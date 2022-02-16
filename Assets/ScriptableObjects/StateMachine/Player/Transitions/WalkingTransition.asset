@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39376f0b8028d0a459b79fb0f62e123e, type: 3}
+  m_Name: WalkingTransition
+  m_EditorClassIdentifier: 
+  conditions:
+  - condition: {fileID: 11400000, guid: 726559ee411093e4ead7d6db4b2a94d5, type: 2}
+    lastItem: 1
+    operatorSelected: 0
+  transitionState: {fileID: 11400000, guid: bff8a3356143b9b48a1c90ba17508f7b, type: 2}
