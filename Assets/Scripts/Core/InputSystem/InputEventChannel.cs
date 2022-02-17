@@ -2,8 +2,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace UnityTemplateProjects.Core.InputSystem
-{
     [CreateAssetMenu(fileName = "InputEventChannel", menuName = "Event Channel/Input")]
     public class InputEventChannel : ScriptableObject
     {
@@ -11,6 +9,30 @@ namespace UnityTemplateProjects.Core.InputSystem
         public Action<Vector2> onMoveActionCanceled;
         public Action onFireActionPerformed;
         public Action onFireActionCanceled;
+        public Action onReloadActionPerformed;
+        public Action onReloadActionCanceled;
+        public Action onThrowActionPerformed;
+        public Action onThrowActionCanceled;
+        
+        public void PerformThrowAction(InputAction.CallbackContext context)
+        {
+            onThrowActionPerformed?.Invoke();
+        }
+        
+        public void CancelThrowAction(InputAction.CallbackContext context)
+        {
+            onThrowActionCanceled?.Invoke();
+        }
+        
+        public void PerformReloadAction(InputAction.CallbackContext context)
+        {
+            onReloadActionPerformed?.Invoke();
+        }
+        
+        public void CancelReloadAction(InputAction.CallbackContext context)
+        {
+            onReloadActionCanceled?.Invoke();
+        }
         
         public void PerformMoveAction(InputAction.CallbackContext context)
         {
@@ -32,4 +54,3 @@ namespace UnityTemplateProjects.Core.InputSystem
             onFireActionCanceled?.Invoke();
         }
     }
-}

@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityTemplateProjects.Core.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
@@ -21,22 +20,38 @@ public class InputManager : MonoBehaviour
         input.Player.Move.canceled += MoveOnCanceled;
         input.Player.Fire.performed += FireOnPerformed;
         input.Player.Fire.canceled += FireOnCanceled;
+        input.Player.Reload.performed += ReloadOnPerformed;
+        input.Player.Reload.canceled += ReloadOnCanceled;
+        input.Player.Throw.performed += ThrowOnPerformed;
+        input.Player.Throw.canceled += ThrowOnCanceled;
         input.Player.Enable();
     }
 
-    private void OnDestroy()
+    private void ThrowOnPerformed(InputAction.CallbackContext context)
     {
-        input.Player.Move.performed -= MoveOnPerformed;
-        input.Player.Move.canceled -= MoveOnCanceled;
-        input.Player.Fire.performed -= FireOnPerformed;
-        input.Player.Fire.canceled -= FireOnCanceled;
+        eventChannel.PerformThrowAction(context);
     }
-
+    
+    private void ThrowOnCanceled(InputAction.CallbackContext context)
+    {
+        eventChannel.CancelThrowAction(context);
+    }
+    
+    private void ReloadOnPerformed(InputAction.CallbackContext context)
+    {
+        eventChannel.PerformReloadAction(context);
+    }
+    
+    private void ReloadOnCanceled(InputAction.CallbackContext context)
+    {
+        eventChannel.CancelReloadAction(context);
+    }
+    
     private void FireOnPerformed(InputAction.CallbackContext context)
     {
         eventChannel.PerformFireAction(context);
     }
-    
+
     private void FireOnCanceled(InputAction.CallbackContext context)
     {
         eventChannel.CancelFireAction(context);

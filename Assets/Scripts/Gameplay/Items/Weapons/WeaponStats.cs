@@ -8,8 +8,9 @@ public class WeaponStats : ScriptableObject
     public float recoil;
     public float damage;
     public float fireRate;
-    public float magazineSize;
+    public int magazineSize;
     public float reloadTime;
+    public float range;
 
     public enum fireType
     {

@@ -1,11 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityTemplateProjects.Gameplay.Items;
 
-public abstract class Item : MonoBehaviour
+namespace Gameplay.Items
 {
-    [SerializeField] private ItemInformation itemInfo;
+    public abstract class Item : MonoBehaviour
+    {
+        [SerializeField] private ItemInformation itemInfo;
+
+        public ItemType type;
     
-    public abstract void Use();
+        public abstract void Use();
+    }
+    
+    public enum ItemType
+    {
+        weapon
+    }
 }
