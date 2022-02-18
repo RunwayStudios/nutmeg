@@ -4,7 +4,7 @@ namespace Gameplay.Items
 {
     public abstract class Item : MonoBehaviour
     {
-        [SerializeField] private ItemInformation itemInfo;
+        [SerializeField] private ItemData itemInfo;
 
         public ItemType type;
     

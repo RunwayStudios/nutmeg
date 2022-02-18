@@ -73,3 +73,6 @@ crashlytics-build.properties
 
 # Save files
 /[Aa]ssets/Saves/
+
+# Rider Stuff
+/.idea/

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Gameplay.Items.Weapons;
+using UnityEngine;
 
 namespace Gameplay.Items
 {
@@ -7,15 +8,28 @@ namespace Gameplay.Items
         [SerializeField] private GameObject muzzleFlareFX;
         [SerializeField] private GameObject bulletTrailFX;
         [SerializeField] private Transform barrelEnd;
+        
+        [SerializeField] private Transform barrelPosition;
+        [SerializeField] private Transform bodyPosition;
+        [SerializeField] private Transform handlePosition;
+        [SerializeField] private Transform magazinePosition;
+        [SerializeField] private Transform muzzlePosition;
+        [SerializeField] private Transform opticPosition;
+        [SerializeField] private Transform stockPosition;
+        [SerializeField] private Transform underBarrelPosition;
 
+        [SerializeField] private GameObject currentMuzzleAttachmentGameObject;
+        [SerializeField] private GameObject currentOpticAttachmentGameObject;
+        [SerializeField] private GameObject currentUnderBarrelAttachmentGameObject;
+        
         private void Start()
         {
-            currentAmmunitionAmount = stats.magazineSize;
+            currentAmmunitionAmount = data.stats.magazineSize;
         }
 
-        protected override bool Fire()
+        protected override bool Attack()
         {
-            if (!base.Fire()) return false;
+            if (!base.Attack()) return false;
 
             if (currentAmmunitionAmount <= 0)
             {
@@ -28,7 +42,7 @@ namespace Gameplay.Items
             currentAmmunitionAmount -= 1;
 
             if (HitScan(out RaycastHit hit))
-                hit.transform.GetComponentInParent<DamageReceiver>().ReceiveDamage(stats.damage);
+                hit.transform.GetComponentInParent<DamageReceiver>().ReceiveDamage(data.stats.damage);
 
             return true;
         }
@@ -56,12 +70,12 @@ namespace Gameplay.Items
 
             Debug.DrawRay(transform.position,
                 offsetTargetDirection
-                * stats.range, Color.red,
-                1f / (stats.fireRate / 60f));
+                * data.stats.range, Color.red,
+                1f / (data.stats.fireRate / 60f));
 
 
             if (Physics.Raycast(transform.position,
-                    offsetTargetDirection, out RaycastHit hit, stats.range
+                    offsetTargetDirection, out RaycastHit hit, data.stats.range
                 ))
             {
                 SpawnBulletTrail(hit.point);
@@ -73,7 +87,7 @@ namespace Gameplay.Items
             }
             else
             {
-                SpawnBulletTrail(transform.position + offsetTargetDirection * stats.range);
+                SpawnBulletTrail(transform.position + offsetTargetDirection * data.stats.range);
             }
 
             return false;
@@ -81,7 +95,7 @@ namespace Gameplay.Items
 
         protected Vector3 CalcRandomTargetOffsetByAccuracy(Vector3 origin)
         {
-            float r = .4f * Mathf.Sqrt(Random.Range(0f, 1f - 2 * stats.accuracy + stats.accuracy * stats.accuracy));
+            float r = .4f * Mathf.Sqrt(Random.Range(0f, 1f - 2 * data.stats.accuracy + data.stats.accuracy * data.stats.accuracy));
             float theta = Random.Range(0f, 1f) * 2f * Mathf.PI;
 
             origin.x += r * Mathf.Cos(theta);
