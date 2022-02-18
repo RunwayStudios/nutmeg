@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c1b2c6019a4440e19879a88961f844b4, type: 3}
-  m_Name: testGrenade
+  m_Name: AssualtRifleTestStats
   m_EditorClassIdentifier: 
-  accuracy: 0
+  accuracy: 0.8
   recoil: 0
-  damage: 100
-  fireRate: 0
-  magazineSize: 0
-  reloadTime: 0
-  range: 2
+  damage: 15
+  fireRate: 800
+  magazineSize: 24
+  reloadTime: 2
+  range: 15

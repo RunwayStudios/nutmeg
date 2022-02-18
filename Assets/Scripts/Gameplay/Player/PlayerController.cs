@@ -1,5 +1,6 @@
 ﻿using System;
 using Gameplay.Items;
+using Gameplay.Items.Weapons;
 using Runway.Core;
 using UnityEngine;
 

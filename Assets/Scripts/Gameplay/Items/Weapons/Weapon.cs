@@ -1,57 +1,58 @@
-﻿using System;
-using System.Collections;
-using Gameplay.Items;
+﻿using System.Collections;
 using UnityEngine;
 
-public abstract class Weapon : Item
+namespace Gameplay.Items.Weapons
 {
-    [SerializeField] protected WeaponStats stats;
-
-    protected float fireRateCoolDown;
-    protected int currentAmmunitionAmount;
-
-    public float ReloadProgress { get; private set; }
-
-    public override void Use()
+    public abstract class Weapon : Item
     {
-        if (ReloadProgress == 0f)
-            Fire();
-    }
+        [SerializeField] protected WeaponData data;
 
-    public void ReloadWeapon()
-    {
-        if (ReloadProgress == 0f && currentAmmunitionAmount != stats.magazineSize)
-            StartCoroutine(ReloadEnumerator());
-    }
+        protected float fireRateCoolDown;
+        protected int currentAmmunitionAmount;
 
-    private float reloadTimer;
-    private IEnumerator ReloadEnumerator()
-    {
-        while ((reloadTimer += Time.deltaTime) <= stats.reloadTime)
+        public float ReloadProgress { get; private set; }
+
+        public override void Use()
         {
-            ReloadProgress = reloadTimer / stats.reloadTime;
-            yield return null;
+            if (ReloadProgress == 0f)
+                Attack();
         }
 
-        ReloadProgress = reloadTimer = 0f;
-        currentAmmunitionAmount = stats.magazineSize;
-    }
+        public void ReloadWeapon()
+        {
+            if (ReloadProgress == 0f && currentAmmunitionAmount != data.stats.magazineSize)
+                StartCoroutine(ReloadEnumerator());
+        }
+
+        private float reloadTimer;
+        private IEnumerator ReloadEnumerator()
+        {
+            while ((reloadTimer += Time.deltaTime) <= data.stats.reloadTime)
+            {
+                ReloadProgress = reloadTimer / data.stats.reloadTime;
+                yield return null;
+            }
+
+            ReloadProgress = reloadTimer = 0f;
+            currentAmmunitionAmount = data.stats.magazineSize;
+        }
     
-    private void Update()
-    {
-        UpdateFireRateTimer();
-    }
+        private void Update()
+        {
+            UpdateFireRateTimer();
+        }
 
-    private void UpdateFireRateTimer()
-    {
-        fireRateCoolDown = Mathf.Clamp(fireRateCoolDown -= Time.deltaTime, 0f, float.MaxValue);
-    }
+        private void UpdateFireRateTimer()
+        {
+            fireRateCoolDown = Mathf.Clamp(fireRateCoolDown -= Time.deltaTime, 0f, float.MaxValue);
+        }
 
-    protected virtual bool Fire()
-    {
-        if (fireRateCoolDown != 0) return false;
+        protected virtual bool Attack()
+        {
+            if (fireRateCoolDown != 0) return false;
 
-        fireRateCoolDown = 1f / (stats.fireRate / 60f);
-        return true;
+            fireRateCoolDown = 1f / (data.stats.fireRate / 60f);
+            return true;
+        }
     }
 }

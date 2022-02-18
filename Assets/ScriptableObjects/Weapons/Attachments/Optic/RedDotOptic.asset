@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ee744be97c746099c7ebd7477f6c62d, type: 3}
+  m_Name: RedDotOptic
+  m_EditorClassIdentifier: 
+  name: Red dot
+  description: 
+  prefab: {fileID: 0}
+  previewImage: {fileID: 0}
+  type: 6
+  statDifference: {fileID: 11400000, guid: 4e510daad0b1099408dc653d225c5025, type: 2}
