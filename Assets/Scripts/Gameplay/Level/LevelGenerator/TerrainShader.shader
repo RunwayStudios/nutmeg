@@ -10,7 +10,7 @@ Shader "Custom/TerrainShader"
     {
         Tags
         {
-            "RenderType"="Opaque" "RenderPipeline" = "Universalpipeline"
+            "RenderType"="Opaque" "RenderPipeline" = "UniversalPipeline"
         }
         //LOD 100
 
@@ -26,11 +26,17 @@ Shader "Custom/TerrainShader"
             Cull Back
 
             HLSLPROGRAM
+            // Physically based Standard lighting model, and enable shadows on all light types
+            //#pragma surface surf Standard fullforwardshadows
+            
             // Signal this shader requires geometry programs
             #pragma prefer_hlslcc gles
             #pragma exclude_renderers d3d11_9x
             #pragma target 2.0
             #pragma require geometry
+
+            //
+            //#pragma multi_compile_shadowcaster
 
             // Lighting and shadow keywords
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
@@ -38,11 +44,16 @@ Shader "Custom/TerrainShader"
             #pragma multi_compile _ _ADDITIONAL_LIGHTS
             #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
             #pragma multi_compile _ _SHADOWS_SOFT
+            
+            //#pragma multi_compile _ _SPECGLOSSMAP
+            //#pragma multi_compile _ _SCREEN_SPACE_OCCLUSION
 
             // Register our functions
             #pragma vertex Vertex
             #pragma geometry Geometry
             #pragma fragment Fragment
+
+            //#define SHADOW_CASTER_PASS
 
             // Include our logic file
             #include "TerrainShader.hlsl"

@@ -94,7 +94,7 @@ void Geometry(triangle VertexOutput inputs[3], inout TriangleStream<GeometryOutp
     // Create a fake VertexOutput for the center vertex
     VertexOutput center = (VertexOutput)0;
     // We need the triangle's normal to extrude the center point
-    float3 triNormal = GetNormalFromTriangle(inputs[0].positionWS, inputs[1].positionWS, inputs[2].positionWS);
+    const float3 triNormal = GetNormalFromTriangle(inputs[0].positionWS, inputs[1].positionWS, inputs[2].positionWS);
 
     // Find the center position and extrude by _PyramidHeight along the normal
     //center.positionWS = GetTriangleCenter(inputs[0].positionWS, inputs[1].positionWS, inputs[2].positionWS) + triNormal * _PyramidHeight;
@@ -139,7 +139,32 @@ float4 Fragment(GeometryOutput input) : SV_Target
 
     // Call URP's simple lighting function
     // The arguments are lightingInput, albedo color, specular color, smoothness, emission color, and alpha
-    return UniversalFragmentBlinnPhong(lightingInput, _TerrainColor.rgb, 1, 0, 0, 1);
+    //return float4(_TerrainColor, 1);
+    
+    // half alpha = 1;
+    // BRDFData brdfData;
+    //
+    // //                 albedo, metallic, specular, smoothness, alpha
+    // InitializeBRDFData(_TerrainColor.rgb, 0, 1, 0.1, alpha, brdfData);
+    //
+    // //                     brdfData, indirectDiffuse, indirectSpecular, fresnelTerm
+    //
+    // SurfaceData s;
+    // s.albedo              = _TerrainColor.rgb;
+    // s.metallic            = 0;
+    // s.specular            = 0;
+    // s.smoothness          = 0;
+    // s.occlusion           = 0;
+    // s.emission            = 0;
+    // s.alpha               = 1;
+    // s.clearCoatMask       = 0.0;
+    // s.clearCoatSmoothness = 1.0;
+    
+    //return UniversalFragmentPBR(lightingInput, s);
+    
+    //return float4(EnvironmentBRDF(brdfData, 1, 1, 1),1);
+    
+    return UniversalFragmentBlinnPhong(lightingInput, _TerrainColor.rgb, 0, 0, 0, 1);// + unity_AmbientSky;
     //return float4(0, 1, 0, 1);
     #endif
 }
