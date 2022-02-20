@@ -1,16 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityTemplateProjects.Gameplay;
 
 namespace Gameplay.Items.Weapons
 {
     public abstract class Weapon : Item
     {
-        [SerializeField] protected WeaponData data;
-
         protected float fireRateCoolDown;
         protected int currentAmmunitionAmount;
 
         public float ReloadProgress { get; private set; }
+
+        private void Start() => ResetAmmunition();
 
         public override void Use()
         {
@@ -20,23 +22,24 @@ namespace Gameplay.Items.Weapons
 
         public void ReloadWeapon()
         {
-            if (ReloadProgress == 0f && currentAmmunitionAmount != data.stats.magazineSize)
+            if (ReloadProgress == 0f && currentAmmunitionAmount != (int) Stats[StatType.MagazineSize])
                 StartCoroutine(ReloadEnumerator());
         }
 
         private float reloadTimer;
+
         private IEnumerator ReloadEnumerator()
         {
-            while ((reloadTimer += Time.deltaTime) <= data.stats.reloadTime)
+            while ((reloadTimer += Time.deltaTime) <= Stats[StatType.ReloadTime])
             {
-                ReloadProgress = reloadTimer / data.stats.reloadTime;
+                ReloadProgress = reloadTimer / Stats[StatType.ReloadTime];
                 yield return null;
             }
 
             ReloadProgress = reloadTimer = 0f;
-            currentAmmunitionAmount = data.stats.magazineSize;
+            ResetAmmunition();
         }
-    
+
         private void Update()
         {
             UpdateFireRateTimer();
@@ -44,14 +47,18 @@ namespace Gameplay.Items.Weapons
 
         private void UpdateFireRateTimer()
         {
+            if(fireRateCoolDown <= 0f)
+                return;
             fireRateCoolDown = Mathf.Clamp(fireRateCoolDown -= Time.deltaTime, 0f, float.MaxValue);
         }
+
+        protected void ResetAmmunition() => currentAmmunitionAmount = (int) Stats[StatType.MagazineSize];
 
         protected virtual bool Attack()
         {
             if (fireRateCoolDown != 0) return false;
 
-            fireRateCoolDown = 1f / (data.stats.fireRate / 60f);
+            fireRateCoolDown = 1f / (Stats[StatType.FireRate] / 60f);
             return true;
         }
     }

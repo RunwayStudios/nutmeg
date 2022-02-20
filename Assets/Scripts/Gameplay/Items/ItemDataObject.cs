@@ -2,8 +2,8 @@
 
 namespace Gameplay.Items
 {
-    [CreateAssetMenu(fileName = "new ItemInfo", menuName = "Item/Generic")]
-    public class ItemData : ScriptableObject
+    [CreateAssetMenu(fileName = "new ItemDataObject", menuName = "Item/Generic")]
+    public class ItemDataObject : ScriptableObject
     {
         public string name;
         [TextArea]

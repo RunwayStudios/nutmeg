@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +14,12 @@ using UnityEngine.InputSystem;
         public Action onReloadActionCanceled;
         public Action onThrowActionPerformed;
         public Action onThrowActionCanceled;
+        public Action<Vector2> onScrollActionPerformed;
+        
+        public void PerformScrollAction(InputAction.CallbackContext context)
+        {
+            onScrollActionPerformed?.Invoke(context.ReadValue<Vector2>());
+        }
         
         public void PerformThrowAction(InputAction.CallbackContext context)
         {

@@ -128,9 +128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 485c06b5497043ad9aade794110ac98e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemInfo: {fileID: 0}
-  type: 0
-  stats: {fileID: 11400000, guid: 983d232b8c2919c4f87f264aea84437f, type: 2}
+  itemDataObject: {fileID: 0}
+  stats: {fileID: 11400000, guid: 572e54b3987040f419bdb4a029050912, type: 2}
   throwOffset: 5
   throwSpeed: 10
   impactFX: {fileID: 1804206099813350, guid: 5ed0a013702bd9f42847584f2fba7b21, type: 3}

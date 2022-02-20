@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityTemplateProjects.Gameplay;
 
 namespace Gameplay.Items.Throwable
 {
@@ -8,19 +9,19 @@ namespace Gameplay.Items.Throwable
         
         private void Damage()
         {
-            Collider[] colliders = Physics.OverlapSphere(transform.position, data.stats.range);
+            Collider[] colliders = Physics.OverlapSphere(transform.position, Stats[StatType.Range]);
 
             foreach (Collider collider in colliders)
             {
                 if (collider.CompareTag("DamageReceiver") &&
                     collider.TryGetComponent(typeof(DamageReceiver), out Component c))
-                    c.GetComponent<DamageReceiver>().ReceiveDamage(data.stats.damage);
+                    c.GetComponent<DamageReceiver>().ReceiveDamage(Stats[StatType.Damage]);
             }
         }
         
         private void OnDrawGizmos()
         {
-            Gizmos.DrawWireSphere(transform.position, data.stats.range);
+            Gizmos.DrawWireSphere(transform.position, Stats[StatType.Range]);
         }
 
         protected override void OnImpact()

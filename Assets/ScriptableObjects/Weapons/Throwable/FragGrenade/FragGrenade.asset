@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4de69d210964c8592b30d07237815c4, type: 3}
+  m_Name: FragGrenade
+  m_EditorClassIdentifier: 
+  name: Frag Grenade
+  description: 
+  prefab: {fileID: 1499745551670331490, guid: c2ce2eec04a7d464a997101ebe4e8421, type: 3}
+  previewImage: {fileID: 0}
+  stats: {fileID: 11400000, guid: 983d232b8c2919c4f87f264aea84437f, type: 2}
+  attachments: []
