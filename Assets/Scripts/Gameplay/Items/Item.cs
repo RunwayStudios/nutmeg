@@ -4,15 +4,11 @@ namespace Gameplay.Items
 {
     public abstract class Item : MonoBehaviour
     {
-        [SerializeField] private ItemData itemInfo;
+        [SerializeField] private ItemDataObject itemDataObject;
+        [SerializeField] private Stats stats;
 
-        public ItemType type;
-    
+        public Stats Stats => stats != null ? stats : ScriptableObject.CreateInstance<Stats>();
+        
         public abstract void Use();
-    }
-    
-    public enum ItemType
-    {
-        weapon
     }
 }

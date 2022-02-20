@@ -9,8 +9,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InputEventChannel input;
     [SerializeField] private CharacterController cc;
     [SerializeField] private StateMachine stateMachine;
-    [SerializeField] private Camera camera;
-    [SerializeField] private LayerMask mask;
 
     [Header("Movment")] [SerializeField] private float moveSpeed;
 
@@ -108,8 +106,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnReloadActionPerformed()
     {
-        if (equippedWeapon.type == ItemType.weapon)
-            equippedWeapon.GetComponent<Weapon>().ReloadWeapon();
+        //TODO check tag
+        equippedWeapon.GetComponent<Weapon>().ReloadWeapon();
     }
 
     private void OnThrowActionPerformed()

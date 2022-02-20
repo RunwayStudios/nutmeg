@@ -3,10 +3,9 @@
 namespace Gameplay.Items.Weapons
 {
     [CreateAssetMenu(fileName = "new WeaponAttachment", menuName = "Item/Weapon/Attachment")]
-    public class WeaponAttachments : ItemData
+    public class WeaponAttachment : ItemDataObject
     {
         public AttachmentType type;
-        public WeaponStats statDifference;
     }
 
     public enum AttachmentType

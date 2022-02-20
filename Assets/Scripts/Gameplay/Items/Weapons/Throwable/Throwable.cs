@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Gameplay.Items.Throwable
 {
-    public abstract class Throwable : Weapon
+    public abstract class Throwable : Weapons.Weapon
     {
         [SerializeField] private float throwOffset;
         [SerializeField] private float throwSpeed;

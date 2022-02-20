@@ -24,29 +24,35 @@ public class InputManager : MonoBehaviour
         input.Player.Reload.canceled += ReloadOnCanceled;
         input.Player.Throw.performed += ThrowOnPerformed;
         input.Player.Throw.canceled += ThrowOnCanceled;
+        input.Player.Scroll.performed += ScrollOnPerformed;
         input.Player.Enable();
+    }
+
+    private void ScrollOnPerformed(InputAction.CallbackContext context)
+    {
+        eventChannel.PerformScrollAction(context);
     }
 
     private void ThrowOnPerformed(InputAction.CallbackContext context)
     {
         eventChannel.PerformThrowAction(context);
     }
-    
+
     private void ThrowOnCanceled(InputAction.CallbackContext context)
     {
         eventChannel.CancelThrowAction(context);
     }
-    
+
     private void ReloadOnPerformed(InputAction.CallbackContext context)
     {
         eventChannel.PerformReloadAction(context);
     }
-    
+
     private void ReloadOnCanceled(InputAction.CallbackContext context)
     {
         eventChannel.CancelReloadAction(context);
     }
-    
+
     private void FireOnPerformed(InputAction.CallbackContext context)
     {
         eventChannel.PerformFireAction(context);
