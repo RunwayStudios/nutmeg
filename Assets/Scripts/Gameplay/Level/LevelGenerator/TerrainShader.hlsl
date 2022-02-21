@@ -30,9 +30,11 @@ struct GeometryOutput
 {
     float3 positionWS : TEXCOORD0; // Position in world space
     float3 normalWS : TEXCOORD1; // Normal vector in world space
+    //float3 diff : TEXCOORD2;
     //float2 uv                       : TEXCOORD2; // UVs
 
     float4 positionCS : SV_POSITION; // Position in clip space
+
 };
 
 // The _MainTex property. The sampler and scale/offset vector is also created
@@ -70,6 +72,11 @@ GeometryOutput SetupVertex(float3 positionWS, float3 normalWS/*, float2 uv*/)
     GeometryOutput output = (GeometryOutput)0;
     output.positionWS = positionWS;
     output.normalWS = normalWS;
+    
+    
+    //output.diff = _TerrainColor.rgb * normalWS;
+
+
     //output.uv = uv;
     // This function calculates clip space position, taking the shadow caster pass into account
     output.positionCS = CalculatePositionCSWithShadowCasterLogic(positionWS, normalWS);
@@ -92,7 +99,7 @@ GeometryOutput SetupVertex(float3 positionWS, float3 normalWS/*, float2 uv*/)
 void Geometry(triangle VertexOutput inputs[3], inout TriangleStream<GeometryOutput> outputStream)
 {
     // Create a fake VertexOutput for the center vertex
-    VertexOutput center = (VertexOutput)0;
+    //VertexOutput center = (VertexOutput)0;
     // We need the triangle's normal to extrude the center point
     const float3 triNormal = GetNormalFromTriangle(inputs[0].positionWS, inputs[1].positionWS, inputs[2].positionWS);
 
@@ -163,9 +170,86 @@ float4 Fragment(GeometryOutput input) : SV_Target
     //return UniversalFragmentPBR(lightingInput, s);
     
     //return float4(EnvironmentBRDF(brdfData, 1, 1, 1),1);
+
     
-    return UniversalFragmentBlinnPhong(lightingInput, _TerrainColor.rgb, 0, 0, 0, 1);// + unity_AmbientSky;
-    //return float4(0, 1, 0, 1);
+    half4 shadowMask = half4(1, 1, 1, 1);
+    Light mainLight = GetMainLight(lightingInput.shadowCoord, input.positionWS, shadowMask);
+
+    
+    half nl = max(0, dot(input.normalWS, _MainLightPosition.xyz));
+    half4 diff = nl * _MainLightColor;
+    diff.rgb += SampleSH(input.normalWS);
+
+    diff.rgb = SampleSH(input.normalWS);
+    diff.a = 1;
+    
+    float4 col = float4(_TerrainColor.rgb, 1);
+    col *= diff;
+    return diff;
+    
+//     return UniversalFragmentBlinnPhong(lightingInput, _TerrainColor.rgb, 0, 0, 0, 1) + ;
+//
+//
+//     InputData inputData = lightingInput;
+//     half3 diffuse = _TerrainColor.rgb;
+//     half4 specularGloss = 0;
+//     half smoothness = 0;
+//     half3 emission = 0;
+//     half alpha = 1;
+//
+//
+//     
+// // To ensure backward compatibility we have to avoid using shadowMask input, as it is not present in older shaders
+// // #if defined(SHADOWS_SHADOWMASK) && defined(LIGHTMAP_ON)
+// //     half4 shadowMask = inputData.shadowMask;
+// // #elif !defined (LIGHTMAP_ON)
+// //     half4 shadowMask = unity_ProbesOcclusion;
+// // #else
+//      half4 shadowMask = half4(0, 0, 0, 0);
+// // #endif
+//
+//     Light mainLight = GetMainLight(inputData.shadowCoord, inputData.positionWS, shadowMask);
+//
+//     #if defined(_SCREEN_SPACE_OCCLUSION)
+//         AmbientOcclusionFactor aoFactor = GetScreenSpaceAmbientOcclusion(inputData.normalizedScreenSpaceUV);
+//         mainLight.color *= aoFactor.directAmbientOcclusion;
+//         inputData.bakedGI *= aoFactor.indirectAmbientOcclusion;
+//     #endif
+//
+//     MixRealtimeAndBakedGI(mainLight, inputData.normalWS, inputData.bakedGI);
+//
+//     half3 attenuatedLightColor = mainLight.color * (mainLight.distanceAttenuation * mainLight.shadowAttenuation);
+//     half3 diffuseColor = inputData.bakedGI + LightingLambert(attenuatedLightColor, mainLight.direction, inputData.normalWS);
+//     half3 specularColor = LightingSpecular(attenuatedLightColor, mainLight.direction, inputData.normalWS, inputData.viewDirectionWS, specularGloss, smoothness);
+//
+// #ifdef _ADDITIONAL_LIGHTS
+//     uint pixelLightCount = GetAdditionalLightsCount();
+//     for (uint lightIndex = 0u; lightIndex < pixelLightCount; ++lightIndex)
+//     {
+//         Light light = GetAdditionalLight(lightIndex, inputData.positionWS, shadowMask);
+//         #if defined(_SCREEN_SPACE_OCCLUSION)
+//             light.color *= aoFactor.directAmbientOcclusion;
+//         #endif
+//         half3 attenuatedLightColor = light.color * (light.distanceAttenuation * light.shadowAttenuation);
+//         diffuseColor += LightingLambert(attenuatedLightColor, light.direction, inputData.normalWS);
+//         specularColor += LightingSpecular(attenuatedLightColor, light.direction, inputData.normalWS, inputData.viewDirectionWS, specularGloss, smoothness);
+//     }
+// #endif
+//
+// #ifdef _ADDITIONAL_LIGHTS_VERTEX
+//     diffuseColor += inputData.vertexLighting;
+// #endif
+//
+//     half3 finalColor = diffuseColor * diffuse + emission;
+//
+// #if defined(_SPECGLOSSMAP) || defined(_SPECULAR_COLOR)
+//     finalColor += specularColor;
+// #endif
+//
+//     return half4(finalColor, alpha);
+//
+//     
+//     //return float4(0, 1, 0, 1);
     #endif
 }
 
