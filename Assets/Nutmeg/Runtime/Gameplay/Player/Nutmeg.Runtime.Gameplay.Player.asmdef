@@ -1,0 +1,21 @@
+{
+    "name": "Nutmeg.Runtime.Gameplay.Player",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:31e7a6be87cc94a45adf3e4ed5bb104b",
+        "GUID:2330a1a6f349cbe45ad9d1799cc023f5",
+        "GUID:9cceda55953895d4ba29bf89f8d8b925",
+        "GUID:307bdc825429c8c4184fade23f5aa16e",
+        "GUID:6c43f481166972648b9fe53392d5a811"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

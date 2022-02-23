@@ -1,9 +1,0 @@
-﻿using UnityEngine;
-
-namespace UnityTemplateProjects.Gameplay.WorldSpaceUI
-{
-    public class WorldSpaceUIController : MonoBehaviour
-    {
-        
-    }
-}

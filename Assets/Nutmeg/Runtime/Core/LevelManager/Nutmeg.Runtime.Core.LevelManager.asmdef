@@ -1,0 +1,14 @@
+{
+    "name": "Nutmeg.Runtime.Core.LevelManager",
+    "rootNamespace": "Nutmeg.Runtime.Core.LevelManager",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
