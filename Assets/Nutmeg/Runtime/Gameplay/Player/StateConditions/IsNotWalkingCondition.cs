@@ -1,6 +1,7 @@
-﻿using Nutmeg.Runtime.Gameplay.Player.StateConditions;
-using UnityEngine;
+﻿using UnityEngine;
 
+namespace Nutmeg.Runtime.Gameplay.Player.StateConditions
+{
     [CreateAssetMenu(fileName = "IsNotWalkingCondition", menuName = "StateMachine/Conditions/Is not Walking")]
     public class IsNotWalkingCondition : IsWalkingCondition
     {
@@ -9,3 +10,4 @@ using UnityEngine;
             return !base.IsMet();
         }
     }
+}

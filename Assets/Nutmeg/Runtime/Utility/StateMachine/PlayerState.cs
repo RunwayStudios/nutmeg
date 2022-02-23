@@ -1,4 +1,4 @@
-﻿namespace Runway.Core
+﻿namespace Nutmeg.Runtime.Utility.StateMachine
 {
     public enum PlayerState
     {

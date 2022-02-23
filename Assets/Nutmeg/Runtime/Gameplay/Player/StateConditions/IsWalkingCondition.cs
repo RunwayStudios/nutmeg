@@ -1,4 +1,4 @@
-﻿using Runway.Core;
+﻿using Nutmeg.Runtime.Utility.StateMachine;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Player.StateConditions

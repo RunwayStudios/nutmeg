@@ -1,10 +1,9 @@
-using Gameplay.Items.Weapons;
 using Nutmeg.Runtime.Utility.MouseController;
 using UnityEngine;
 
-namespace Gameplay.Items.Throwable
+namespace Nutmeg.Runtime.Gameplay.Weapons.Throwable
 {
-    public abstract class Throwable : Weapons.Weapon
+    public abstract class Throwable : Weapon
     {
         [SerializeField] private float throwOffset;
         [SerializeField] private float throwSpeed;

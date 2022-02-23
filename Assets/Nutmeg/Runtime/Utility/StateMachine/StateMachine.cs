@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Runway.Core
+namespace Nutmeg.Runtime.Utility.StateMachine
 {
     public class StateMachine : MonoBehaviour
     {

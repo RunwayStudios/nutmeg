@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Gameplay.Items
+namespace Nutmeg.Runtime.Gameplay.Items
 {
     [CreateAssetMenu(fileName = "new ItemDataObject", menuName = "Item/Generic")]
     public class ItemDataObject : ScriptableObject

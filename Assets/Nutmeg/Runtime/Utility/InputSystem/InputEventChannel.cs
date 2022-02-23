@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+namespace Nutmeg.Runtime.Utility.InputSystem
+{
     [CreateAssetMenu(fileName = "InputEventChannel", menuName = "Event Channel/Input")]
     public class InputEventChannel : ScriptableObject
     {
@@ -61,3 +62,4 @@ using UnityEngine.InputSystem;
             onFireActionCanceled?.Invoke();
         }
     }
+}

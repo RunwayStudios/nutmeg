@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Runway.Core
+namespace Nutmeg.Runtime.Utility.StateMachine
 {
     [CreateAssetMenu(fileName = "State", menuName = "StateMachine/State")]
     public class State : ScriptableObject

@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Runway.Core
+namespace Nutmeg.Runtime.Utility.StateMachine
 {
     [System.Serializable]
     public class ConditionContainer

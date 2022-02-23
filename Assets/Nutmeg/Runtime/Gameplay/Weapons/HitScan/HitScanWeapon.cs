@@ -1,11 +1,9 @@
-﻿using Gameplay.Items;
-using Gameplay.Items.Weapons;
+﻿using Nutmeg.Runtime.Gameplay.Items;
 using Nutmeg.Runtime.Gameplay.Targets;
 using Nutmeg.Runtime.Utility.MouseController;
 using UnityEngine;
-using UnityTemplateProjects.Gameplay;
 
-namespace Nutmeg.Runtime.Gameplay.Items.Weapons.HitScan
+namespace Nutmeg.Runtime.Gameplay.Weapons.HitScan
 {
     public class HitScanWeapon : Weapon
     {

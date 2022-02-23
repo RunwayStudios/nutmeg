@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Nutmeg.Runtime.Gameplay.Items;
+using UnityEngine;
 
-namespace Gameplay.Items.Weapons
+namespace Nutmeg.Runtime.Gameplay.Weapons.HitScan
 {
     [CreateAssetMenu(fileName = "new WeaponAttachment", menuName = "Item/Weapon/Attachment")]
     public class WeaponAttachment : ItemDataObject

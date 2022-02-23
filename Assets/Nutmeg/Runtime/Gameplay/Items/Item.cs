@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Gameplay.Items
+namespace Nutmeg.Runtime.Gameplay.Items
 {
     public abstract class Item : MonoBehaviour
     {

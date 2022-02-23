@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using UnityTemplateProjects.Gameplay;
+﻿using Nutmeg.Runtime.Gameplay.Items;
 using Nutmeg.Runtime.Gameplay.Targets;
+using UnityEngine;
 
-namespace Gameplay.Items.Throwable
+namespace Nutmeg.Runtime.Gameplay.Weapons.Throwable
 {
-    public class FragGrenade : Throwable
+    public class FragGrenade : global::Nutmeg.Runtime.Gameplay.Weapons.Throwable.Throwable
     {
         [SerializeField] private GameObject impactFX;
 

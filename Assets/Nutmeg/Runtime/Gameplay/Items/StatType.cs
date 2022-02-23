@@ -1,4 +1,4 @@
-﻿namespace UnityTemplateProjects.Gameplay
+﻿namespace Nutmeg.Runtime.Gameplay.Items
 {
     public enum StatType
     {

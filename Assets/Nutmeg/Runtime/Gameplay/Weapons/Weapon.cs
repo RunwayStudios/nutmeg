@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
+using Nutmeg.Runtime.Gameplay.Items;
 using UnityEngine;
-using UnityTemplateProjects.Gameplay;
 
-namespace Gameplay.Items.Weapons
+namespace Nutmeg.Runtime.Gameplay.Weapons
 {
     public abstract class Weapon : Item
     {

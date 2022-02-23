@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityTemplateProjects.Gameplay.WorldSpaceUI
+namespace Nutmeg.Runtime.Core.WorldSpaceUIManager
 {
     public class WorldSpaceUIManager : MonoBehaviour
     {

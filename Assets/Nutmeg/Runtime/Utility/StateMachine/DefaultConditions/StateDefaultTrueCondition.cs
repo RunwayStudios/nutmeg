@@ -1,12 +1,12 @@
-using Runway.Core;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "defaultTrue", menuName = "StateMachine/Conditions/Default True")]
-public class StateDefaultTrueCondition : StateCondition
+namespace Nutmeg.Runtime.Utility.StateMachine.DefaultConditions
 {
-    public override void Initialize(StateMachine root){}
+    [CreateAssetMenu(fileName = "defaultTrue", menuName = "StateMachine/Conditions/Default True")]
+    internal class StateDefaultTrueCondition : StateCondition
+    {
+        public override void Initialize(StateMachine root){}
 
-    public override bool IsMet() => true;
+        public override bool IsMet() => true;
+    }
 }

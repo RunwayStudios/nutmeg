@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityTemplateProjects.Gameplay;
 
-namespace Gameplay.Items
+namespace Nutmeg.Runtime.Gameplay.Items
 {
     [CreateAssetMenu(fileName = "new Stats", menuName = "Stats")]
     public class Stats : ScriptableObject

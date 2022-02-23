@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
-namespace Gameplay.Items
+namespace Nutmeg.Runtime.Gameplay.Weapons.HitScan
 {
     public class Bullet : MonoBehaviour
     {
