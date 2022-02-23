@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityTemplateProjects.Gameplay;
 
 namespace Gameplay.Items
@@ -8,26 +10,30 @@ namespace Gameplay.Items
     {
         [SerializeField] private StatObject[] stats;
 
+        private Dictionary<StatType, float> statMap;
+
         public float this[StatType type] => GetValueOfType(type);
 
         public float GetValueOfType(StatType type) => TryGetValueOfType(type, out float f) ? f : 0f;
 
         public bool TryGetValueOfType(StatType type, out float value)
         {
-            foreach (StatObject s in stats)
+            if (statMap.TryGetValue(type, out float f))
             {
-                if (s.type == type)
-                {
-                    value = s.value;
-                    return true;
-                }
+                value = f;
+                return true;
             }
 
             value = 0f;
             return false;
         }
+
+        private void OnValidate()
+        {
+            statMap = stats.ToDictionary(s => s.type, s => s.value);
+        }
     }
-    
+
     [System.Serializable]
     public class StatObject
     {
