@@ -1,0 +1,16 @@
+{
+    "name": "Nutmeg.Editor.Utility.StateMachine",
+    "rootNamespace": "",
+    "references": [
+        "GUID:31e7a6be87cc94a45adf3e4ed5bb104b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
