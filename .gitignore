@@ -26,6 +26,7 @@
 
 # Visual Studio cache directory
 .vs/
+.idea/
 
 # Gradle cache directory
 .gradle/
@@ -76,3 +77,4 @@ crashlytics-build.properties
 
 # Rider Stuff
 /.idea/
+.idea/.idea.nutmeg/.idea/workspace.xml
