@@ -2124,7 +2124,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &449313156
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2710,6 +2710,7 @@ GameObject:
   - component: {fileID: 578148039}
   - component: {fileID: 578148041}
   - component: {fileID: 578148040}
+  - component: {fileID: 578148042}
   m_Layer: 0
   m_Name: LevelGenerator
   m_TagString: Untagged
@@ -2743,9 +2744,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93ec05edcf807fa45b75f26536480ba7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrainSize: 100
   terrainUnitSize: 1
-  maxBaseSize: 10
+  terrainSize: 100
+  maxRandomVertexOffset: 0.25
+  baseFlatteningMap: {fileID: 2800000, guid: 699243633679d11479c69ba2415cd7be, type: 3}
+  baseTerrainSmootheningDistance: 10
   noiseScale: 0.1
   noiseMultiplier: 10
   regenerate: 0
@@ -2798,6 +2801,20 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 578148037}
+  m_Mesh: {fileID: 0}
+--- !u!64 &578148042
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578148037}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1001 &581137812
 PrefabInstance:
@@ -3434,7 +3451,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &766108553
 Transform:
   m_ObjectHideFlags: 0
@@ -3600,7 +3617,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!135 &790218334
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -6032,7 +6049,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &1279715350
 Light:
   m_ObjectHideFlags: 0
@@ -7056,7 +7073,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!135 &1530172446
 SphereCollider:
   m_ObjectHideFlags: 0

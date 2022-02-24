@@ -1,6 +1,4 @@
-using System;
 using System.Diagnostics;
-using System.Timers;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -9,23 +7,31 @@ namespace Gameplay.Level.LevelGenerator
 {
     public class LevelGenerator : MonoBehaviour
     {
-        [SerializeField] [Tooltip("Width and Height of the terrain in units specified below")]
-        private int terrainSize = 100;
-
-        [SerializeField] [Tooltip("Size of a single unit if the terrain")]
+        [Header("Genral")] [SerializeField] [Tooltip("Size of a terrainUnit")]
         private float terrainUnitSize = 1f;
 
-        [SerializeField] [Tooltip("Width and Height of the flattened base area")]
-        private int maxBaseSize = 10;
+        [SerializeField] [Tooltip("Width and Height of the terrain in terrainUnits")]
+        private int terrainSize = 100;
 
-        [SerializeField] private float noiseScale = 1f;
+        [SerializeField] [Tooltip("maximum random offset of each vertex in terrainUnits")]
+        private float maxRandomVertexOffset = 0f;
+
+        [Space] [SerializeField] [Tooltip("texture showing the area being flattened for the base")]
+        private Texture2D baseFlatteningMap;
+
+        [SerializeField] [Tooltip("number of terrainUnits to smoothen between flattened base and terrain")]
+        private int baseTerrainSmootheningDistance = 10;
+
+
+        [Space] [Header("Terrain Generation")] [SerializeField]
+        private float noiseScale = 1f;
+
         [SerializeField] private float noiseMultiplier = 1f;
 
-
-        [SerializeField] private bool regenerate = false;
-        private Stopwatch terrainGenStopwatch = new Stopwatch();
+        
+        [Space] [SerializeField] private bool regenerate = false;
+        private readonly Stopwatch terrainGenStopwatch = new Stopwatch();
         [SerializeField] private double generateMS = 0f;
-
 
         private void Awake()
         {
@@ -58,11 +64,10 @@ namespace Gameplay.Level.LevelGenerator
         struct TerrainVertex
         {
             public Vector3 pos;
-
             //public ushort normalX, normalY;
             //public Color32 tangent;
 
-            public TerrainVertex(Vector3 pos, ushort normalX, ushort normalY)
+            public TerrainVertex(Vector3 pos)
             {
                 this.pos = pos;
                 //this.normalX = normalX;
@@ -92,28 +97,49 @@ namespace Gameplay.Level.LevelGenerator
             var triangles = new NativeArray<ushort>(triangleIndexCount, Allocator.Temp,
                 NativeArrayOptions.ClearMemory);
 
+
             // ... fill in vertex array data here...
+
+            float terrainSizeUnityUnits = terrainSize * terrainUnitSize;
+            float maxRandomVertexOffsetUnityUnits = maxRandomVertexOffset * terrainUnitSize;
+            RandomEx rndmBool = new RandomEx();
+
             int vertIndex = 0;
             ushort triangleIndex = 0;
 
-            for (float z = 0; z <= terrainSize; z++)
+            for (float z = 0; z <= terrainSizeUnityUnits; z += terrainUnitSize)
             {
-                for (float x = 0; x <= terrainSize; x++)
+                for (float x = 0; x <= terrainSizeUnityUnits; x += terrainUnitSize)
                 {
-                    if (x < terrainSize && z < terrainSize)
+                    if (x < terrainSizeUnityUnits && z < terrainSizeUnityUnits)
                     {
                         triangles[triangleIndex++] = (ushort)vertIndex;
                         triangles[triangleIndex++] = (ushort)(vertIndex + terrainSize + 1);
-                        triangles[triangleIndex++] = (ushort)(vertIndex + 1);
-                        triangles[triangleIndex++] = (ushort)(vertIndex + terrainSize + 1);
+                        if (rndmBool.NextBoolean())
+                        {
+                            triangles[triangleIndex++] = (ushort)(vertIndex + 1);
+                            triangles[triangleIndex++] = (ushort)(vertIndex + terrainSize + 1);
+                        }
+                        else
+                        {
+                            triangles[triangleIndex++] = (ushort)(vertIndex + terrainSize + 2);
+                            triangles[triangleIndex++] = (ushort)vertIndex;
+                        }
+
                         triangles[triangleIndex++] = (ushort)(vertIndex + terrainSize + 2);
                         triangles[triangleIndex++] = (ushort)(vertIndex + 1);
                     }
 
-                    float terrainYOffset = Mathf.PerlinNoise((x + 0.1f) * noiseScale, (z + 0.1f) * noiseScale) *
-                                           noiseMultiplier;
+                    float terrainYOffsetMultiplier = SampleTerrainMultiplier(x, z);
 
-                    verts[vertIndex++] = new TerrainVertex(new Vector3(x, terrainYOffset, z), 0, 1);
+                    float terrainYOffset = Mathf.PerlinNoise((x + 0.1f) * noiseScale, (z + 0.1f) * noiseScale) * noiseMultiplier -
+                                           noiseMultiplier / 2;
+                    terrainYOffset *= terrainYOffsetMultiplier;
+
+                    verts[vertIndex++] = new TerrainVertex(new Vector3(
+                        x + Random.Range(-1, 1) * maxRandomVertexOffsetUnityUnits,
+                        terrainYOffset,
+                        z + Random.Range(-1, 1) * maxRandomVertexOffsetUnityUnits));
                 }
             }
 
@@ -125,6 +151,75 @@ namespace Gameplay.Level.LevelGenerator
             mesh.RecalculateBounds();
 
             GetComponent<MeshFilter>().mesh = mesh;
+            GetComponent<MeshCollider>().sharedMesh = mesh;
+            
+            System.GC.Collect();
+        }
+
+        private float SampleTerrainMultiplier(float x, float y)
+        {
+            int centreTextureX = Mathf.RoundToInt(x / terrainSize * baseFlatteningMap.width);
+            int centreTextureY = Mathf.RoundToInt(y / terrainSize * baseFlatteningMap.height);
+            float sampledPixel = baseFlatteningMap.GetPixel(centreTextureX, centreTextureY).r;
+
+            if (sampledPixel < .01)
+                return sampledPixel;
+
+            float closest = baseTerrainSmootheningDistance;
+            float incrementX = (float)terrainSize / baseFlatteningMap.width;
+            float incrementY = (float)terrainSize / baseFlatteningMap.height;
+            float texWidth = baseFlatteningMap.width;
+            float texHeight = baseFlatteningMap.height;
+
+            for (float ix = -baseTerrainSmootheningDistance; ix < baseTerrainSmootheningDistance + 1; ix += incrementX)
+            {
+                if (ix == 0)
+                    continue;
+                
+                int texX = Mathf.FloorToInt(centreTextureX + ix);
+                if (texX >= texWidth || texX < 0)
+                    continue;
+                
+                for (float iy = -baseTerrainSmootheningDistance; iy < baseTerrainSmootheningDistance + 1; iy += incrementY)
+                {
+                    if (iy == 0)
+                        continue;
+                    
+                    int texY = Mathf.FloorToInt(centreTextureY + iy);
+
+                    if (texY >= texHeight || texY < 0)
+                        continue;
+
+                    sampledPixel = baseFlatteningMap.GetPixel(texX, texY).r;
+                    if (sampledPixel < .01)
+                    {
+                        float dist = new Vector2(ix, iy).magnitude;
+                        closest = (dist < closest) ? dist : closest;
+                    }
+                }
+            }
+
+            return Mathf.Clamp(closest / baseTerrainSmootheningDistance, 0, 1);
+        }
+    }
+
+    public class RandomEx : System.Random
+    {
+        private uint boolBits;
+
+        public RandomEx() : base()
+        {
+        }
+
+        public RandomEx(int seed) : base(seed)
+        {
+        }
+
+        public bool NextBoolean()
+        {
+            boolBits >>= 1;
+            if (boolBits <= 1) boolBits = (uint)~this.Next();
+            return (boolBits & 1) == 0;
         }
     }
 }
