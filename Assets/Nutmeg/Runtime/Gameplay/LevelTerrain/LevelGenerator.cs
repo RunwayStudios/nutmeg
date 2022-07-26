@@ -7,7 +7,7 @@ namespace Gameplay.Level.LevelGenerator
 {
     public class LevelGenerator : MonoBehaviour
     {
-        [Header("Genral")] [SerializeField] [Tooltip("Size of a terrainUnit")]
+        [Header("General")] [SerializeField] [Tooltip("Size of a terrainUnit")]
         private float terrainUnitSize = 1f;
 
         [SerializeField] [Tooltip("Width and Height of the terrain in terrainUnits")]
