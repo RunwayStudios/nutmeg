@@ -15,11 +15,13 @@ namespace Nutmeg.Runtime.Gameplay.Player
         [SerializeField] private CharacterController cc;
         [SerializeField] private StateMachine stateMachine;
 
-        [Header("Movment")] [SerializeField] private float moveSpeed;
+        [Header("Movement")] [SerializeField] private float moveSpeed;
 
         [SerializeField] private Item equippedWeapon;
         [SerializeField] private GameObject equippedThrowable;
         [SerializeField] private Transform hand;
+
+        public static PlayerController c_player;
 
         private Action stateAction;
 
@@ -37,6 +39,8 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
             if (isLocalPlayer)
             {
+                c_player = this;
+
                 input.onMoveActionPerformed += OnMoveActionPerformed;
                 input.onMoveActionCanceled += OnMoveActionCanceled;
                 input.onFireActionPerformed += OnFireActionPerformed;

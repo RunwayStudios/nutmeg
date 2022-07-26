@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Mirror;
 using Nutmeg.Runtime.Core.Networking.Lobby;
 using Steamworks;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,9 @@ namespace Nutmeg.Runtime.Core.Networking
     {
         [SerializeField] private Text teyt;
         [SerializeField] private Transform startPosition;
-
+        
+        
+        
         private void Start()
         {
             startPositions = new List<Transform> {startPosition};
