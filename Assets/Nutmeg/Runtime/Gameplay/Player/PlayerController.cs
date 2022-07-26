@@ -1,4 +1,5 @@
 ﻿using System;
+using Mirror;
 using Nutmeg.Runtime.Gameplay.Items;
 using Nutmeg.Runtime.Gameplay.Weapons;
 using Nutmeg.Runtime.Utility.InputSystem;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Player
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : NetworkBehaviour
     {
         [SerializeField] private InputEventChannel input;
         [SerializeField] private CharacterController cc;
@@ -29,17 +30,20 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         public bool IsWalking { get; private set; }
 
-        private void OnEnable()
+        private void Start()
         {
             stateMachine.onStateEnter += OnStateEnter;
             stateMachine.onStateExit += OnStateExit;
 
-            input.onMoveActionPerformed += OnMoveActionPerformed;
-            input.onMoveActionCanceled += OnMoveActionCanceled;
-            input.onFireActionPerformed += OnFireActionPerformed;
-            input.onFireActionCanceled += OnFireActionCanceled;
-            input.onReloadActionPerformed += OnReloadActionPerformed;
-            input.onThrowActionPerformed += OnThrowActionPerformed;
+            if (isLocalPlayer)
+            {
+                input.onMoveActionPerformed += OnMoveActionPerformed;
+                input.onMoveActionCanceled += OnMoveActionCanceled;
+                input.onFireActionPerformed += OnFireActionPerformed;
+                input.onFireActionCanceled += OnFireActionCanceled;
+                input.onReloadActionPerformed += OnReloadActionPerformed;
+                input.onThrowActionPerformed += OnThrowActionPerformed;
+            }
         }
 
         private void OnStateEnter(PlayerState state)

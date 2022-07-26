@@ -12,9 +12,9 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.Throwable
         {
             Collider[] colliders = Physics.OverlapSphere(transform.position, Stats[StatType.Range]);
 
-            foreach (Collider cl in colliders)
+            foreach (var cl in colliders)
             {
-                if (cl.CompareTag("DamageReceiver") && cl.TryGetComponent(typeof(DamageReceiver), out Component co))
+                if (cl.CompareTag("DamageReceiver") && cl.TryGetComponent(typeof(DamageReceiver), out var co))
                     co.GetComponent<DamageReceiver>().ReceiveDamage(Stats[StatType.Damage]);
             }
         }
