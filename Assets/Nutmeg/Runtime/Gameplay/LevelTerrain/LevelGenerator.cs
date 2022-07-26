@@ -19,6 +19,12 @@ namespace Gameplay.Level.LevelGenerator
         [Space] [SerializeField] [Tooltip("texture showing the area being flattened for the base")]
         private Texture2D baseFlatteningMap;
 
+        // [0] first black pixel in x axis
+        // [1] last in x axis
+        // [2] first in y axis
+        // [3] last in y axis
+        private int[] baseFlatteningMapBounds = new int[4];
+
         [SerializeField] [Tooltip("number of terrainUnits to smoothen between flattened base and terrain")]
         private int baseTerrainSmootheningDistance = 10;
 
@@ -28,7 +34,7 @@ namespace Gameplay.Level.LevelGenerator
 
         [SerializeField] private float noiseMultiplier = 1f;
 
-        
+
         [Space] [SerializeField] private bool regenerate = false;
         private readonly Stopwatch terrainGenStopwatch = new Stopwatch();
         [SerializeField] private double generateMS = 0f;
@@ -40,6 +46,7 @@ namespace Gameplay.Level.LevelGenerator
         // Start is called before the first frame update
         void Start()
         {
+            CalculateBaseFlatteningMapBounds();
             GenerateLevel();
         }
 
@@ -90,28 +97,29 @@ namespace Gameplay.Level.LevelGenerator
             int vertexCount = terrainSize * terrainSize + terrainSize * 2 + 1;
 
             var verts = new NativeArray<TerrainVertex>(vertexCount, Allocator.Temp,
-                NativeArrayOptions.ClearMemory);
+                NativeArrayOptions.UninitializedMemory);
 
             int triangleIndexCount = terrainSize * terrainSize * 6;
 
             var triangles = new NativeArray<ushort>(triangleIndexCount, Allocator.Temp,
-                NativeArrayOptions.ClearMemory);
+                NativeArrayOptions.UninitializedMemory);
 
 
             // ... fill in vertex array data here...
 
             float terrainSizeUnityUnits = terrainSize * terrainUnitSize;
+            float terrainSizeUnityUnitsHalf = terrainSizeUnityUnits / 2;
             float maxRandomVertexOffsetUnityUnits = maxRandomVertexOffset * terrainUnitSize;
             RandomEx rndmBool = new RandomEx();
 
             int vertIndex = 0;
             ushort triangleIndex = 0;
 
-            for (float z = 0; z <= terrainSizeUnityUnits; z += terrainUnitSize)
+            for (float z = -terrainSizeUnityUnitsHalf; z <= terrainSizeUnityUnitsHalf; z += terrainUnitSize)
             {
-                for (float x = 0; x <= terrainSizeUnityUnits; x += terrainUnitSize)
+                for (float x = -terrainSizeUnityUnitsHalf; x <= terrainSizeUnityUnitsHalf; x += terrainUnitSize)
                 {
-                    if (x < terrainSizeUnityUnits && z < terrainSizeUnityUnits)
+                    if (x < terrainSizeUnityUnitsHalf && z < terrainSizeUnityUnitsHalf)
                     {
                         triangles[triangleIndex++] = (ushort)vertIndex;
                         triangles[triangleIndex++] = (ushort)(vertIndex + terrainSize + 1);
@@ -130,7 +138,7 @@ namespace Gameplay.Level.LevelGenerator
                         triangles[triangleIndex++] = (ushort)(vertIndex + 1);
                     }
 
-                    float terrainYOffsetMultiplier = SampleTerrainMultiplier(x, z);
+                    float terrainYOffsetMultiplier = SampleTerrainMultiplier(x + terrainSizeUnityUnitsHalf, z + terrainSizeUnityUnitsHalf);
 
                     float terrainYOffset = Mathf.PerlinNoise((x + 0.1f) * noiseScale, (z + 0.1f) * noiseScale) * noiseMultiplier -
                                            noiseMultiplier / 2;
@@ -152,39 +160,52 @@ namespace Gameplay.Level.LevelGenerator
 
             GetComponent<MeshFilter>().mesh = mesh;
             GetComponent<MeshCollider>().sharedMesh = mesh;
-            
+
             System.GC.Collect();
         }
 
         private float SampleTerrainMultiplier(float x, float y)
         {
-            int centreTextureX = Mathf.RoundToInt(x / terrainSize * baseFlatteningMap.width);
-            int centreTextureY = Mathf.RoundToInt(y / terrainSize * baseFlatteningMap.height);
+            float texWidth = baseFlatteningMap.width;
+            float texHeight = baseFlatteningMap.height;
+            int centreTextureX = Mathf.RoundToInt(x / terrainSize * texWidth);
+            int centreTextureY = Mathf.RoundToInt(y / terrainSize * texHeight);
+
+            if (centreTextureX < baseFlatteningMapBounds[0] - baseTerrainSmootheningDistance ||
+                centreTextureX > baseFlatteningMapBounds[1] + baseTerrainSmootheningDistance ||
+                centreTextureY < baseFlatteningMapBounds[2] - baseTerrainSmootheningDistance ||
+                centreTextureY > baseFlatteningMapBounds[3] + baseTerrainSmootheningDistance)
+                return 1.0f;
+
             float sampledPixel = baseFlatteningMap.GetPixel(centreTextureX, centreTextureY).r;
 
-            if (sampledPixel < .01)
+            if (sampledPixel < .01 || baseTerrainSmootheningDistance == 0)
                 return sampledPixel;
 
             float closest = baseTerrainSmootheningDistance;
-            float incrementX = (float)terrainSize / baseFlatteningMap.width;
-            float incrementY = (float)terrainSize / baseFlatteningMap.height;
-            float texWidth = baseFlatteningMap.width;
-            float texHeight = baseFlatteningMap.height;
+            float incrementX = terrainSize / texWidth;
+            float incrementY = terrainSize / texHeight;
 
-            for (float ix = -baseTerrainSmootheningDistance; ix < baseTerrainSmootheningDistance + 1; ix += incrementX)
+            // checking bounds to see whether we can skip some checks in loop below
+            float temp = centreTextureX - baseTerrainSmootheningDistance;
+            float lowestX = temp < baseFlatteningMapBounds[0] ? -(baseTerrainSmootheningDistance - (baseFlatteningMapBounds[0] - temp)) : -baseTerrainSmootheningDistance;
+            temp = centreTextureX + baseTerrainSmootheningDistance;
+            float highestX = temp > baseFlatteningMapBounds[1] ? (baseTerrainSmootheningDistance - (temp - baseFlatteningMapBounds[1])) : baseTerrainSmootheningDistance;
+            
+            temp = centreTextureY - baseTerrainSmootheningDistance;
+            float lowestY = temp < baseFlatteningMapBounds[2] ? -(baseTerrainSmootheningDistance - (baseFlatteningMapBounds[2] - temp)) : -baseTerrainSmootheningDistance;
+            temp = centreTextureY + baseTerrainSmootheningDistance;
+            float highestY = temp > baseFlatteningMapBounds[3] ? (baseTerrainSmootheningDistance - (temp - baseFlatteningMapBounds[3])) : baseTerrainSmootheningDistance;
+
+            // checking all pixels around centerPixel to find closest black one
+            for (float ix = lowestX; ix < highestX + 1; ix += incrementX)
             {
-                if (ix == 0)
-                    continue;
-                
                 int texX = Mathf.FloorToInt(centreTextureX + ix);
                 if (texX >= texWidth || texX < 0)
                     continue;
-                
-                for (float iy = -baseTerrainSmootheningDistance; iy < baseTerrainSmootheningDistance + 1; iy += incrementY)
+
+                for (float iy = lowestY; iy < highestY + 1; iy += incrementY)
                 {
-                    if (iy == 0)
-                        continue;
-                    
                     int texY = Mathf.FloorToInt(centreTextureY + iy);
 
                     if (texY >= texHeight || texY < 0)
@@ -199,7 +220,32 @@ namespace Gameplay.Level.LevelGenerator
                 }
             }
 
-            return Mathf.Clamp(closest / baseTerrainSmootheningDistance, 0, 1);
+            return Mathf.SmoothStep(0, 1, closest / baseTerrainSmootheningDistance);
+        }
+
+        private void CalculateBaseFlatteningMapBounds()
+        {
+            int texWidth = baseFlatteningMap.width;
+            int texHeight = baseFlatteningMap.height;
+
+            baseFlatteningMapBounds[0] = texWidth;
+            baseFlatteningMapBounds[1] = 0;
+            baseFlatteningMapBounds[2] = texHeight;
+            baseFlatteningMapBounds[3] = 0;
+
+            for (int x = 0; x < texWidth; x++)
+            {
+                for (int y = 0; y < texHeight; y++)
+                {
+                    if (baseFlatteningMap.GetPixel(x, y).r < .01)
+                    {
+                        baseFlatteningMapBounds[0] = (x < baseFlatteningMapBounds[0]) ? x : baseFlatteningMapBounds[0];
+                        baseFlatteningMapBounds[1] = (x > baseFlatteningMapBounds[1]) ? x : baseFlatteningMapBounds[1];
+                        baseFlatteningMapBounds[2] = (y < baseFlatteningMapBounds[2]) ? y : baseFlatteningMapBounds[2];
+                        baseFlatteningMapBounds[3] = (y > baseFlatteningMapBounds[3]) ? y : baseFlatteningMapBounds[3];
+                    }
+                }
+            }
         }
     }
 

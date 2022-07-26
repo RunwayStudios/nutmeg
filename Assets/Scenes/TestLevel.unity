@@ -2726,7 +2726,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 578148037}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -100, y: -29, z: 50}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 16726743}
@@ -2748,9 +2748,9 @@ MonoBehaviour:
   terrainSize: 100
   maxRandomVertexOffset: 0.25
   baseFlatteningMap: {fileID: 2800000, guid: 699243633679d11479c69ba2415cd7be, type: 3}
-  baseTerrainSmootheningDistance: 10
-  noiseScale: 0.1
-  noiseMultiplier: 10
+  baseTerrainSmootheningDistance: 20
+  noiseScale: 0.05
+  noiseMultiplier: 7
   regenerate: 0
   generateMS: 0
 --- !u!23 &578148040
