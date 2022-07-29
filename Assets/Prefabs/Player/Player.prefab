@@ -1848,6 +1848,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2301625246436863681}
   - component: {fileID: 8075652109735551753}
+  - component: {fileID: 7539812409645716862}
   - component: {fileID: 5905950931694304186}
   - component: {fileID: 3684348489722995112}
   - component: {fileID: 7812347246799318936}
@@ -1897,6 +1898,19 @@ MonoBehaviour:
   equippedWeapon: {fileID: 8917122791119549140}
   equippedThrowable: {fileID: 1499745551670331490, guid: c2ce2eec04a7d464a997101ebe4e8421, type: 3}
   hand: {fileID: 3947274929086874689}
+--- !u!114 &7539812409645716862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2301625247740665164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d20f2be949f4fedb930111277f5aa36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 2301625248092270180}
 --- !u!114 &5905950931694304186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2307,7 +2321,7 @@ Animator:
   m_GameObject: {fileID: 2301625248092270186}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: b5f71c859f9f9bf41badda8a4650082c, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e12d6be634a06f54ca29f62fde186279, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -2558,6 +2572,10 @@ PrefabInstance:
     - target: {fileID: 7227987240207125737, guid: d788a325800a2ba47af4539a6477ffe3, type: 3}
       propertyPath: m_Name
       value: SM_Wep_Rifle_Assault_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7227987240207125737, guid: d788a325800a2ba47af4539a6477ffe3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7231342680461741833, guid: d788a325800a2ba47af4539a6477ffe3, type: 3}
       propertyPath: m_RootOrder

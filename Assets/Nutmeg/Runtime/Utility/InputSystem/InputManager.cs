@@ -19,12 +19,12 @@ namespace Nutmeg.Runtime.Utility.InputSystem
 
             input.Player.Move.performed += MoveOnPerformed;
             input.Player.Move.canceled += MoveOnCanceled;
-            input.Player.Fire.performed += FireOnPerformed;
-            input.Player.Fire.canceled += FireOnCanceled;
+            input.Player.Primary.performed += PrimaryOnPerformed;
+            input.Player.Primary.canceled += PrimaryOnCanceled;
             input.Player.Reload.performed += ReloadOnPerformed;
             input.Player.Reload.canceled += ReloadOnCanceled;
-            input.Player.Throw.performed += ThrowOnPerformed;
-            input.Player.Throw.canceled += ThrowOnCanceled;
+            input.Player.Secondary.performed += SecondaryOnPerformed;
+            input.Player.Secondary.canceled += SecondaryOnCanceled;
             input.Player.Scroll.performed += ScrollOnPerformed;
             input.Player.Enable();
         }
@@ -34,14 +34,14 @@ namespace Nutmeg.Runtime.Utility.InputSystem
             eventChannel.PerformScrollAction(context);
         }
 
-        private void ThrowOnPerformed(InputAction.CallbackContext context)
+        private void SecondaryOnPerformed(InputAction.CallbackContext context)
         {
-            eventChannel.PerformThrowAction(context);
+            eventChannel.PerformSecondaryAction(context);
         }
 
-        private void ThrowOnCanceled(InputAction.CallbackContext context)
+        private void SecondaryOnCanceled(InputAction.CallbackContext context)
         {
-            eventChannel.CancelThrowAction(context);
+            eventChannel.CancelSecondaryAction(context);
         }
 
         private void ReloadOnPerformed(InputAction.CallbackContext context)
@@ -54,14 +54,14 @@ namespace Nutmeg.Runtime.Utility.InputSystem
             eventChannel.CancelReloadAction(context);
         }
 
-        private void FireOnPerformed(InputAction.CallbackContext context)
+        private void PrimaryOnPerformed(InputAction.CallbackContext context)
         {
-            eventChannel.PerformFireAction(context);
+            eventChannel.PerformPrimaryAction(context);
         }
 
-        private void FireOnCanceled(InputAction.CallbackContext context)
+        private void PrimaryOnCanceled(InputAction.CallbackContext context)
         {
-            eventChannel.CancelFireAction(context);
+            eventChannel.CancelPrimaryAction(context);
         }
 
         private void MoveOnPerformed(InputAction.CallbackContext context)

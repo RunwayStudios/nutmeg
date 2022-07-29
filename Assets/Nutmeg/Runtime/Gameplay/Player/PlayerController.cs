@@ -28,6 +28,8 @@ namespace Nutmeg.Runtime.Gameplay.Player
         private Vector2 moveVector;
         private Vector3 lookTarget;
 
+        private PlayerAnimationController animationController;
+
         private bool useItem;
 
         public bool IsWalking { get; private set; }
@@ -37,16 +39,18 @@ namespace Nutmeg.Runtime.Gameplay.Player
             stateMachine.onStateEnter += OnStateEnter;
             stateMachine.onStateExit += OnStateExit;
 
+            animationController = GetComponent<PlayerAnimationController>();
+            
             if (isLocalPlayer)
             {
                 c_player = this;
 
                 input.onMoveActionPerformed += OnMoveActionPerformed;
                 input.onMoveActionCanceled += OnMoveActionCanceled;
-                input.onFireActionPerformed += OnFireActionPerformed;
-                input.onFireActionCanceled += OnFireActionCanceled;
+                input.onPrimaryActionPerformed += OnPrimaryActionPerformed;
+                input.onPrimaryActionCanceled += OnPrimaryActionCanceled;
                 input.onReloadActionPerformed += OnReloadActionPerformed;
-                input.onThrowActionPerformed += OnThrowActionPerformed;
+                input.onSecondaryActionPerformed += OnSecondaryActionPerformed;
             }
         }
 
@@ -56,6 +60,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
             {
                 case PlayerState.Idle:
                     stateAction += OnIdle;
+                    animationController.PlayAnimation("Player_Rifle_Idle_1");
                     break;
                 case PlayerState.Walking:
                     stateAction += OnWalking;
@@ -78,12 +83,44 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void OnWalking()
         {
+
+            float dot = Vector3.Dot(new Vector3(-moveVector.x, 0, moveVector.y), transform.forward); 
+            Vector3 cross = Vector3.Cross(new Vector3(-moveVector.x, 0, moveVector.y), transform.forward); 
+            Debug.Log(dot);
+
+            bool isPerpendicular = dot > -0.5 && dot < 0.5;
+            
+            animationController.UpdateFloatParam("Player_Rifle_Walk", Math.Abs(dot));
+            
+            //Back or Forth
+            if(cross.y < 0 && dot > 0.5)
+                animationController.PlayBlendAnimation("Player_Rifle_Walk_Forward_Right");
+            else if(cross.y < 0 && dot < -0.5)
+                animationController.PlayBlendAnimation("Player_Rifle_Walk_Backward_Right");
+            else if(cross.y > 0 && dot > 0.5)
+                animationController.PlayBlendAnimation("Player_Rifle_Walk_Forward_Left");
+            else if(cross.y > 0 && dot < -0.5)
+                animationController.PlayBlendAnimation("Player_Rifle_Walk_Backward_Left");
+                
+
+            /*if(cross.y < 0 && isPerpendicular)
+                animationController.PlayAnimation("Player_Rifle_Walk_Right");
+            else if(cross.y > 0 && isPerpendicular)
+                animationController.PlayAnimation("Player_Rifle_Walk_Left");
+            else if(dot < 0.5)
+                animationController.PlayAnimation("Player_Rifle_Walk_Forward");
+            else if(dot > -0.5)
+                animationController.PlayAnimation("Player_Rifle_Walk_Backward");
+            */
+            //Left or right
+            
             Move();
             Rotate();
         }
 
         private void OnIdle()
         {
+           
             Rotate();
         }
 
@@ -104,14 +141,20 @@ namespace Nutmeg.Runtime.Gameplay.Player
             moveVector = value;
         }
 
-        private void OnFireActionPerformed()
+        private void OnPrimaryActionPerformed()
         {
+            //animationController.SetNewAnimationParamBool("rifle", true);
+            animationController.PlayAnimation("equip rifle");
+            
+            //TODO doesnt make sense to add to stateAction
+            //Feels like a cheap work around
             if (equippedWeapon != null)
                 stateAction += equippedWeapon.Use;
         }
 
-        private void OnFireActionCanceled()
+        private void OnPrimaryActionCanceled()
         {
+            //TODO doesnt make sense to add to stateAction
             if (equippedWeapon != null)
                 stateAction -= equippedWeapon.Use;
         }
@@ -122,8 +165,9 @@ namespace Nutmeg.Runtime.Gameplay.Player
             equippedWeapon.GetComponent<Weapon>().ReloadWeapon();
         }
 
-        private void OnThrowActionPerformed()
+        private void OnSecondaryActionPerformed()
         {
+            //TODO make more modular. Mybe the secondary wont be a nade
             Instantiate(equippedThrowable, hand.position, hand.rotation);
         }
 
@@ -143,6 +187,11 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void OnDrawGizmos()
         {
+            Gizmos.color = Color.green;
+            Gizmos.DrawRay(transform.position, transform.forward * 2f);
+            
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawRay(transform.position, new Vector3(-moveVector.x, 0, moveVector.y) * 2f);
         }
     }
 }

@@ -9,12 +9,12 @@ namespace Nutmeg.Runtime.Utility.InputSystem
     {
         public Action<Vector2> onMoveActionPerformed;
         public Action<Vector2> onMoveActionCanceled;
-        public Action onFireActionPerformed;
-        public Action onFireActionCanceled;
+        public Action onPrimaryActionPerformed;
+        public Action onPrimaryActionCanceled;
         public Action onReloadActionPerformed;
         public Action onReloadActionCanceled;
-        public Action onThrowActionPerformed;
-        public Action onThrowActionCanceled;
+        public Action onSecondaryActionPerformed;
+        public Action onSecondaryActionCanceled;
         public Action<Vector2> onScrollActionPerformed;
         
         public void PerformScrollAction(InputAction.CallbackContext context)
@@ -22,14 +22,14 @@ namespace Nutmeg.Runtime.Utility.InputSystem
             onScrollActionPerformed?.Invoke(context.ReadValue<Vector2>());
         }
         
-        public void PerformThrowAction(InputAction.CallbackContext context)
+        public void PerformSecondaryAction(InputAction.CallbackContext context)
         {
-            onThrowActionPerformed?.Invoke();
+            onSecondaryActionPerformed?.Invoke();
         }
         
-        public void CancelThrowAction(InputAction.CallbackContext context)
+        public void CancelSecondaryAction(InputAction.CallbackContext context)
         {
-            onThrowActionCanceled?.Invoke();
+            onSecondaryActionCanceled?.Invoke();
         }
         
         public void PerformReloadAction(InputAction.CallbackContext context)
@@ -52,14 +52,14 @@ namespace Nutmeg.Runtime.Utility.InputSystem
             onMoveActionCanceled?.Invoke(context.ReadValue<Vector2>());
         }
         
-        public void PerformFireAction(InputAction.CallbackContext context)
+        public void PerformPrimaryAction(InputAction.CallbackContext context)
         {
-            onFireActionPerformed?.Invoke();
+            onPrimaryActionPerformed?.Invoke();
         }
         
-        public void CancelFireAction(InputAction.CallbackContext context)
+        public void CancelPrimaryAction(InputAction.CallbackContext context)
         {
-            onFireActionCanceled?.Invoke();
+            onPrimaryActionCanceled?.Invoke();
         }
     }
 }
