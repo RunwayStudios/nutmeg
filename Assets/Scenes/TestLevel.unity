@@ -2745,13 +2745,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrainUnitSize: 1
-  terrainSize: 100
+  terrainSize: 128
   maxRandomVertexOffset: 0.25
   baseFlatteningMap: {fileID: 2800000, guid: 699243633679d11479c69ba2415cd7be, type: 3}
   baseTerrainSmootheningDistance: 20
   noiseScale: 0.05
   noiseMultiplier: 7
-  regenerate: 0
+  regenerate: 1
   generateMS: 0
 --- !u!23 &578148040
 MeshRenderer:

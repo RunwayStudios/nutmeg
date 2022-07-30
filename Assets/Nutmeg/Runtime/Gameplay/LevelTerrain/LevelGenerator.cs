@@ -1,7 +1,10 @@
+using System;
 using System.Diagnostics;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Debug = UnityEngine.Debug;
+using Random = UnityEngine.Random;
 
 namespace Gameplay.Level.LevelGenerator
 {
@@ -47,7 +50,7 @@ namespace Gameplay.Level.LevelGenerator
         void Start()
         {
             CalculateBaseFlatteningMapBounds();
-            GenerateLevel();
+            //GenerateLevel();
         }
 
         // Update is called once per frame
@@ -84,7 +87,22 @@ namespace Gameplay.Level.LevelGenerator
 
         public void GenerateLevel()
         {
-            var mesh = new Mesh();
+            foreach (Transform child in transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+
+            int meshSplitCount = Mathf.CeilToInt(terrainSize / 100f);
+            int singleMeshSize = terrainSize / meshSplitCount;
+
+            Mesh[,] meshes = new Mesh[meshSplitCount, meshSplitCount];
+            for (int ix = 0; ix < meshSplitCount; ix++)
+            {
+                for (int iy = 0; iy < meshSplitCount; iy++)
+                {
+                    meshes[ix, iy] = new Mesh();
+                }
+            }
 
             // specify vertex count and layout
             var layout = new[]
@@ -94,48 +112,58 @@ namespace Gameplay.Level.LevelGenerator
                 //new VertexAttributeDescriptor(VertexAttribute.Tangent, VertexAttributeFormat.UNorm8, 4),
             };
 
-            int vertexCount = terrainSize * terrainSize + terrainSize * 2 + 1;
+            int vertexCount = singleMeshSize * singleMeshSize + singleMeshSize * 2 + 1;
+            int triangleIndexCount = singleMeshSize * singleMeshSize * 6;
 
-            var verts = new NativeArray<TerrainVertex>(vertexCount, Allocator.Temp,
-                NativeArrayOptions.UninitializedMemory);
-
-            int triangleIndexCount = terrainSize * terrainSize * 6;
+            NativeArray<TerrainVertex>[,] verts = new NativeArray<TerrainVertex>(vertexCount, Allocator.Temp,
+                NativeArrayOptions.UninitializedMemory)[meshSplitCount,meshSplitCount];
 
             var triangles = new NativeArray<ushort>(triangleIndexCount, Allocator.Temp,
                 NativeArrayOptions.UninitializedMemory);
-
-
-            // ... fill in vertex array data here...
 
             float terrainSizeUnityUnits = terrainSize * terrainUnitSize;
             float terrainSizeUnityUnitsHalf = terrainSizeUnityUnits / 2;
             float maxRandomVertexOffsetUnityUnits = maxRandomVertexOffset * terrainUnitSize;
             RandomEx rndmBool = new RandomEx();
 
-            int vertIndex = 0;
-            ushort triangleIndex = 0;
 
-            for (float z = -terrainSizeUnityUnitsHalf; z <= terrainSizeUnityUnitsHalf; z += terrainUnitSize)
+            int curMeshX;
+            int curMeshZ;
+            Mesh curMesh;
+
+            int[,] vertIndexes = new int[meshSplitCount,meshSplitCount];
+            ushort[,] triangleIndexes = new ushort[meshSplitCount,meshSplitCount];
+
+            for (float z = -terrainSizeUnityUnitsHalf;
+                 z <= terrainSizeUnityUnitsHalf;
+                 z += terrainUnitSize)
             {
-                for (float x = -terrainSizeUnityUnitsHalf; x <= terrainSizeUnityUnitsHalf; x += terrainUnitSize)
+                for (float x = -terrainSizeUnityUnitsHalf;
+                     x <= terrainSizeUnityUnitsHalf;
+                     x += terrainUnitSize)
                 {
-                    if (x < terrainSizeUnityUnitsHalf && z < terrainSizeUnityUnitsHalf)
+                    curMeshX = Mathf.FloorToInt(x / singleMeshSize);
+                    curMeshZ = Mathf.FloorToInt(z / singleMeshSize);
+                    curMesh = meshes[curMeshX, curMeshZ];
+
+                    if (x < terrainSizeUnityUnitsHalf &&
+                        z < terrainSizeUnityUnitsHalf)
                     {
-                        triangles[triangleIndex++] = (ushort)vertIndex;
-                        triangles[triangleIndex++] = (ushort)(vertIndex + terrainSize + 1);
+                        triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)vertIndexes[curMeshX, curMeshZ];
+                        triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + singleMeshSize + 1);
                         if (rndmBool.NextBoolean())
                         {
-                            triangles[triangleIndex++] = (ushort)(vertIndex + 1);
-                            triangles[triangleIndex++] = (ushort)(vertIndex + terrainSize + 1);
+                            triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + 1);
+                            triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + singleMeshSize + 1);
                         }
                         else
                         {
-                            triangles[triangleIndex++] = (ushort)(vertIndex + terrainSize + 2);
-                            triangles[triangleIndex++] = (ushort)vertIndex;
+                            triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + singleMeshSize + 2);
+                            triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)vertIndexes[curMeshX, curMeshZ];
                         }
 
-                        triangles[triangleIndex++] = (ushort)(vertIndex + terrainSize + 2);
-                        triangles[triangleIndex++] = (ushort)(vertIndex + 1);
+                        triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + singleMeshSize + 2);
+                        triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + 1);
                     }
 
                     float terrainYOffsetMultiplier = SampleTerrainMultiplier(x + terrainSizeUnityUnitsHalf, z + terrainSizeUnityUnitsHalf);
@@ -144,22 +172,36 @@ namespace Gameplay.Level.LevelGenerator
                                            noiseMultiplier / 2;
                     terrainYOffset *= terrainYOffsetMultiplier;
 
-                    verts[vertIndex++] = new TerrainVertex(new Vector3(
+                    verts[vertIndexes[curMeshX, curMeshZ]++] = new TerrainVertex(new Vector3(
                         x + Random.Range(-1, 1) * maxRandomVertexOffsetUnityUnits,
                         terrainYOffset,
                         z + Random.Range(-1, 1) * maxRandomVertexOffsetUnityUnits));
                 }
             }
 
-            mesh.SetVertexBufferParams(vertexCount, layout);
-            mesh.SetVertexBufferData(verts, 0, 0, vertexCount, 0, MeshUpdateFlags.Default);
-            mesh.SetIndices(triangles, MeshTopology.Triangles, 0, false, 0);
+            for (int meshX = 0; meshX < meshSplitCount; meshX++)
+            {
+                for (int meshZ = 0; meshZ < meshSplitCount; meshZ++)
+                {
+                    curMesh = meshes[meshX, meshZ];
+                    
+                    curMesh.SetVertexBufferParams(vertexCount, layout);
+                    curMesh.SetVertexBufferData(verts, 0, 0, vertexCount, 0, MeshUpdateFlags.Default);
+                    curMesh.SetIndices(triangles, MeshTopology.Triangles, 0, false, 0);
 
-            //mesh.RecalculateNormals();
-            mesh.RecalculateBounds();
+                    //mesh.RecalculateNormals();
+                    curMesh.RecalculateBounds();
 
-            GetComponent<MeshFilter>().mesh = mesh;
-            GetComponent<MeshCollider>().sharedMesh = mesh;
+                    GameObject go = new GameObject("levelMesh [" + meshX + ", " + meshZ + "]",
+                        typeof(MeshFilter), typeof(MeshCollider), typeof(MeshRenderer));
+                    go.transform.SetParent(transform);
+
+                    go.GetComponent<MeshRenderer>().material = GetComponent<MeshRenderer>().material;
+                    go.GetComponent<MeshFilter>().mesh = curMesh;
+                    go.GetComponent<MeshCollider>().sharedMesh = curMesh;
+                }
+            }
+
 
             System.GC.Collect();
         }
@@ -191,7 +233,7 @@ namespace Gameplay.Level.LevelGenerator
             float lowestX = temp < baseFlatteningMapBounds[0] ? -(baseTerrainSmootheningDistance - (baseFlatteningMapBounds[0] - temp)) : -baseTerrainSmootheningDistance;
             temp = centreTextureX + baseTerrainSmootheningDistance;
             float highestX = temp > baseFlatteningMapBounds[1] ? (baseTerrainSmootheningDistance - (temp - baseFlatteningMapBounds[1])) : baseTerrainSmootheningDistance;
-            
+
             temp = centreTextureY - baseTerrainSmootheningDistance;
             float lowestY = temp < baseFlatteningMapBounds[2] ? -(baseTerrainSmootheningDistance - (baseFlatteningMapBounds[2] - temp)) : -baseTerrainSmootheningDistance;
             temp = centreTextureY + baseTerrainSmootheningDistance;
