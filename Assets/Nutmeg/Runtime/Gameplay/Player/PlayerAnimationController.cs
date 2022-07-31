@@ -8,10 +8,19 @@ namespace Nutmeg.Runtime.Gameplay.Player
         [SerializeField] private Animator animator;
 
         private string currentAnimation;
+
+        private float animationFadeTime;
+
+        private void Start()
+        {
+        }
+        
         private void Update()
         {
         }
 
+        public void SetAnimationFadeTime(float time) => animationFadeTime = time;
+        
         public void UpdateFloatParam(string param, float amount)
         {
             animator.SetFloat(param, amount);
@@ -26,13 +35,18 @@ namespace Nutmeg.Runtime.Gameplay.Player
             currentAnimation = animation;
         }
 
-        public void PlayBlendAnimation(string blendAnimation)
-        {
-            if(currentAnimation == blendAnimation) return;
-            animator.Play(blendAnimation);
-            currentAnimation = blendAnimation;
-        }
+        public void PlayCrossAnimation(string animation, int layer) =>
+            PlayCrossAnimation(animation, animationFadeTime, layer);
         
+        public void PlayCrossAnimation(string animation, float fadeTime, int layer)
+        {
+            if(currentAnimation == animation /*|| animator.IsInTransition(layer)*/) return;
+            
+            animator.CrossFade(animation, fadeTime, layer);
+            
+            currentAnimation = animation;
+        }
+
         public void SetNewAnimationParamBool(string param, bool b)
         {
             animator.SetBool(param, b);

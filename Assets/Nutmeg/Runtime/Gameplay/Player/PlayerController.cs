@@ -16,6 +16,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
         [SerializeField] private StateMachine stateMachine;
 
         [Header("Movement")] [SerializeField] private float moveSpeed;
+        [SerializeField] private float acceleration = .01f;
 
         [SerializeField] private Item equippedWeapon;
         [SerializeField] private GameObject equippedThrowable;
@@ -40,7 +41,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
             stateMachine.onStateExit += OnStateExit;
 
             animationController = GetComponent<PlayerAnimationController>();
-            
+
             if (isLocalPlayer)
             {
                 c_player = this;
@@ -60,7 +61,6 @@ namespace Nutmeg.Runtime.Gameplay.Player
             {
                 case PlayerState.Idle:
                     stateAction += OnIdle;
-                    animationController.PlayAnimation("Player_Rifle_Idle_1");
                     break;
                 case PlayerState.Walking:
                     stateAction += OnWalking;
@@ -81,29 +81,49 @@ namespace Nutmeg.Runtime.Gameplay.Player
             }
         }
 
+        private Vector2 animationVelocity = Vector2.zero;
+
         private void OnWalking()
         {
+            float dot = Vector3.Dot(new Vector3(-moveVector.x, 0f, moveVector.y), transform.forward);
+            Vector3 cross = Vector3.Cross(new Vector3(-moveVector.x, 0f, moveVector.y), transform.forward);
 
-            float dot = Vector3.Dot(new Vector3(-moveVector.x, 0, moveVector.y), transform.forward); 
-            Vector3 cross = Vector3.Cross(new Vector3(-moveVector.x, 0, moveVector.y), transform.forward); 
-            Debug.Log(dot);
+            //not working correctly
+            //velocity gets added without needed
+            
+            animationVelocity = new Vector2(
+                Mathf.Clamp(
+                    animationVelocity.x + (cross.y != 0f ? cross.y * acceleration :
+                        animationVelocity.x != 0f ? animationVelocity.x > 0f ? -acceleration : acceleration : 0f), -1f,
+                    1f),
+                Mathf.Clamp(
+                    animationVelocity.y + (dot != 0f ? dot * acceleration :
+                        animationVelocity.y != 0f ? animationVelocity.y > 0f ? -acceleration : acceleration : 0f), -1f,
+                    1f)
+            );
 
-            bool isPerpendicular = dot > -0.5 && dot < 0.5;
-            
-            animationController.UpdateFloatParam("Player_Rifle_Walk", Math.Abs(dot));
-            
+            animationController.UpdateFloatParam("Forward_Velocity", Mathf.Clamp(animationVelocity.y, -.75f, .75f));
+            animationController.UpdateFloatParam("Strafe_Velocity", Mathf.Clamp(animationVelocity.x, -.75f, .75f));
+
+
             //Back or Forth
-            if(cross.y < 0 && dot > 0.5)
-                animationController.PlayBlendAnimation("Player_Rifle_Walk_Forward_Right");
-            else if(cross.y < 0 && dot < -0.5)
-                animationController.PlayBlendAnimation("Player_Rifle_Walk_Backward_Right");
-            else if(cross.y > 0 && dot > 0.5)
-                animationController.PlayBlendAnimation("Player_Rifle_Walk_Forward_Left");
-            else if(cross.y > 0 && dot < -0.5)
-                animationController.PlayBlendAnimation("Player_Rifle_Walk_Backward_Left");
+            /*if(cross.y > 0)
+                animationController.UpdateFloatParam("Strafe_Velocity", .75f);
+            else if(cross.y < 0)
+                animationController.UpdateFloatParam("Strafe_Velocity", -.75f);
+            
+            
+            if(cross.y < 0 && dot > 0)
+                animationController.PlayCrossAnimation("Player_Rifle_Walk_Forward_Right", 0);
+            else if(cross.y < 0 && dot < 0)
+                animationController.PlayCrossAnimation("Player_Rifle_Walk_Backward_Right", 0);
+            else if(cross.y > 0 && dot > 0)
+                animationController.PlayCrossAnimation("Player_Rifle_Walk_Forward_Left", 0);
+            else if(cross.y > 0 && dot < 0)
+                animationController.PlayCrossAnimation("Player_Rifle_Walk_Backward_Left", 0);
                 
 
-            /*if(cross.y < 0 && isPerpendicular)
+            if(cross.y < 0 && isPerpendicular)
                 animationController.PlayAnimation("Player_Rifle_Walk_Right");
             else if(cross.y > 0 && isPerpendicular)
                 animationController.PlayAnimation("Player_Rifle_Walk_Left");
@@ -113,20 +133,32 @@ namespace Nutmeg.Runtime.Gameplay.Player
                 animationController.PlayAnimation("Player_Rifle_Walk_Backward");
             */
             //Left or right
-            
+
             Move();
             Rotate();
         }
 
         private void OnIdle()
         {
-           
+            animationVelocity = new Vector2(
+                animationVelocity.x - (animationVelocity.x > .03f || animationVelocity.x < -.03f
+                    ? animationVelocity.x > 0f ? acceleration : -acceleration
+                    : animationVelocity.x),
+                animationVelocity.y - (animationVelocity.y > .03f || animationVelocity.y < -.03f
+                    ? animationVelocity.y > 0f ? acceleration : -acceleration
+                    : animationVelocity.y));
+
+            animationController.UpdateFloatParam("Forward_Velocity", Mathf.Clamp(animationVelocity.y, -.75f, .75f));
+            animationController.UpdateFloatParam("Strafe_Velocity", Mathf.Clamp(animationVelocity.x, -.75f, .75f));
+
             Rotate();
         }
 
         private void Update()
         {
             stateAction?.Invoke();
+
+            Debug.Log(animationVelocity);
         }
 
         private void OnMoveActionPerformed(Vector2 value)
@@ -145,7 +177,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
         {
             //animationController.SetNewAnimationParamBool("rifle", true);
             animationController.PlayAnimation("equip rifle");
-            
+
             //TODO doesnt make sense to add to stateAction
             //Feels like a cheap work around
             if (equippedWeapon != null)
@@ -171,9 +203,22 @@ namespace Nutmeg.Runtime.Gameplay.Player
             Instantiate(equippedThrowable, hand.position, hand.rotation);
         }
 
+
         private void Move()
         {
-            cc.Move((Vector3.left * moveVector.x + Vector3.back * moveVector.y) * moveSpeed * Time.deltaTime);
+            /*
+            velocity = new Vector2(
+                Mathf.Clamp(
+                    velocity.x + (moveVector.x != 0 ? moveVector.normalized.x * acceleration :
+                        velocity.x != 0 ? velocity.x > 0 ? -acceleration : acceleration : 0f), -1f, 1f),
+                Mathf.Clamp(
+                    velocity.y + (moveVector.y != 0 ? moveVector.normalized.y * acceleration :
+                        velocity.y != 0 ? velocity.y > 0 ? -acceleration : acceleration : 0f), -1f, 1f)
+            );
+            */
+
+            cc.Move((Vector3.left * moveVector.x + Vector3.back * moveVector.y) * moveSpeed *
+                    Time.deltaTime);
         }
 
 
@@ -189,7 +234,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
         {
             Gizmos.color = Color.green;
             Gizmos.DrawRay(transform.position, transform.forward * 2f);
-            
+
             Gizmos.color = Color.yellow;
             Gizmos.DrawRay(transform.position, new Vector3(-moveVector.x, 0, moveVector.y) * 2f);
         }
