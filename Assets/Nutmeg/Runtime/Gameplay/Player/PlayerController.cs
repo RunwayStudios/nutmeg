@@ -90,16 +90,22 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
             //not working correctly
             //velocity gets added without needed
-            
+
             animationVelocity = new Vector2(
                 Mathf.Clamp(
-                    animationVelocity.x + (cross.y != 0f ? cross.y * acceleration :
-                        animationVelocity.x != 0f ? animationVelocity.x > 0f ? -acceleration : acceleration : 0f), -1f,
-                    1f),
+                    animationVelocity.x + (cross.y != 0f
+                        ? -cross.y * acceleration
+                        : animationVelocity.x > .03f || animationVelocity.x < -.03f
+                            ? animationVelocity.x > 0f ? -acceleration : acceleration
+                            : animationVelocity.x), -Math.Abs(cross.y),
+                    Math.Abs(cross.y)),
                 Mathf.Clamp(
-                    animationVelocity.y + (dot != 0f ? dot * acceleration :
-                        animationVelocity.y != 0f ? animationVelocity.y > 0f ? -acceleration : acceleration : 0f), -1f,
-                    1f)
+                    animationVelocity.y + (dot != 0f
+                        ? -dot * acceleration
+                        : animationVelocity.y > .03f || animationVelocity.y < -.03f
+                            ? animationVelocity.y > 0f ? -acceleration : acceleration
+                            : animationVelocity.y), -Math.Abs(dot),
+                    Math.Abs(dot))
             );
 
             animationController.UpdateFloatParam("Forward_Velocity", Mathf.Clamp(animationVelocity.y, -.75f, .75f));
@@ -176,7 +182,6 @@ namespace Nutmeg.Runtime.Gameplay.Player
         private void OnPrimaryActionPerformed()
         {
             //animationController.SetNewAnimationParamBool("rifle", true);
-            animationController.PlayAnimation("equip rifle");
 
             //TODO doesnt make sense to add to stateAction
             //Feels like a cheap work around
@@ -237,6 +242,9 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
             Gizmos.color = Color.yellow;
             Gizmos.DrawRay(transform.position, new Vector3(-moveVector.x, 0, moveVector.y) * 2f);
+
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(transform.position + new Vector3(animationVelocity.x, 0f, animationVelocity.y) * 4f, .2f);
         }
     }
 }
