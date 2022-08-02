@@ -94,6 +94,7 @@ namespace Gameplay.Level.LevelGenerator
 
             int meshSplitCount = Mathf.CeilToInt(terrainSize / 100f);
             int singleMeshSize = terrainSize / meshSplitCount;
+            terrainSize = singleMeshSize * meshSplitCount;
 
             Mesh[,] meshes = new Mesh[meshSplitCount, meshSplitCount];
             for (int ix = 0; ix < meshSplitCount; ix++)
@@ -115,11 +116,25 @@ namespace Gameplay.Level.LevelGenerator
             int vertexCount = singleMeshSize * singleMeshSize + singleMeshSize * 2 + 1;
             int triangleIndexCount = singleMeshSize * singleMeshSize * 6;
 
-            NativeArray<TerrainVertex>[,] verts = new NativeArray<TerrainVertex>(vertexCount, Allocator.Temp,
-                NativeArrayOptions.UninitializedMemory)[meshSplitCount,meshSplitCount];
+            TerrainVertex[][][] verts = new TerrainVertex[meshSplitCount][][];
+            for (int ix = 0; ix < meshSplitCount; ix++)
+            {
+                verts[ix] = new TerrainVertex[meshSplitCount][];
+                for (int iy = 0; iy < meshSplitCount; iy++)
+                {
+                    verts[ix][iy] = new TerrainVertex[vertexCount];
+                }
+            }
 
-            var triangles = new NativeArray<ushort>(triangleIndexCount, Allocator.Temp,
-                NativeArrayOptions.UninitializedMemory);
+            ushort[][][] triangles = new ushort[meshSplitCount][][];
+            for (int ix = 0; ix < meshSplitCount; ix++)
+            {
+                triangles[ix] = new ushort[meshSplitCount][];
+                for (int iy = 0; iy < meshSplitCount; iy++)
+                {
+                    triangles[ix][iy] = new ushort[triangleIndexCount];
+                }
+            }
 
             float terrainSizeUnityUnits = terrainSize * terrainUnitSize;
             float terrainSizeUnityUnitsHalf = terrainSizeUnityUnits / 2;
@@ -131,51 +146,76 @@ namespace Gameplay.Level.LevelGenerator
             int curMeshZ;
             Mesh curMesh;
 
-            int[,] vertIndexes = new int[meshSplitCount,meshSplitCount];
-            ushort[,] triangleIndexes = new ushort[meshSplitCount,meshSplitCount];
+            int[,] vertIndexes = new int[meshSplitCount, meshSplitCount];
+            ushort[,] triangleIndexes = new ushort[meshSplitCount, meshSplitCount];
+
 
             for (float z = -terrainSizeUnityUnitsHalf;
                  z <= terrainSizeUnityUnitsHalf;
                  z += terrainUnitSize)
             {
+                float positiveZ = z + terrainSizeUnityUnitsHalf;
                 for (float x = -terrainSizeUnityUnitsHalf;
                      x <= terrainSizeUnityUnitsHalf;
                      x += terrainUnitSize)
                 {
-                    curMeshX = Mathf.FloorToInt(x / singleMeshSize);
-                    curMeshZ = Mathf.FloorToInt(z / singleMeshSize);
-                    curMesh = meshes[curMeshX, curMeshZ];
+                    float positiveX = x + terrainSizeUnityUnitsHalf;
 
-                    if (x < terrainSizeUnityUnitsHalf &&
-                        z < terrainSizeUnityUnitsHalf)
-                    {
-                        triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)vertIndexes[curMeshX, curMeshZ];
-                        triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + singleMeshSize + 1);
-                        if (rndmBool.NextBoolean())
-                        {
-                            triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + 1);
-                            triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + singleMeshSize + 1);
-                        }
-                        else
-                        {
-                            triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + singleMeshSize + 2);
-                            triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)vertIndexes[curMeshX, curMeshZ];
-                        }
+                    curMeshX = Mathf.FloorToInt(positiveX / (terrainSizeUnityUnits / meshSplitCount));
+                    curMeshZ = Mathf.FloorToInt(positiveZ / (terrainSizeUnityUnits / meshSplitCount));
+                    //curMesh = meshes[curMeshX, curMeshZ];
 
-                        triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + singleMeshSize + 2);
-                        triangles[triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + 1);
-                    }
-
-                    float terrainYOffsetMultiplier = SampleTerrainMultiplier(x + terrainSizeUnityUnitsHalf, z + terrainSizeUnityUnitsHalf);
-
-                    float terrainYOffset = Mathf.PerlinNoise((x + 0.1f) * noiseScale, (z + 0.1f) * noiseScale) * noiseMultiplier -
+                    float terrainYOffsetMultiplier = SampleTerrainMultiplier(x, z);
+                    float terrainYOffset = Mathf.PerlinNoise((positiveX + 0.1f) * noiseScale, (positiveZ + 0.1f) * noiseScale) * noiseMultiplier -
                                            noiseMultiplier / 2;
                     terrainYOffset *= terrainYOffsetMultiplier;
 
-                    verts[vertIndexes[curMeshX, curMeshZ]++] = new TerrainVertex(new Vector3(
-                        x + Random.Range(-1, 1) * maxRandomVertexOffsetUnityUnits,
-                        terrainYOffset,
-                        z + Random.Range(-1, 1) * maxRandomVertexOffsetUnityUnits));
+                    float vertexXRandomized = x + Random.Range(-1, 1) * maxRandomVertexOffsetUnityUnits;
+                    float vertexZRandomized = z + Random.Range(-1, 1) * maxRandomVertexOffsetUnityUnits;
+
+                    if (x < terrainSizeUnityUnitsHalf - terrainUnitSize / 2 &&
+                        z < terrainSizeUnityUnitsHalf - terrainUnitSize / 2)
+                    {
+                        triangles[curMeshX][curMeshZ][triangleIndexes[curMeshX, curMeshZ]++] = (ushort)vertIndexes[curMeshX, curMeshZ];
+                        triangles[curMeshX][curMeshZ][triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + singleMeshSize + 1);
+                        if (rndmBool.NextBoolean())
+                        {
+                            triangles[curMeshX][curMeshZ][triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + 1);
+                            triangles[curMeshX][curMeshZ][triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + singleMeshSize + 1);
+                        }
+                        else
+                        {
+                            triangles[curMeshX][curMeshZ][triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + singleMeshSize + 2);
+                            triangles[curMeshX][curMeshZ][triangleIndexes[curMeshX, curMeshZ]++] = (ushort)vertIndexes[curMeshX, curMeshZ];
+                        }
+
+                        triangles[curMeshX][curMeshZ][triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + singleMeshSize + 2);
+                        triangles[curMeshX][curMeshZ][triangleIndexes[curMeshX, curMeshZ]++] = (ushort)(vertIndexes[curMeshX, curMeshZ] + 1);
+
+                        verts[curMeshX][curMeshZ][vertIndexes[curMeshX, curMeshZ]++] = new TerrainVertex(
+                            new Vector3(vertexXRandomized, terrainYOffset, vertexZRandomized));
+                    }
+
+                    bool onNewMeshX = curMeshX > 0 && positiveX - terrainUnitSize / 2 < singleMeshSize * terrainUnitSize * curMeshX &&
+                                      positiveX + terrainUnitSize / 2 > singleMeshSize * terrainUnitSize * curMeshX;
+                    bool onNewMeshZ = curMeshZ > 0 && positiveZ - terrainUnitSize / 2 < singleMeshSize * terrainUnitSize * curMeshZ &&
+                                      positiveZ + terrainUnitSize / 2 > singleMeshSize * terrainUnitSize * curMeshZ;
+
+                    if (onNewMeshX && curMeshZ < meshSplitCount)
+                    {
+                        verts[curMeshX - 1][curMeshZ][vertIndexes[curMeshX - 1, curMeshZ]++] = new TerrainVertex(
+                            new Vector3(vertexXRandomized, terrainYOffset, vertexZRandomized));
+                    }
+                    if (onNewMeshZ && curMeshX < meshSplitCount)
+                    {
+                        verts[curMeshX][curMeshZ - 1][vertIndexes[curMeshX, curMeshZ - 1]++] = new TerrainVertex(
+                            new Vector3(vertexXRandomized, terrainYOffset, vertexZRandomized));
+                    }
+                    if (onNewMeshX && onNewMeshZ)
+                    {
+                        verts[curMeshX - 1][curMeshZ - 1][vertIndexes[curMeshX - 1, curMeshZ - 1]++] = new TerrainVertex(
+                            new Vector3(vertexXRandomized, terrainYOffset, vertexZRandomized));
+                    }
                 }
             }
 
@@ -184,10 +224,10 @@ namespace Gameplay.Level.LevelGenerator
                 for (int meshZ = 0; meshZ < meshSplitCount; meshZ++)
                 {
                     curMesh = meshes[meshX, meshZ];
-                    
+
                     curMesh.SetVertexBufferParams(vertexCount, layout);
-                    curMesh.SetVertexBufferData(verts, 0, 0, vertexCount, 0, MeshUpdateFlags.Default);
-                    curMesh.SetIndices(triangles, MeshTopology.Triangles, 0, false, 0);
+                    curMesh.SetVertexBufferData(verts[meshX][meshZ], 0, 0, vertexCount, 0, MeshUpdateFlags.Default);
+                    curMesh.SetIndices(triangles[meshX][meshZ], MeshTopology.Triangles, 0, false, 0);
 
                     //mesh.RecalculateNormals();
                     curMesh.RecalculateBounds();
@@ -210,45 +250,43 @@ namespace Gameplay.Level.LevelGenerator
         {
             float texWidth = baseFlatteningMap.width;
             float texHeight = baseFlatteningMap.height;
-            int centreTextureX = Mathf.RoundToInt(x / terrainSize * texWidth);
-            int centreTextureY = Mathf.RoundToInt(y / terrainSize * texHeight);
+            int textureX = Mathf.RoundToInt(x / terrainUnitSize + texWidth / 2);
+            int textureY = Mathf.RoundToInt(y / terrainUnitSize + texHeight / 2);
 
-            if (centreTextureX < baseFlatteningMapBounds[0] - baseTerrainSmootheningDistance ||
-                centreTextureX > baseFlatteningMapBounds[1] + baseTerrainSmootheningDistance ||
-                centreTextureY < baseFlatteningMapBounds[2] - baseTerrainSmootheningDistance ||
-                centreTextureY > baseFlatteningMapBounds[3] + baseTerrainSmootheningDistance)
+            if (textureX < baseFlatteningMapBounds[0] - baseTerrainSmootheningDistance ||
+                textureX > baseFlatteningMapBounds[1] + baseTerrainSmootheningDistance ||
+                textureY < baseFlatteningMapBounds[2] - baseTerrainSmootheningDistance ||
+                textureY > baseFlatteningMapBounds[3] + baseTerrainSmootheningDistance)
                 return 1.0f;
 
-            float sampledPixel = baseFlatteningMap.GetPixel(centreTextureX, centreTextureY).r;
+            float sampledPixel = baseFlatteningMap.GetPixel(textureX, textureY).r;
 
             if (sampledPixel < .01 || baseTerrainSmootheningDistance == 0)
                 return sampledPixel;
 
             float closest = baseTerrainSmootheningDistance;
-            float incrementX = terrainSize / texWidth;
-            float incrementY = terrainSize / texHeight;
 
             // checking bounds to see whether we can skip some checks in loop below
-            float temp = centreTextureX - baseTerrainSmootheningDistance;
+            float temp = textureX - baseTerrainSmootheningDistance;
             float lowestX = temp < baseFlatteningMapBounds[0] ? -(baseTerrainSmootheningDistance - (baseFlatteningMapBounds[0] - temp)) : -baseTerrainSmootheningDistance;
-            temp = centreTextureX + baseTerrainSmootheningDistance;
+            temp = textureX + baseTerrainSmootheningDistance;
             float highestX = temp > baseFlatteningMapBounds[1] ? (baseTerrainSmootheningDistance - (temp - baseFlatteningMapBounds[1])) : baseTerrainSmootheningDistance;
 
-            temp = centreTextureY - baseTerrainSmootheningDistance;
+            temp = textureY - baseTerrainSmootheningDistance;
             float lowestY = temp < baseFlatteningMapBounds[2] ? -(baseTerrainSmootheningDistance - (baseFlatteningMapBounds[2] - temp)) : -baseTerrainSmootheningDistance;
-            temp = centreTextureY + baseTerrainSmootheningDistance;
+            temp = textureY + baseTerrainSmootheningDistance;
             float highestY = temp > baseFlatteningMapBounds[3] ? (baseTerrainSmootheningDistance - (temp - baseFlatteningMapBounds[3])) : baseTerrainSmootheningDistance;
 
             // checking all pixels around centerPixel to find closest black one
-            for (float ix = lowestX; ix < highestX + 1; ix += incrementX)
+            for (float ix = lowestX; ix < highestX + 1; ix++)
             {
-                int texX = Mathf.FloorToInt(centreTextureX + ix);
+                int texX = Mathf.FloorToInt(textureX + ix);
                 if (texX >= texWidth || texX < 0)
                     continue;
 
-                for (float iy = lowestY; iy < highestY + 1; iy += incrementY)
+                for (float iy = lowestY; iy < highestY + 1; iy++)
                 {
-                    int texY = Mathf.FloorToInt(centreTextureY + iy);
+                    int texY = Mathf.FloorToInt(textureY + iy);
 
                     if (texY >= texHeight || texY < 0)
                         continue;
