@@ -1,0 +1,17 @@
+{
+    "name": "Nutmeg.Runtime.Gameplay.BaseBuilding",
+    "rootNamespace": "",
+    "references": [
+        "GUID:307bdc825429c8c4184fade23f5aa16e",
+        "GUID:2330a1a6f349cbe45ad9d1799cc023f5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

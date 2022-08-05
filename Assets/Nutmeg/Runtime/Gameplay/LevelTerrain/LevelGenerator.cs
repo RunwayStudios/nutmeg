@@ -239,6 +239,7 @@ namespace Gameplay.Level.LevelGenerator
                     go.GetComponent<MeshRenderer>().material = GetComponent<MeshRenderer>().material;
                     go.GetComponent<MeshFilter>().mesh = curMesh;
                     go.GetComponent<MeshCollider>().sharedMesh = curMesh;
+                    go.layer = 11;
                 }
             }
 
