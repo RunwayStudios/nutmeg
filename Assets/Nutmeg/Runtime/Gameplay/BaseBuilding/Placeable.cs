@@ -12,6 +12,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         private Material prevMaterial;
 
         private int curCollidingCount = 0;
+        private bool baseBoundsValid = true;
 
 
         // Start is called before the first frame update
@@ -34,6 +35,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
                 Rigidbody rigidbody = gameObject.AddComponent<Rigidbody>();
                 rigidbody.useGravity = false;
                 rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+                rigidbody.isKinematic = true;
 
                 Collider[] colliders = GetComponents<Collider>();
                 foreach (Collider collider in colliders)
@@ -79,9 +81,70 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             }
         }
 
-        public bool CurrentPositionValid()
+        public bool IsCurrentPositionValid()
         {
             return curPositionValid;
+        }
+
+        public void UpdateCurrentPositionValid()
+        {
+            bool newValue = curCollidingCount < 1 && baseBoundsValid;
+
+            if (newValue != curPositionValid)
+            {
+                if (!newValue)
+                    GetComponent<MeshRenderer>().material.color = BaseManager.Main.invalidMaterialColor;
+
+                if (newValue)
+                    GetComponent<MeshRenderer>().material.color = BaseManager.Main.validMaterialColor;
+            }
+
+            curPositionValid = newValue;
+        }
+
+        public void CheckBaseBounds(Texture2D baseMap)
+        {
+            Bounds bounds = GetComponent<Collider>().bounds;
+            Vector3 pos = Vector3.zero;
+            int textureX = Mathf.FloorToInt(pos.x + bounds.min.x) + baseMap.width / 2;
+            int textureY = Mathf.FloorToInt(pos.z + bounds.min.z) + baseMap.width / 2;
+            float color = baseMap.GetPixel(textureX, textureY).r;
+            if (color != 0)
+            {
+                baseBoundsValid = false;
+                UpdateCurrentPositionValid();
+                return;
+            }
+
+            textureY = Mathf.FloorToInt(pos.z + bounds.max.z) + baseMap.width / 2;
+            color = baseMap.GetPixel(textureX, textureY).r;
+            if (color != 0)
+            {
+                baseBoundsValid = false;
+                UpdateCurrentPositionValid();
+                return;
+            }
+
+            textureX = Mathf.FloorToInt(pos.x + bounds.max.x) + baseMap.width / 2;
+            color = baseMap.GetPixel(textureX, textureY).r;
+            if (color != 0)
+            {
+                baseBoundsValid = false;
+                UpdateCurrentPositionValid();
+                return;
+            }
+
+            textureY = Mathf.FloorToInt(pos.z + bounds.min.z) + baseMap.width / 2;
+            color = baseMap.GetPixel(textureX, textureY).r;
+            if (color != 0)
+            {
+                baseBoundsValid = false;
+                UpdateCurrentPositionValid();
+                return;
+            }
+
+            baseBoundsValid = true;
+            UpdateCurrentPositionValid();
         }
 
 
@@ -89,13 +152,10 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         {
             if (beingPlaced && other.CompareTag("Placeable"))
             {
-                if (curCollidingCount < 1)
-                {
-                    curPositionValid = false;
-                    GetComponent<MeshRenderer>().material.color = BaseManager.Main.invalidMaterialColor;
-                }
-
                 curCollidingCount++;
+
+                if (curCollidingCount < 2)
+                    UpdateCurrentPositionValid();
             }
         }
 
@@ -106,10 +166,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
                 curCollidingCount--;
 
                 if (curCollidingCount < 1)
-                {
-                    curPositionValid = true;
-                    GetComponent<MeshRenderer>().material.color = BaseManager.Main.validMaterialColor;
-                }
+                    UpdateCurrentPositionValid();
             }
         }
     }
