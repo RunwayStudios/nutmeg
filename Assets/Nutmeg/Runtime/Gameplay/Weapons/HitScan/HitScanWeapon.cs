@@ -1,4 +1,5 @@
-﻿using Nutmeg.Runtime.Gameplay.Items;
+﻿using Mirror;
+using Nutmeg.Runtime.Gameplay.Items;
 using Nutmeg.Runtime.Gameplay.Targets;
 using Nutmeg.Runtime.Utility.MouseController;
 using UnityEngine;
@@ -50,8 +51,8 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.HitScan
 
         protected void SpawnBulletTrail(Vector3 target)
         {
-            Instantiate(bulletTrailFX, barrelEnd.position, barrelEnd.rotation).GetComponent<Bullet>()
-                .Initialize(target);
+            var obj = Instantiate(bulletTrailFX, barrelEnd.position, barrelEnd.rotation);
+            obj.GetComponent<Bullet>().Initialize(target);
         }
 
         protected bool HitScan(out RaycastHit raycastHit)

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Nutmeg.Runtime.Utility.WorldSpaceUI;
+using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Targets
 {
@@ -8,6 +9,7 @@ namespace Nutmeg.Runtime.Gameplay.Targets
         [SerializeField] private Transform hitNumberSpawnPosition;
 
         private float damageNumber;
+        private WSUIElement worldSpaceUIElement;
 
         public void ReceiveDamage(float damage)
         {
@@ -16,7 +18,19 @@ namespace Nutmeg.Runtime.Gameplay.Targets
 
         private void SpawnHitNumbers(float value)
         {
-            
+            if (worldSpaceUIElement == null)
+            {
+                worldSpaceUIElement =
+                    WorldSpaceUI.Create(hitNumberObject, hitNumberSpawnPosition, .3f).DestroyOnComplete();
+                worldSpaceUIElement.onDestroy += () => worldSpaceUIElement = null;
+            }
+            else
+            {
+                worldSpaceUIElement.Reset();
+            }
+
+            var hn = worldSpaceUIElement.GameObject.GetComponent<HitNumber>();
+            hn.SetNumberAndPosition(hn.Number + value, hitNumberSpawnPosition.position);
         }
     }
 }
