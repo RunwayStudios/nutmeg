@@ -105,10 +105,10 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         public void CheckBaseBounds(Texture2D baseMap)
         {
             Bounds bounds = GetComponent<Collider>().bounds;
-            Vector3 pos = Vector3.zero;
-            int textureX = Mathf.FloorToInt(pos.x + bounds.min.x) + baseMap.width / 2;
-            int textureY = Mathf.FloorToInt(pos.z + bounds.min.z) + baseMap.width / 2;
+            int textureX = Mathf.FloorToInt(bounds.min.x) + baseMap.width / 2;
+            int textureY = Mathf.FloorToInt(bounds.min.z) + baseMap.width / 2;
             float color = baseMap.GetPixel(textureX, textureY).r;
+            
             if (color != 0)
             {
                 baseBoundsValid = false;
@@ -116,7 +116,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
                 return;
             }
 
-            textureY = Mathf.FloorToInt(pos.z + bounds.max.z) + baseMap.width / 2;
+            textureY = Mathf.FloorToInt(bounds.max.z) + baseMap.width / 2;
             color = baseMap.GetPixel(textureX, textureY).r;
             if (color != 0)
             {
@@ -125,7 +125,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
                 return;
             }
 
-            textureX = Mathf.FloorToInt(pos.x + bounds.max.x) + baseMap.width / 2;
+            textureX = Mathf.FloorToInt(bounds.max.x) + baseMap.width / 2;
             color = baseMap.GetPixel(textureX, textureY).r;
             if (color != 0)
             {
@@ -134,7 +134,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
                 return;
             }
 
-            textureY = Mathf.FloorToInt(pos.z + bounds.min.z) + baseMap.width / 2;
+            textureY = Mathf.FloorToInt(bounds.min.z) + baseMap.width / 2;
             color = baseMap.GetPixel(textureX, textureY).r;
             if (color != 0)
             {
