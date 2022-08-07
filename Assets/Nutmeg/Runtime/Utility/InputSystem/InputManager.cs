@@ -7,7 +7,7 @@ namespace Nutmeg.Runtime.Utility.InputSystem
     {
         [SerializeField] private InputEventChannel eventChannel;
 
-        private PlayerInputActions input;
+        public static InputActions input { get; private set; }
 
         private void Start()
         {
@@ -15,8 +15,10 @@ namespace Nutmeg.Runtime.Utility.InputSystem
 
         private void OnEnable()
         {
-            input = new PlayerInputActions();
+            input = new InputActions();
 
+            
+            //TODO use static input
             input.Player.Move.performed += MoveOnPerformed;
             input.Player.Move.canceled += MoveOnCanceled;
             input.Player.Primary.performed += PrimaryOnPerformed;
