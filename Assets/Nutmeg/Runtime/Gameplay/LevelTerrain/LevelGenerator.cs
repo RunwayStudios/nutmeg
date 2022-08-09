@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Rendering;
 using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
@@ -206,11 +207,13 @@ namespace Gameplay.Level.LevelGenerator
                         verts[curMeshX - 1][curMeshZ][vertIndexes[curMeshX - 1, curMeshZ]++] = new TerrainVertex(
                             new Vector3(vertexXRandomized, terrainYOffset, vertexZRandomized));
                     }
+
                     if (onNewMeshZ && curMeshX < meshSplitCount)
                     {
                         verts[curMeshX][curMeshZ - 1][vertIndexes[curMeshX, curMeshZ - 1]++] = new TerrainVertex(
                             new Vector3(vertexXRandomized, terrainYOffset, vertexZRandomized));
                     }
+
                     if (onNewMeshX && onNewMeshZ)
                     {
                         verts[curMeshX - 1][curMeshZ - 1][vertIndexes[curMeshX - 1, curMeshZ - 1]++] = new TerrainVertex(
@@ -218,6 +221,8 @@ namespace Gameplay.Level.LevelGenerator
                     }
                 }
             }
+
+            GameObject go = null;
 
             for (int meshX = 0; meshX < meshSplitCount; meshX++)
             {
@@ -232,15 +237,23 @@ namespace Gameplay.Level.LevelGenerator
                     //mesh.RecalculateNormals();
                     curMesh.RecalculateBounds();
 
-                    GameObject go = new GameObject("levelMesh [" + meshX + ", " + meshZ + "]",
-                        typeof(MeshFilter), typeof(MeshCollider), typeof(MeshRenderer));
+                    go = new GameObject("levelMesh [" + meshX + ", " + meshZ + "]",
+                        typeof(MeshFilter), typeof(MeshCollider), typeof(MeshRenderer), typeof(NavMeshSurface));
                     go.transform.SetParent(transform);
+                    go.isStatic = true;
 
                     go.GetComponent<MeshRenderer>().material = GetComponent<MeshRenderer>().material;
                     go.GetComponent<MeshFilter>().mesh = curMesh;
                     go.GetComponent<MeshCollider>().sharedMesh = curMesh;
                     go.layer = 11;
                 }
+            }
+
+            if (go != null)
+            {
+                NavMeshSurface navMeshSurface = go.GetComponent<NavMeshSurface>();
+                navMeshSurface.layerMask = (1 << 11);
+                navMeshSurface.BuildNavMesh();
             }
 
 
