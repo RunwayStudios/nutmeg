@@ -1,17 +1,19 @@
-using System;
 using System.Diagnostics;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
-using Debug = UnityEngine.Debug;
-using Random = UnityEngine.Random;
 
 namespace Gameplay.Level.LevelGenerator
 {
     public class LevelGenerator : MonoBehaviour
     {
+        [HideInInspector] public static LevelGenerator Main;
+        
+        
         [Header("General")] [SerializeField] [Tooltip("Size of a terrainUnit")]
+        private int seed = 0;
+
+        [Space] [SerializeField] [Tooltip("Size of a terrainUnit")]
         private float terrainUnitSize = 1f;
 
         [SerializeField] [Tooltip("Width and Height of the terrain in terrainUnits")]
@@ -38,13 +40,19 @@ namespace Gameplay.Level.LevelGenerator
 
         [SerializeField] private float noiseMultiplier = 1f;
 
+        
+        private NavMeshSurface navMesh;
+        
 
-        [Space] [SerializeField] private bool regenerate = false;
+        // debug
+        [Space] [SerializeField] private bool generateRandomSeed = false;
+        [SerializeField] private bool regenerate = false;
         private readonly Stopwatch terrainGenStopwatch = new Stopwatch();
         [SerializeField] private double generateMS = 0f;
 
         private void Awake()
         {
+            Main = this;
         }
 
         // Start is called before the first frame update
@@ -68,6 +76,11 @@ namespace Gameplay.Level.LevelGenerator
         }
 
 
+        public void UpdateNavMesh()
+        {
+            navMesh.BuildNavMesh();
+        }
+
         // Vertex with FP32 position, FP16 2D normal and a 4-byte tangent.
         // In some cases StructLayout attribute needs
         // to be used, to get the data layout match exactly what it needs to be.
@@ -88,6 +101,9 @@ namespace Gameplay.Level.LevelGenerator
 
         public void GenerateLevel()
         {
+            if (generateRandomSeed)
+                seed = new System.Random().Next();
+            
             foreach (Transform child in transform)
             {
                 GameObject.Destroy(child.gameObject);
@@ -140,7 +156,7 @@ namespace Gameplay.Level.LevelGenerator
             float terrainSizeUnityUnits = terrainSize * terrainUnitSize;
             float terrainSizeUnityUnitsHalf = terrainSizeUnityUnits / 2;
             float maxRandomVertexOffsetUnityUnits = maxRandomVertexOffset * terrainUnitSize;
-            RandomEx rndmBool = new RandomEx();
+            RandomEx rndmBool = new RandomEx(seed);
 
 
             int curMeshX;
@@ -150,6 +166,9 @@ namespace Gameplay.Level.LevelGenerator
             int[,] vertIndexes = new int[meshSplitCount, meshSplitCount];
             ushort[,] triangleIndexes = new ushort[meshSplitCount, meshSplitCount];
 
+            System.Random seedRandom = new System.Random(seed);
+            int noiseOffsetX = Mathf.FloorToInt((float)seedRandom.NextDouble() * 1000);
+            int noiseOffsetY = Mathf.FloorToInt((float)seedRandom.NextDouble() * 1000);
 
             for (float z = -terrainSizeUnityUnitsHalf;
                  z <= terrainSizeUnityUnitsHalf;
@@ -167,12 +186,13 @@ namespace Gameplay.Level.LevelGenerator
                     //curMesh = meshes[curMeshX, curMeshZ];
 
                     float terrainYOffsetMultiplier = SampleTerrainMultiplier(x, z);
-                    float terrainYOffset = Mathf.PerlinNoise((positiveX + 0.1f) * noiseScale, (positiveZ + 0.1f) * noiseScale) * noiseMultiplier -
+                    float terrainYOffset = Mathf.PerlinNoise((positiveX + 0.1f) * noiseScale + noiseOffsetX, (positiveZ + 0.1f) * noiseScale + noiseOffsetY) * noiseMultiplier -
                                            noiseMultiplier / 2;
                     terrainYOffset *= terrainYOffsetMultiplier;
 
-                    float vertexXRandomized = x + Random.Range(-1, 1) * maxRandomVertexOffsetUnityUnits;
-                    float vertexZRandomized = z + Random.Range(-1, 1) * maxRandomVertexOffsetUnityUnits;
+                    // x + random Number from -1 to (excluding)1 * max offset
+                    float vertexXRandomized = x + (2 * (float)seedRandom.NextDouble() - 1) * maxRandomVertexOffsetUnityUnits;
+                    float vertexZRandomized = z + (2 * (float)seedRandom.NextDouble() - 1) * maxRandomVertexOffsetUnityUnits;
 
                     if (x < terrainSizeUnityUnitsHalf - terrainUnitSize / 2 &&
                         z < terrainSizeUnityUnitsHalf - terrainUnitSize / 2)
@@ -238,7 +258,7 @@ namespace Gameplay.Level.LevelGenerator
                     curMesh.RecalculateBounds();
 
                     go = new GameObject("levelMesh [" + meshX + ", " + meshZ + "]",
-                        typeof(MeshFilter), typeof(MeshCollider), typeof(MeshRenderer), typeof(NavMeshSurface));
+                        typeof(MeshFilter), typeof(MeshCollider), typeof(MeshRenderer));
                     go.transform.SetParent(transform);
                     go.isStatic = true;
 
@@ -251,9 +271,9 @@ namespace Gameplay.Level.LevelGenerator
 
             if (go != null)
             {
-                NavMeshSurface navMeshSurface = go.GetComponent<NavMeshSurface>();
-                navMeshSurface.layerMask = (1 << 11);
-                navMeshSurface.BuildNavMesh();
+                navMesh = go.AddComponent<NavMeshSurface>();
+                navMesh.layerMask = LayerMask.GetMask(new string[] {"Terrain", "NavMeshObstacle"});
+                navMesh.BuildNavMesh();
             }
 
 

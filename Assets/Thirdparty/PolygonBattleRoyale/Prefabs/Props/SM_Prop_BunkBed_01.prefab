@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 23204547830983174}
   - component: {fileID: 64290388754737756}
   - component: {fileID: 5423156948083911444}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SM_Prop_BunkBed_01
   m_TagString: Placeable
   m_Icon: {fileID: 0}
@@ -110,3 +110,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beingPlaced: 0
+  curPositionValid: 0

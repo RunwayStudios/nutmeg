@@ -1,8 +1,9 @@
-using System;
 using System.Collections.Generic;
+using Gameplay.Level.LevelGenerator;
 using Nutmeg.Runtime.Utility.InputSystem;
 using Nutmeg.Runtime.Utility.MouseController;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 namespace Nutmeg.Runtime.Gameplay.BaseBuilding
@@ -17,9 +18,9 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
 
         [SerializeField] [Tooltip("")] private GameObject debugToPlace;
 
-        [Space]
-        [SerializeField] [Tooltip("")] private float baseY = 0.0f;
-        
+        [Space] [SerializeField] [Tooltip("")] private float baseY = 0.0f;
+
+
         private bool placingObject = false;
         private bool inBuildingMode = false;
         private GameObject curPlacingGo;
@@ -33,10 +34,14 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         public Color invalidMaterialColor;
         public Color validMaterialColor;
 
+        private void Awake()
+        {
+            Main = this;
+        }
+
         // Start is called before the first frame update
         void Start()
         {
-            Main = this;
             input = InputManager.input;
             input.BaseBuilding.PlaceObject.performed += PlacePlaceable;
             input.Player.Tab.performed += DebugEnterBuildingMode;
@@ -58,18 +63,24 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         }
 
 
-
         private void DebugEnterBuildingMode(InputAction.CallbackContext context)
         {
-            EnterBuildingMode();
-            StartPlacingObject(debugToPlace);
+            if (!inBuildingMode)
+            {
+                EnterBuildingMode();
+                StartPlacingObject(debugToPlace);
+            }
+            else
+            {
+                ExitBuildingMode();
+            }
         }
 
         private void EnterBuildingMode()
         {
             if (inBuildingMode)
                 return;
-            
+
             // todo hendl
             input.Player.Primary.Disable();
             input.BaseBuilding.Enable();
@@ -85,10 +96,10 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             Vector3 placeablePos;
             if (!TryGetNewPlacementPosition(out placeablePos))
                 return;
-            
+
             if (!inBuildingMode)
                 EnterBuildingMode();
-            
+
             curPlacingOriginalGo = blueprint;
             curPlacingGo = Instantiate(blueprint, placeablePos, Quaternion.Euler(Vector3.zero));
 
@@ -100,9 +111,9 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
 
             curPlacingPlaceable = curPlacingGo.GetComponent<Placeable>();
             curPlacingPlaceable.SetBeingPlaced(true);
-            
+
             UpdatePositionOfObjectBeingPlaced();
-            
+
             placingObject = true;
         }
 
@@ -132,6 +143,8 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
 
             Destroy(curPlacingGo);
             placingObject = false;
+            
+            //LevelGenerator.Main.UpdateNavMesh();
 
             ExitBuildingMode();
         }
@@ -154,7 +167,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
                     return;
 
                 previousPosition = newPos;
-                
+
                 curPlacingGo.transform.position = newPos;
 
                 curPlacingPlaceable.CheckBaseBounds(baseFlatteningMap);
@@ -171,6 +184,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
                 pos = posOut;
                 return true;
             }
+
             pos = Vector3.zero;
             return false;
         }

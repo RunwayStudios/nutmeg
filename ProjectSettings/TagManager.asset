@@ -19,7 +19,7 @@ TagManager:
   - MouseTargetable
   - DamageReceiver
   - Terrain
-  - 
+  - NavMeshObstacle
   - 
   - 
   - 

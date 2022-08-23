@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33648875781438580}
   - component: {fileID: 23034612686266930}
   - component: {fileID: 65646502918883386}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SM_Prop_Container_Small_Door_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 33297080768916526}
   - component: {fileID: 23853577398537226}
   - component: {fileID: 65497909379784572}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SM_Prop_Container_Small_Door_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,13 +201,10 @@ GameObject:
   - component: {fileID: 4526156451493706}
   - component: {fileID: 33623459426934044}
   - component: {fileID: 23588939327244268}
-  - component: {fileID: 64507255213016084}
-  - component: {fileID: 64962908516288684}
-  - component: {fileID: 64090941992809874}
-  - component: {fileID: 64706621388105088}
   - component: {fileID: 64536670106332572}
   - component: {fileID: 7324009021824623055}
-  m_Layer: 0
+  - component: {fileID: 1036660826568738946}
+  m_Layer: 12
   m_Name: SM_Prop_Container_Small_01
   m_TagString: Placeable
   m_Icon: {fileID: 0}
@@ -281,62 +278,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64507255213016084
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1808195246080866}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43827692342327136, guid: 41e8f62a8bc7055459dda505d142e895, type: 2}
---- !u!64 &64962908516288684
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1808195246080866}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43558378588655308, guid: 41e8f62a8bc7055459dda505d142e895, type: 2}
---- !u!64 &64090941992809874
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1808195246080866}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43312602588713616, guid: 41e8f62a8bc7055459dda505d142e895, type: 2}
---- !u!64 &64706621388105088
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1808195246080866}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43322037054634370, guid: 41e8f62a8bc7055459dda505d142e895, type: 2}
 --- !u!64 &64536670106332572
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -364,6 +305,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beingPlaced: 0
+  curPositionValid: 0
+--- !u!208 &1036660826568738946
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1808195246080866}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.2270001, y: 1.3030001, z: 1.5690001}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.3030001, z: 0.071}
+  m_TimeToStationary: 0.5
 --- !u!1 &1864100768190834
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,7 +334,7 @@ GameObject:
   - component: {fileID: 33631353580538626}
   - component: {fileID: 23646711114951540}
   - component: {fileID: 65408355806012584}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SM_Prop_Container_Small_Door_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -471,7 +429,7 @@ GameObject:
   - component: {fileID: 33290420073564148}
   - component: {fileID: 23395710897393384}
   - component: {fileID: 65275212549597604}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SM_Prop_Container_Small_Door_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
