@@ -1,5 +1,5 @@
 {
-    "name": "Nutmeg.Runtime.Gameplay.BaseBuilding",
+    "name": "Nutmeg.Runtime.Gameplay.Base",
     "rootNamespace": "",
     "references": [
         "GUID:2330a1a6f349cbe45ad9d1799cc023f5",

@@ -1,4 +1,5 @@
 using System;
+using Gameplay.Level.LevelGenerator;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.BaseBuilding
@@ -8,6 +9,8 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         [SerializeField] [Tooltip("")] private bool beingPlaced;
 
         [SerializeField] [Tooltip("")] private bool curPositionValid;
+
+        [SerializeField] private float health = 100f;
 
         private Material prevMaterial;
 
@@ -24,6 +27,34 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         void Update()
         {
         }
+
+
+        #region Damage
+
+        public void Damage(float value, DamageType type)
+        {
+            health -= value;
+
+            if (health <= 0f && gameObject && gameObject.activeSelf)
+            {
+                gameObject.SetActive(false);
+                Destroy(gameObject);
+                LevelGenerator.Main.UpdateNavMesh();
+            }
+        }
+
+        public enum DamageType
+        {
+            Default,
+            Fire,
+            Explosion,
+            Water
+        }
+
+        #endregion
+        
+
+        #region Placing
 
         public void SetBeingPlaced(bool newBeingPlaced)
         {
@@ -147,7 +178,6 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             UpdateCurrentPositionValid();
         }
 
-
         private void OnTriggerEnter(Collider other)
         {
             if (beingPlaced && other.CompareTag("Placeable"))
@@ -169,5 +199,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
                     UpdateCurrentPositionValid();
             }
         }
+        
+        #endregion
     }
 }

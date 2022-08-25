@@ -78,7 +78,8 @@ namespace Gameplay.Level.LevelGenerator
 
         public void UpdateNavMesh()
         {
-            navMesh.BuildNavMesh();
+            navMesh.UpdateNavMesh(navMesh.navMeshData);
+            // navMesh.BuildNavMesh();
         }
 
         // Vertex with FP32 position, FP16 2D normal and a 4-byte tangent.

@@ -136,7 +136,8 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             if (!placingObject || !curPlacingPlaceable.IsCurrentPositionValid())
                 return;
 
-            placed.Add(Instantiate(curPlacingOriginalGo, curPlacingGo.transform.position, Quaternion.Euler(Vector3.zero)).GetComponent<Placeable>());
+            Placeable placeable = Instantiate(curPlacingOriginalGo, curPlacingGo.transform.position, Quaternion.Euler(Vector3.zero)).GetComponent<Placeable>();
+            placed.Add(placeable);
 
             // todo necessary when moving objects
             // curPlacingPlaceable.SetBeingPlaced(false);
@@ -144,7 +145,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             Destroy(curPlacingGo);
             placingObject = false;
             
-            //LevelGenerator.Main.UpdateNavMesh();
+            LevelGenerator.Main.UpdateNavMesh();
 
             ExitBuildingMode();
         }
