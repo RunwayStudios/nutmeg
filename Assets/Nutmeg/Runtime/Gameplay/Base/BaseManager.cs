@@ -20,6 +20,8 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
 
         [Space] [SerializeField] [Tooltip("")] private float baseY = 0.0f;
 
+        [SerializeField] private float rotateSpeed = 90f;
+        private float currentRotation = 0f;
 
         private bool placingObject = false;
         private bool inBuildingMode = false;
@@ -34,6 +36,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         public Color invalidMaterialColor;
         public Color validMaterialColor;
 
+
         private void Awake()
         {
             Main = this;
@@ -44,13 +47,21 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         {
             input = InputManager.input;
             input.BaseBuilding.PlaceObject.performed += PlacePlaceable;
-            input.Player.Tab.performed += DebugEnterBuildingMode;
+            input.BaseBuilding.RotateClockwise.performed += StartRotatingPlaceableClockwise;
+            input.BaseBuilding.RotateClockwise.canceled += StopRotatingPlaceableClockwise;
+            input.BaseBuilding.RotateCounterclockwise.performed += StartRotatingPlaceableCounterclockwise;
+            input.BaseBuilding.RotateCounterclockwise.canceled += StopRotatingPlaceableCounterclockwise;
+            input.Player.Tab.performed += SwapBuildingMode;
         }
 
         private void OnDestroy()
         {
             input.BaseBuilding.PlaceObject.performed -= PlacePlaceable;
-            input.Player.Tab.performed -= DebugEnterBuildingMode;
+            input.BaseBuilding.RotateClockwise.performed -= StartRotatingPlaceableClockwise;
+            input.BaseBuilding.RotateClockwise.canceled -= StopRotatingPlaceableClockwise;
+            input.BaseBuilding.RotateCounterclockwise.performed -= StartRotatingPlaceableCounterclockwise;
+            input.BaseBuilding.RotateCounterclockwise.canceled -= StopRotatingPlaceableCounterclockwise;
+            input.Player.Tab.performed -= SwapBuildingMode;
         }
 
         // Update is called once per frame
@@ -59,11 +70,12 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             if (placingObject)
             {
                 UpdatePositionOfObjectBeingPlaced();
+                RotatePlaceable();
             }
         }
 
 
-        private void DebugEnterBuildingMode(InputAction.CallbackContext context)
+        private void SwapBuildingMode(InputAction.CallbackContext context)
         {
             if (!inBuildingMode)
             {
@@ -136,18 +148,19 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             if (!placingObject || !curPlacingPlaceable.IsCurrentPositionValid())
                 return;
 
-            Placeable placeable = Instantiate(curPlacingOriginalGo, curPlacingGo.transform.position, Quaternion.Euler(Vector3.zero)).GetComponent<Placeable>();
+            Placeable placeable = Instantiate(curPlacingOriginalGo, curPlacingGo.transform.position, curPlacingGo.transform.rotation).GetComponent<Placeable>();
             placed.Add(placeable);
 
             // todo necessary when moving objects
             // curPlacingPlaceable.SetBeingPlaced(false);
 
-            Destroy(curPlacingGo);
-            placingObject = false;
+            // todo separate single place mode?
+            // Destroy(curPlacingGo);
+            // placingObject = false;
             
             LevelGenerator.Main.UpdateNavMesh();
 
-            ExitBuildingMode();
+            // ExitBuildingMode();
         }
 
         private void CancelPlacingPlaceable()
@@ -188,6 +201,34 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
 
             pos = Vector3.zero;
             return false;
+        }
+
+        private void StartRotatingPlaceableClockwise(InputAction.CallbackContext context)
+        {
+            currentRotation += rotateSpeed;
+        }
+        
+        private void StopRotatingPlaceableClockwise(InputAction.CallbackContext context)
+        {
+            currentRotation -= rotateSpeed;
+        }
+        
+        private void StartRotatingPlaceableCounterclockwise(InputAction.CallbackContext context)
+        {
+            currentRotation -= rotateSpeed;
+        }
+
+        private void StopRotatingPlaceableCounterclockwise(InputAction.CallbackContext context)
+        {
+            currentRotation += rotateSpeed;
+        }
+
+        private void RotatePlaceable()
+        {
+            if (currentRotation == 0f)
+                return;
+            
+            curPlacingGo.transform.Rotate(Vector3.up, currentRotation * Time.deltaTime);
         }
     }
 }
