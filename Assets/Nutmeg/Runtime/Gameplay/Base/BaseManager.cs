@@ -105,8 +105,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             if (placingObject)
                 return;
 
-            Vector3 placeablePos;
-            if (!TryGetNewPlacementPosition(out placeablePos))
+            if (!TryGetNewPlacementPosition(out Vector3 placeablePos))
                 return;
 
             if (!inBuildingMode)
@@ -122,7 +121,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             }
 
             curPlacingPlaceable = curPlacingGo.GetComponent<Placeable>();
-            curPlacingPlaceable.SetBeingPlaced(true);
+            curPlacingPlaceable.StartPlacing();
 
             UpdatePositionOfObjectBeingPlaced();
 
@@ -174,8 +173,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
 
         private void UpdatePositionOfObjectBeingPlaced()
         {
-            Vector3 newPos;
-            if (TryGetNewPlacementPosition(out newPos))
+            if (TryGetNewPlacementPosition(out var newPos))
             {
                 if (previousPosition == newPos)
                     return;
@@ -185,6 +183,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
                 curPlacingGo.transform.position = newPos;
 
                 curPlacingPlaceable.CheckBaseBounds(baseFlatteningMap);
+                curPlacingPlaceable.CheckIntersecting();
             }
         }
 

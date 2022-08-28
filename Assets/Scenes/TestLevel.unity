@@ -4179,6 +4179,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 869846471}
   m_CullTransparentMesh: 1
+--- !u!4 &870814389 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4197487896501028, guid: 2d3a45ade0e0c37429c35f1e9f42bff2, type: 3}
+  m_PrefabInstance: {fileID: 1108621682}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &887243230
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5243,6 +5248,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5423156948083911444, guid: 2d3a45ade0e0c37429c35f1e9f42bff2, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5423156948083911444, guid: 2d3a45ade0e0c37429c35f1e9f42bff2, type: 3}
+      propertyPath: boundsCenter
+      value: 
+      objectReference: {fileID: 870814389}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d3a45ade0e0c37429c35f1e9f42bff2, type: 3}
 --- !u!1 &1111910267
@@ -9324,6 +9337,7 @@ MonoBehaviour:
   baseFlatteningMap: {fileID: 2800000, guid: 699243633679d11479c69ba2415cd7be, type: 3}
   debugToPlace: {fileID: 1808194703305103}
   baseY: 0
+  rotateSpeed: 90
   transparentDefaultMaterial: {fileID: 2100000, guid: a9cf5b4513c97d2418ec5700b2b5eb86, type: 2}
   invalidMaterialColor: {r: 1, g: 0, b: 0, a: 1}
   validMaterialColor: {r: 0, g: 1, b: 0.07017541, a: 1}

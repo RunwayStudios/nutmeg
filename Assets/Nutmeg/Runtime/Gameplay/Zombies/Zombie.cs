@@ -26,6 +26,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
         [SerializeField] private float attackDamage = 5;
         private float lastAttackTry = 0f;
+        private bool attacking = false;
 
 
         // Start is called before the first frame update
@@ -33,7 +34,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         {
             if (skins.Count < 1)
             {
-                Debug.LogError("Skins haven't been set up for zombie");
+                Debug.LogError("Skins haven't been set up for " + gameObject.name);
                 return;
             }
 
@@ -48,14 +49,16 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             navMeshAgent.SetDestination(new Vector3(0, 0, 0));
 
 
-            ZombieManager.Main.activeZombies.Add(transform);
+            ZombieManager.Main.activeZombies.Add(new ZombieManager.ZombiePositionStruct(transform.position, this));
         }
 
         // Update is called once per frame
         void Update()
         {
-            CheckObstacles();
-            TryAttack();
+            if (ShouldCheckObstacles())
+                CheckObstacles();
+            if (ShouldAttack())
+                Attack();
         }
 
 
@@ -63,9 +66,6 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
         protected virtual void CheckObstacles()
         {
-            if (!ShouldCheckObstacles())
-                return;
-
             int currentObstaclesStillInDetector = 0;
             bool newObstacle = false;
             List<Collider> colliders = Physics.OverlapBox(obstacleDetectorCenter.position, obstacleDetectorHalfExtends, obstacleDetectorCenter.rotation).ToList();
@@ -108,6 +108,9 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
         protected virtual bool ShouldCheckObstacles()
         {
+            if (attacking)
+                return false;
+            
             if (lastObstacleCheck + obstacleCheckInterval > Time.time)
                 return false;
 
@@ -119,7 +122,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         {
             if (CurrentObstaclesCount() < 2)
             {
-                navMeshAgent.isStopped = true;
+                StartAttacking();
             }
         }
 
@@ -127,7 +130,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         {
             if (CurrentObstaclesCount() < 1)
             {
-                navMeshAgent.isStopped = false;
+                StopAttacking();
             }
         }
 
@@ -140,14 +143,11 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
         #region Attacking
 
-        protected virtual void TryAttack()
+        protected virtual bool ShouldAttack()
         {
-            if (ShouldTryAttack())
-                Attack();
-        }
-
-        protected virtual bool ShouldTryAttack()
-        {
+            if (!attacking)
+                return false;
+            
             if (lastAttackTry + attackInterval > Time.time)
                 return false;
 
@@ -155,8 +155,22 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             return true;
         }
 
+        protected virtual void StartAttacking()
+        {
+            navMeshAgent.isStopped = true;
+            attacking = true;
+        }
+
+        protected virtual void StopAttacking()
+        {
+            navMeshAgent.isStopped = false;
+            attacking = false;
+        }
+
         protected virtual void Attack()
         {
+            CheckObstacles();
+
             if (CurrentObstaclesCount() > 0)
                 currentObstacles[0].Damage(attackDamage, Placeable.DamageType.Default);
         }
@@ -165,8 +179,9 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
         private void OnDrawGizmos()
         {
-            Gizmos.matrix = Matrix4x4.TRS(obstacleDetectorCenter.position, this.obstacleDetectorCenter.rotation, this.transform.lossyScale);
-            Gizmos.DrawCube(Vector3.zero, obstacleDetectorHalfExtends * 2);
+            Gizmos.color = Color.red;
+            Gizmos.matrix = Matrix4x4.TRS(obstacleDetectorCenter.position, obstacleDetectorCenter.rotation, transform.lossyScale);
+            Gizmos.DrawWireCube(Vector3.zero, obstacleDetectorHalfExtends * 2);
         }
     }
 }
