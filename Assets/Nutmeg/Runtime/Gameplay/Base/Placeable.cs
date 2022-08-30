@@ -1,4 +1,3 @@
-using Gameplay.Level.LevelGenerator;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,9 +8,6 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         [SerializeField] private Transform boundsCenter;
         [SerializeField] private Vector3 boundsHalfExtends = Vector3.one;
 
-        [Space]
-        [SerializeField] private float health = 100f;
-        
         private bool beingPlaced;
         private bool curPositionValid;
 
@@ -30,30 +26,6 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         void Update()
         {
         }
-
-
-        #region Damage
-
-        public virtual void Damage(float value, DamageType type)
-        {
-            health -= value;
-
-            if (health <= 0f && gameObject && gameObject.activeSelf)
-            {
-                DestroyImmediate(gameObject);
-                LevelGenerator.Main.UpdateNavMesh();
-            }
-        }
-
-        public enum DamageType
-        {
-            Default,
-            Fire,
-            Explosion,
-            Water
-        }
-
-        #endregion
 
 
         #region Placing
@@ -225,7 +197,8 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         
         #endregion
 
-        private void OnDrawGizmos()
+        
+        private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.cyan;
             Gizmos.matrix = Matrix4x4.TRS(boundsCenter.position, boundsCenter.rotation, transform.lossyScale);

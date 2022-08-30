@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Nutmeg.Runtime.Gameplay.Combat.Zombies;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Zombies
@@ -8,7 +9,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         public static ZombieManager Main;
         
         // [HideInInspector]
-        public List<ZombiePositionStruct> activeZombies = new List<ZombiePositionStruct>();
+        // public List<ZombiePositionStruct> activeZombies = new List<ZombiePositionStruct>();
 
         public List<Transform> spawners = new List<Transform>();
 
@@ -42,19 +43,6 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             
                 int rndmSpawnerIndex = Mathf.FloorToInt((float)new System.Random().NextDouble() * spawners.Count);
                 Instantiate(testZombiePrefab, spawners[rndmSpawnerIndex].position, new Quaternion());
-            }
-        }
-
-
-        public struct ZombiePositionStruct
-        {
-            public Vector3 pos;
-            public Zombie zombie;
-
-            public ZombiePositionStruct(Vector3 pos, Zombie zombie)
-            {
-                this.pos = pos;
-                this.zombie = zombie;
             }
         }
     }

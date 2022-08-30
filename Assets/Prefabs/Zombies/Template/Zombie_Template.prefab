@@ -3293,6 +3293,9 @@ GameObject:
   - component: {fileID: 95921630161195528}
   - component: {fileID: 6945734945769535206}
   - component: {fileID: -7093906615665926990}
+  - component: {fileID: 5235717926986241672}
+  - component: {fileID: 3953483507448050485}
+  - component: {fileID: 7287517683666557563}
   m_Layer: 0
   m_Name: Zombie_Template
   m_TagString: Untagged
@@ -3399,10 +3402,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skins: []
   navMeshAgent: {fileID: -7093906615665926990}
-  obstacleCheckInterval: 0.5
-  obstacleDetectorCenter: {fileID: 2443189955497392352}
-  obstacleDetectorHalfExtends: {x: 0.19, y: 0.85, z: 0.13}
-  currentObstacles: []
 --- !u!195 &-7093906615665926990
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3425,6 +3424,56 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 9
   m_ObstacleAvoidanceType: 3
+--- !u!114 &5235717926986241672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8397bfe99f16a0a4cb498d2275959ee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  group: 0
+  modules:
+  - {fileID: 3953483507448050485}
+  - {fileID: 7287517683666557563}
+--- !u!114 &3953483507448050485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bba79797453b746b67814214d1408a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+--- !u!114 &7287517683666557563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25adc742abc296f4f92281fb4d20fff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detector: {fileID: 0}
+  attackDamage: 5
+  attackInterval: 5
+  OnStartAttacking:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStopAttacking:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1423411692011380
 GameObject:
   m_ObjectHideFlags: 0

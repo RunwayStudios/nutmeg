@@ -394,6 +394,10 @@ GameObject:
   - component: {fileID: 7531896893012523909}
   - component: {fileID: 7633742447424014421}
   - component: {fileID: 1808194703305104}
+  - component: {fileID: 3684758778192502426}
+  - component: {fileID: 6704118926827809986}
+  - component: {fileID: 299690965411054213}
+  - component: {fileID: 7861696591638381190}
   m_Layer: 0
   m_Name: Placeable_Deco_Container_01
   m_TagString: Placeable
@@ -497,7 +501,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boundsCenter: {fileID: 5510721501700751313}
   boundsHalfExtends: {x: 1.24, y: 1.42, z: 1.51}
-  health: 100
 --- !u!208 &1808194703305104
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -514,6 +517,65 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 1.3030001, z: 0.071}
   m_TimeToStationary: 0.5
+--- !u!114 &3684758778192502426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888044353502096120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8397bfe99f16a0a4cb498d2275959ee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  group: 1
+  modules:
+  - {fileID: 6704118926827809986}
+  - {fileID: 299690965411054213}
+  - {fileID: 7861696591638381190}
+--- !u!114 &6704118926827809986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888044353502096120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bba79797453b746b67814214d1408a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+--- !u!114 &299690965411054213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888044353502096120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25adc742abc296f4f92281fb4d20fff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detector: {fileID: 7861696591638381190}
+  attackDamage: 5
+  attackInterval: 0.5
+--- !u!114 &7861696591638381190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888044353502096120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6752db7822782a242aa5472d5163203b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetGroup: 0
+  attackRadius: 5.6
 --- !u!1 &7813331556766603471
 GameObject:
   m_ObjectHideFlags: 0
