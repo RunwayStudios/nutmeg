@@ -10,11 +10,10 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         [Space] [SerializeField] private float attackDamage = 5f;
         [SerializeField] private float attackInterval = 5f;
         private float lastAttackTry;
-        private bool wasAttackingLastFrame = false;
+        private bool attacking = false;
 
         [Space] [Header("Events")] [SerializeField]
         private UnityEvent OnStartAttacking;
-
         [SerializeField] private UnityEvent OnStopAttacking;
 
 
@@ -27,17 +26,17 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
                 if (detector.TryGetTarget(out CombatEntity target))
                 {
                     Attack(target);
-                    if (!wasAttackingLastFrame)
+                    if (!attacking)
                     {
-                        wasAttackingLastFrame = true;
+                        attacking = true;
                         OnStartAttacking.Invoke();
                     }
                 }
                 else
                 {
-                    if (wasAttackingLastFrame)
+                    if (attacking)
                     {
-                        wasAttackingLastFrame = false;
+                        attacking = false;
                         OnStopAttacking.Invoke();
                     }
                 }

@@ -30,9 +30,6 @@ namespace Nutmeg.Runtime.Gameplay.Combat.Zombies
 
             // todo set base center/hut?
             navMeshAgent.SetDestination(new Vector3(0, 0, 0));
-
-
-            // ZombieManager.Main.activeZombies.Add(new ZombieManager.ZombiePositionStruct(transform.position, this));
         }
 
         // Update is called once per frame
