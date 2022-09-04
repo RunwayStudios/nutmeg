@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-// using Nutmeg.Runtime.Gameplay.BaseBuilding;
 
-namespace Nutmeg.Runtime.Gameplay.Combat.Zombies
+namespace Nutmeg.Runtime.Gameplay.Zombies
 {
     public class Zombie : MonoBehaviour
     {
@@ -21,7 +20,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.Zombies
                 return;
             }
 
-            int rndmSkinIndex = Mathf.FloorToInt((float)new System.Random().NextDouble() * skins.Count);
+            int rndmSkinIndex = Random.Range(0, skins.Count);
             skins[rndmSkinIndex].SetActive(true);
 
 

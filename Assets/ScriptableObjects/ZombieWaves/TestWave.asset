@@ -13,5 +13,49 @@ MonoBehaviour:
   m_Name: TestWave
   m_EditorClassIdentifier: 
   parts:
-  - test: 0
-  - test: 0
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  references:
+    version: 1
+    00000000:
+      type: {class: SpawnGroupWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
+      data:
+        zombiePrefab: {fileID: 1144529266033343354, guid: e6c37a22b3513bc4792c09756ed3de11, type: 3}
+        groupSize: 0
+    00000001:
+      type: {class: MultiplyWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
+      data:
+        numMultiplications: 30
+        wavePart:
+          id: 4
+    00000002:
+      type: {class: WaitWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
+      data:
+        seconds: 0
+    00000003:
+      type: {class: SpawnGroupWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
+      data:
+        zombiePrefab: {fileID: 1144529266033343354, guid: e6c37a22b3513bc4792c09756ed3de11, type: 3}
+        groupSize: 0
+    00000004:
+      type: {class: WavePartGroup, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
+      data:
+        parts:
+        - id: 5
+        - id: 6
+    00000005:
+      type: {class: WaitWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
+      data:
+        seconds: 0.2
+    00000006:
+      type: {class: MultiplyWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
+      data:
+        numMultiplications: 10
+        wavePart:
+          id: 7
+    00000007:
+      type: {class: SpawnSingleWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
+      data:
+        zombiePrefab: {fileID: 1144529266033343354, guid: e6c37a22b3513bc4792c09756ed3de11, type: 3}
