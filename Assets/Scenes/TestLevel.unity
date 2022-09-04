@@ -7237,6 +7237,12 @@ MonoBehaviour:
   - {fileID: 1229544152}
   - {fileID: 1697502893}
   - {fileID: 1832437477}
+  testWave: 0
+  testAddWavePart: 0
+  zombieWaves:
+  - {fileID: 11400000, guid: 507a29515aef6c547a2253e32dfb5925, type: 2}
+  waveIndex: 0
+  wavePartIndex: 0
   testSingle: 0
   testZombiePrefab: {fileID: 1144529266033343354, guid: e6c37a22b3513bc4792c09756ed3de11, type: 3}
 --- !u!4 &1438796911

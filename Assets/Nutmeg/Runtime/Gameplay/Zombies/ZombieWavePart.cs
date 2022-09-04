@@ -1,13 +1,14 @@
-using UnityEngine;
-
 namespace Nutmeg.Runtime.Gameplay.Zombies
 {
-    public abstract class ZombieWavePart : ScriptableObject
+    [System.Serializable]
+    public abstract class ZombieWavePart
     {
-        public abstract void StartPart();
+        public abstract void Start();
 
-        public abstract void Update();
-
-        public abstract bool Finished();
+        /// <summary>
+        /// update wave part
+        /// </summary>
+        /// <returns>whether wave part finished</returns>
+        public abstract bool Update();
     }
 }

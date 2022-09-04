@@ -1,3 +1,16 @@
 {
-	"name": "Nutmeg.Runtime.Gameplay.Zombies"
+    "name": "Nutmeg.Runtime.Gameplay.Zombies",
+    "rootNamespace": "",
+    "references": [
+        "GUID:73106583b323919458c1e05166706ce3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

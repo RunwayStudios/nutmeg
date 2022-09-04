@@ -1,21 +1,36 @@
 using System;
 using System.Collections.Generic;
-using Nutmeg.Runtime.Gameplay.Combat.Zombies;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Zombies
 {
     public class ZombieSpawner : MonoBehaviour
     {
+        public static ZombieSpawner Main;
+        
+        
         [SerializeField] private bool updateSpawningLocationsFromChildren = false;
         [SerializeField] private string spawningLocationsGoName = "Spawner";
         [SerializeField] private List<Transform> spawningLocations = new List<Transform>();
+
+        [Space] 
+        [SerializeField] private bool testWave;
+        private bool spawningWave;
+        [SerializeField] private ZombieWave[] zombieWaves;
+        [SerializeField] private int waveIndex = 0;
+        private ZombieWave curWave;
+        [SerializeField] private int wavePartIndex = 0;
+        private ZombieWavePart curWavePart;
         
-        [Space]
-        [SerializeField] private bool testSingle = false;
-        [SerializeField] private GameObject testZombiePrefab;
-        
-        
+
+        private bool currentlySpawning;
+
+
+        private void Awake()
+        {
+            Main = this;
+        }
+
         // Start is called before the first frame update
         void Start()
         {
@@ -25,20 +40,57 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         // Update is called once per frame
         void Update()
         {
-            if (testSingle)
+            if (testWave)
             {
-                testSingle = false;
-
-                if (spawningLocations.Count < 1)
-                {
-                    Debug.LogError("Spawners haven't been set up for zombieManager");
-                    return;
-                }
+                testWave = false;
+                StartWave(waveIndex);
+            }
             
-                int rndmSpawnerIndex = Mathf.FloorToInt((float)new System.Random().NextDouble() * spawningLocations.Count);
-                Instantiate(testZombiePrefab, spawningLocations[rndmSpawnerIndex].position, new Quaternion());
+            UpdateWave();
+        }
+
+
+        private void StartWave(int index)
+        {
+            if (index >= zombieWaves.Length)
+            {
+                currentlySpawning = false;
+                return;
+            }
+            
+            waveIndex = index;
+            curWave = zombieWaves[waveIndex];
+            wavePartIndex = 0;
+            curWavePart = curWave.parts[wavePartIndex];
+            curWavePart.Start();
+
+            currentlySpawning = true;
+        }
+
+        private void NextWavePart()
+        {
+            wavePartIndex++;
+            if (wavePartIndex >= curWave.parts.Length)
+            {
+                currentlySpawning = false;
+                // automatically start with next wave
+                // StartWave(waveIndex + 1);
+                return;
+            }
+
+            curWavePart = curWave.parts[wavePartIndex];
+            curWavePart.Start();
+        }
+
+        private void UpdateWave()
+        {
+            // if but immediately update the next wave part and check if it's done
+            while (currentlySpawning && curWavePart.Update())
+            {
+                NextWavePart();
             }
         }
+        
 
         private void OnValidate()
         {
@@ -55,5 +107,8 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
                 }
             }
         }
+
+
+        public List<Transform> SpawningLocations => spawningLocations;
     }
 }

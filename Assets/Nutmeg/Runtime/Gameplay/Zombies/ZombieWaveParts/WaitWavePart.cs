@@ -1,23 +1,20 @@
+using Nutmeg.Runtime.Gameplay.Zombies;
 using UnityEngine;
 
-namespace Nutmeg.Runtime.Gameplay.Zombies.ZombieWaveParts
+[System.Serializable]
+public class WaitWavePart : ZombieWavePart
 {
-    [CreateAssetMenu(menuName = "Zombies/ZombieWavePart/Wait")]
-    public class WaitWavePart : ZombieWavePart
+    [SerializeField] private float seconds = 1f;
+
+    private float startedWait;
+
+    public override void Start()
     {
-        public override void StartPart()
-        {
-            throw new System.NotImplementedException();
-        }
+        startedWait = Time.time;
+    }
 
-        public override void Update()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override bool Finished()
-        {
-            throw new System.NotImplementedException();
-        }
+    public override bool Update()
+    {
+        return startedWait + seconds < Time.time;
     }
 }

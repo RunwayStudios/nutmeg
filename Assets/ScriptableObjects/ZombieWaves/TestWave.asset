@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81970d10a65b5b84fa48cbe69df50e21, type: 3}
   m_Name: TestWave
   m_EditorClassIdentifier: 
+  parts:
+  - test: 0
+  - test: 0

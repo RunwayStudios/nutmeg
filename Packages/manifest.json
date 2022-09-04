@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.textus-games.serialized-reference-ui": "https://github.com/TextusGames/UnitySerializedReferenceUI.git",
     "com.unity.ai.navigation.components": "https://github.com/Unity-Technologies/NavMeshComponents.git#package",
     "com.unity.animation.rigging": "1.0.3",
     "com.unity.cinemachine": "2.6.11",
