@@ -899,6 +899,10 @@ GameObject:
   - component: {fileID: 95921630161195528}
   - component: {fileID: 6945734945769535206}
   - component: {fileID: -7093906615665926990}
+  - component: {fileID: 1223114201743971530}
+  - component: {fileID: 6491913076638152761}
+  - component: {fileID: 6909698799584520908}
+  - component: {fileID: 3870538267931740748}
   m_Layer: 0
   m_Name: Zombie_Smart
   m_TagString: Untagged
@@ -917,7 +921,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8964191606144396127}
+  - {fileID: 8410188297336685459}
   - {fileID: 4101432036228654}
   - {fileID: 4062523139138622}
   - {fileID: 4085906745210270}
@@ -963,10 +967,6 @@ MonoBehaviour:
   - {fileID: 1092556488114106}
   - {fileID: 1483869819391620}
   navMeshAgent: {fileID: -7093906615665926990}
-  obstacleCheckInterval: 0.5
-  obstacleDetectorCenter: {fileID: 8964191606144396127}
-  obstacleDetectorHalfExtends: {x: 0.19, y: 0.85, z: 0.13}
-  currentObstacles: []
 --- !u!195 &-7093906615665926990
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -989,6 +989,102 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 1
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1223114201743971530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8397bfe99f16a0a4cb498d2275959ee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  group: 0
+  modules:
+  - {fileID: 6491913076638152761}
+  - {fileID: 6909698799584520908}
+  - {fileID: 3870538267931740748}
+--- !u!114 &6491913076638152761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bba79797453b746b67814214d1408a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  OnReceiveDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6909698799584520908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295363f08482cbe4dbcaf9eada779cf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetGroup: 1
+  obstacleDetectorCenter: {fileID: 8410188297336685459}
+  obstacleDetectorHalfExtends: {x: 0.19, y: 0.85, z: 0.13}
+--- !u!114 &3870538267931740748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25adc742abc296f4f92281fb4d20fff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detector: {fileID: 6909698799584520908}
+  attackDamage: 5
+  attackInterval: 1
+  OnStartAttacking:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6945734945769535206}
+        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Zombies.Zombie, Nutmeg.Runtime.Gameplay.Zombies
+        m_MethodName: OnStartAttacking
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnStopAttacking:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6945734945769535206}
+        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Zombies.Zombie, Nutmeg.Runtime.Gameplay.Zombies
+        m_MethodName: OnStopAttacking
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1423411692011380
 GameObject:
   m_ObjectHideFlags: 0
@@ -2183,7 +2279,7 @@ Transform:
   m_Father: {fileID: 4091118722080264}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4985988732271843060
+--- !u!1 &348474889885124075
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2191,7 +2287,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8964191606144396127}
+  - component: {fileID: 8410188297336685459}
   m_Layer: 0
   m_Name: ObstacleDetectorCenter
   m_TagString: Untagged
@@ -2199,13 +2295,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8964191606144396127
+--- !u!4 &8410188297336685459
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4985988732271843060}
+  m_GameObject: {fileID: 348474889885124075}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0.27}
   m_LocalScale: {x: 1, y: 1, z: 1}

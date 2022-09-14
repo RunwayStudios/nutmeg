@@ -6,7 +6,8 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
     public class RadiusDetectorModule : DetectorModule
     {
         [SerializeField] private CombatGroup targetGroup;
-        [SerializeField] private float radius = 5f;
+        [SerializeField] private float fromRadius = 1f;
+        [SerializeField] private float toRadius = 5f;
 
 
         public override bool TryGetTarget(out CombatEntity target)
@@ -21,7 +22,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
             for (int i = 0; i < targets.Count; i++)
             {
                 float distance = new Vector2(transform.position.x - targets[i].Transform.position.x, transform.position.z - targets[i].Transform.position.z).magnitude;
-                if (distance < radius && distance < lowestDistance)
+                if (distance > fromRadius && distance < toRadius && distance < lowestDistance)
                 {
                     lowestDistance = distance;
                     closestIndex = i;
@@ -37,8 +38,10 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
 
         private void OnDrawGizmosSelected()
         {
+            Handles.color = new Color(0f, 0.5f, 0.5f);
+            Handles.DrawWireDisc(transform.position, Vector3.up, fromRadius);
             Handles.color = Color.cyan;
-            Handles.DrawWireDisc(transform.position, Vector3.up, radius);
+            Handles.DrawWireDisc(transform.position, Vector3.up, toRadius);
         }
     }
 }

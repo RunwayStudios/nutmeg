@@ -3,7 +3,6 @@ using Gameplay.Level.LevelGenerator;
 using Nutmeg.Runtime.Utility.InputSystem;
 using Nutmeg.Runtime.Utility.MouseController;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 namespace Nutmeg.Runtime.Gameplay.BaseBuilding

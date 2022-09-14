@@ -980,7 +980,7 @@ GameObject:
   - component: {fileID: 4843553746213050}
   - component: {fileID: 95831563611282832}
   m_Layer: 0
-  m_Name: Character_SportsBraFemale_01
+  m_Name: NPC_Military
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

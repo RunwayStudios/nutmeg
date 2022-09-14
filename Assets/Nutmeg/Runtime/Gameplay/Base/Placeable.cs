@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 namespace Nutmeg.Runtime.Gameplay.BaseBuilding
 {
@@ -8,6 +9,9 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         [SerializeField] private Transform boundsCenter;
         [SerializeField] private Vector3 boundsHalfExtends = Vector3.one;
 
+        [SerializeField] private UnityEvent OnStartPlacing;
+        [SerializeField] private UnityEvent OnStopPlacing;
+        
         private bool beingPlaced;
         private bool curPositionValid;
 
@@ -35,16 +39,14 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             beingPlaced = true;
 
             curPositionValid = true;
+            
+            OnStartPlacing.Invoke();
 
             Collider[] colliders = GetComponents<Collider>();
             foreach (Collider collider in colliders)
             {
                 collider.enabled = false;
             }
-
-            NavMeshObstacle navMeshObstacle = GetComponent<NavMeshObstacle>();
-            if (navMeshObstacle)
-                navMeshObstacle.enabled = false;
 
 
             Material material = GetComponent<MeshRenderer>().material;
@@ -69,6 +71,8 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         public void StopPlacing()
         {
             beingPlaced = false;
+            
+            OnStopPlacing.Invoke();
 
             Destroy(gameObject.GetComponent<Rigidbody>());
             // todo reset to original position if there was one / delete otherwise
