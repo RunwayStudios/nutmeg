@@ -255,6 +255,7 @@ GameObject:
   - component: {fileID: 33429541364700436}
   - component: {fileID: 23775215876747556}
   - component: {fileID: 64680976172880162}
+  - component: {fileID: 8855108006050385729}
   m_Layer: 0
   m_Name: SM_Wep_Rifle_Assault_01
   m_TagString: Untagged
@@ -269,7 +270,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1296539039355890}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -282,6 +283,7 @@ Transform:
   - {fileID: 4609892381821270}
   - {fileID: 8933045212545888995}
   - {fileID: 5727368773705947816}
+  - {fileID: 3993105123699785846}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -348,6 +350,34 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43423280058218976, guid: 27d4bc80aff09d74c9e3e67b94c45e36, type: 2}
+--- !u!114 &8855108006050385729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296539039355890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8bcdb6f241740a29f73783df04a21b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDataObject: {fileID: 0}
+  stats: {fileID: 11400000, guid: 572e54b3987040f419bdb4a029050912, type: 2}
+  muzzleFlareFX: {fileID: 157586, guid: 2574ca206a571a342a7fab69fdfb87aa, type: 3}
+  bulletTrailFX: {fileID: 7655137983007208036, guid: bc80d15a7b9a94148b7db359d766bbb1, type: 3}
+  barrelEnd: {fileID: 3993105123699785846}
+  barrelPosition: {fileID: 0}
+  bodyPosition: {fileID: 0}
+  handlePosition: {fileID: 0}
+  magazinePosition: {fileID: 0}
+  muzzlePosition: {fileID: 0}
+  opticPosition: {fileID: 0}
+  stockPosition: {fileID: 0}
+  underBarrelPosition: {fileID: 0}
+  currentMuzzleAttachmentGameObject: {fileID: 0}
+  currentOpticAttachmentGameObject: {fileID: 0}
+  currentUnderBarrelAttachmentGameObject: {fileID: 0}
 --- !u!1 &1764537760694094
 GameObject:
   m_ObjectHideFlags: 0
@@ -672,6 +702,36 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &4395329404180920942
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3993105123699785846}
+  m_Layer: 0
+  m_Name: Tip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3993105123699785846
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4395329404180920942}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.084, z: 0.674}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4645375280533522}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9035475266380393666
 GameObject:
   m_ObjectHideFlags: 0

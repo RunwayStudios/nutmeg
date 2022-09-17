@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Mirror;
 using Nutmeg.Runtime.Gameplay.Items;
 using Nutmeg.Runtime.Gameplay.Weapons;
@@ -14,9 +15,14 @@ namespace Nutmeg.Runtime.Gameplay.Player
         [SerializeField] private InputEventChannel input;
         [SerializeField] private CharacterController cc;
         [SerializeField] private StateMachine stateMachine;
+        [SerializeField] private Transform body;
 
         [Header("Movement")] [SerializeField] private float moveSpeed;
         [SerializeField] private float acceleration = .01f;
+        [SerializeField] private float dashDistance = 10f;
+        [SerializeField] private float dashSpeed = 1f;
+        [SerializeField] private AnimationCurve dashAcceleration;
+
 
         [SerializeField] private Item equippedWeapon;
         [SerializeField] private GameObject equippedThrowable;
@@ -34,6 +40,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
         private bool useItem;
 
         public bool IsWalking { get; private set; }
+        public bool IsDashing { get; private set; }
 
         private void Start()
         {
@@ -65,6 +72,9 @@ namespace Nutmeg.Runtime.Gameplay.Player
                 case PlayerState.Walking:
                     stateAction += OnWalking;
                     break;
+                case PlayerState.Dashing:
+                    StartCoroutine(Dash()); 
+                    break;
             }
         }
 
@@ -89,7 +99,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
             Vector3 cross = Vector3.Cross(new Vector3(-moveVector.x, 0f, moveVector.y), transform.forward);
 
             //not working correctly
-            //velocity gets added without needed
+            //velocity gets added without needed ???
 
             animationVelocity = new Vector2(
                 Mathf.Clamp(
@@ -110,7 +120,6 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
             animationController.UpdateFloatParam("Forward_Velocity", Mathf.Clamp(animationVelocity.y, -.75f, .75f));
             animationController.UpdateFloatParam("Strafe_Velocity", Mathf.Clamp(animationVelocity.x, -.75f, .75f));
-
 
             //Back or Forth
             /*if(cross.y > 0)
@@ -164,7 +173,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
         {
             stateAction?.Invoke();
 
-            Debug.Log(animationVelocity);
+            //Debug.Log(animationVelocity);
         }
 
         private void OnMoveActionPerformed(Vector2 value)
@@ -204,10 +213,32 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void OnSecondaryActionPerformed()
         {
+            if(!IsDashing)
+                IsDashing = true;
             //TODO make more modular. Mybe the secondary wont be a nade
-            Instantiate(equippedThrowable, hand.position, hand.rotation);
+            //Instantiate(equippedThrowable, hand.position, hand.rotation);
         }
 
+        private float elapsedDashTime;
+
+        private IEnumerator Dash()
+        {
+            float velocity = 0f;
+            while (velocity < 1f)
+            {
+                Debug.Log(velocity);
+                
+                //velocity = dashAcceleration.Evaluate(elapsedDashTime / dashSpeed);
+                velocity = elapsedDashTime / dashSpeed;
+                elapsedDashTime += Time.deltaTime;
+
+                cc.Move((Vector3.left * moveVector.x + Vector3.back * moveVector.y) * (velocity) * dashDistance *
+                        Time.deltaTime);
+                yield return null;
+            } 
+            
+            IsDashing = false;
+        }
 
         private void Move()
         {
@@ -229,10 +260,10 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void Rotate()
         {
-            MouseController.UpdateMouseLookTarget();
-            transform.LookAt(MouseController.GetLastMouseLookTargetPoint());
+            //MouseController.UpdateMouseLookTarget();
+            body.LookAt(MouseController.GetLastMouseLookTargetPoint());
             //transform.LookAt(camera.ScreenToWorldPoint(Mouse.current.position.ReadValue()));
-            transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
+            body.rotation = Quaternion.Euler(0f, body.rotation.eulerAngles.y, 0f);
         }
 
         private void OnDrawGizmos()

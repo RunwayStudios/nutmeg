@@ -2,10 +2,11 @@
 {
     public enum PlayerState
     {
+        Dashing,
+        Hiding,
         Idle,
-        Walking,
         Sprinting,
         Sneaking,
-        Hiding
+        Walking,
     }
 }

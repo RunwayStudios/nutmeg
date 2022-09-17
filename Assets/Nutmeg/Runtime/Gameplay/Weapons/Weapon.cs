@@ -21,6 +21,9 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
 
         public void ReloadWeapon()
         {
+            if(!Stats.HasType(StatType.ReloadTime))
+                return;
+            
             if (ReloadProgress == 0f && currentAmmunitionAmount != (int) Stats[StatType.MagazineSize])
                 StartCoroutine(ReloadEnumerator());
         }

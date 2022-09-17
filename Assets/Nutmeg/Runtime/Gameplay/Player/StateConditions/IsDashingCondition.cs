@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Player.StateConditions
 {
-    [CreateAssetMenu(fileName = "IsWalkingCondition", menuName = "StateMachine/Conditions/Is Walking")]
-    public class IsWalkingCondition : StateCondition
+    [CreateAssetMenu(fileName = "IsDashingCondition", menuName = "StateMachine/Conditions/Is Dashing")]
+    public class IsDashingCondition : StateCondition
     {
         private PlayerController controller;
 
         public override bool IsMet()
         {
-            return controller.IsWalking;
+            return controller.IsDashing;
         }
 
         public override void Initialize(StateMachine root)

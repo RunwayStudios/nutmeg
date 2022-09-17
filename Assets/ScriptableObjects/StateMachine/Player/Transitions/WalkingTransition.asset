@@ -15,5 +15,8 @@ MonoBehaviour:
   conditions:
   - condition: {fileID: 11400000, guid: 726559ee411093e4ead7d6db4b2a94d5, type: 2}
     lastItem: 1
+    operatorSelected: 1
+  - condition: {fileID: 11400000, guid: 42403387173d1ce4bb7025458e773832, type: 2}
+    lastItem: 1
     operatorSelected: 0
   transitionState: {fileID: 11400000, guid: bff8a3356143b9b48a1c90ba17508f7b, type: 2}

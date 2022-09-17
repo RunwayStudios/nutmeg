@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1490df991a3f894ab4e59cb8dc1e498, type: 3}
   m_Name: Idle
   m_EditorClassIdentifier: 
-  playerState: 0
+  playerState: 2
   transitions:
   - {fileID: 11400000, guid: a851a551439eeec41823340b8a939c40, type: 2}

@@ -3,12 +3,14 @@
     public enum StatType
     {
         Accuracy,
+        Amount,
+        Cooldown,
+        UseTime,
         Recoil,
         Damage,
         FireRate,
         MagazineSize,
-        ReloadTime,
         Range, 
-        Amount
+        ReloadTime
     }
 }

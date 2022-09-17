@@ -9,6 +9,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.HitScan
     public class HitScanWeapon : Weapon
     {
         [SerializeField] private GameObject muzzleFlareFX;
+        [SerializeField] private int muzzleFlareFXPoolSize;
         [SerializeField] private GameObject bulletTrailFX;
         [SerializeField] private Transform barrelEnd;
 

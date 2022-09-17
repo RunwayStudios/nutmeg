@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Nutmeg.Runtime.Utility.MouseController
@@ -9,6 +10,12 @@ namespace Nutmeg.Runtime.Utility.MouseController
         private static RaycastHit? lastLookTarget;
 
         private void Start() => camera = GetComponent<Camera>();
+
+        private void Update()
+        {
+            if(Mouse.current.wasUpdatedThisFrame)
+                UpdateMouseLookTarget();
+        }
 
         public static GameObject GetLastMouseLookTargetGameObject() => lastLookTarget?.transform.gameObject;
 
