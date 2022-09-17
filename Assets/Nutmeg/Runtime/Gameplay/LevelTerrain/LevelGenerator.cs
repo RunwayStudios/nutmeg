@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.AI;
@@ -59,11 +60,22 @@ namespace Gameplay.Level.LevelGenerator
         void Start()
         {
             CalculateBaseFlatteningMapBounds();
-            //GenerateLevel();
         }
 
         // Update is called once per frame
         void Update()
+        {
+            if (regenerate)
+            {
+                regenerate = false;
+                terrainGenStopwatch.Restart();
+                GenerateLevel();
+                terrainGenStopwatch.Stop();
+                generateMS = terrainGenStopwatch.Elapsed.TotalMilliseconds;
+            }
+        }
+
+        private void OnValidate()
         {
             if (regenerate)
             {

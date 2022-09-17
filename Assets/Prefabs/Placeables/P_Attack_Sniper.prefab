@@ -173,7 +173,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   group: 1
   modules:
-  - {fileID: 6780269372015060223}
   - {fileID: 6311361668244213556}
   - {fileID: 894671858835887931}
 --- !u!114 &6780269372015060223
