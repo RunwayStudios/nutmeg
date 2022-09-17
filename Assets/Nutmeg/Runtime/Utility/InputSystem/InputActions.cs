@@ -89,6 +89,15 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Tab"",
+                    ""type"": ""Button"",
+                    ""id"": ""d5200dab-8945-47d3-bcc2-770e02db2934"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -364,6 +373,17 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Special"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9071a990-1762-486f-911e-7b5fe5208d86"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Tab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -884,6 +904,74 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""BaseBuilding"",
+            ""id"": ""ee5460b4-9e9d-4b61-8398-4c0047ec614f"",
+            ""actions"": [
+                {
+                    ""name"": ""PlaceObject"",
+                    ""type"": ""Button"",
+                    ""id"": ""f57d2e2f-6c62-46ed-a9e9-d66a24e2450c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateClockwise"",
+                    ""type"": ""Button"",
+                    ""id"": ""50e79581-60ac-4cb0-8eb7-e7e00d739052"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateCounterclockwise"",
+                    ""type"": ""Button"",
+                    ""id"": ""0a545ac0-d7ba-433f-8658-e65a81a17afa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""69e9b7d4-3081-49cc-9ffd-b310b7f3eb10"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""PlaceObject"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3a1cb218-adce-4b40-8f6b-9340c2ccb0a7"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateClockwise"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3cee23d4-4e5b-44df-8f9b-d77e7987a95e"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCounterclockwise"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -958,6 +1046,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_Player_Special = m_Player.FindAction("Special", throwIfNotFound: true);
         m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
         m_Player_Scroll = m_Player.FindAction("Scroll", throwIfNotFound: true);
+        m_Player_Tab = m_Player.FindAction("Tab", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -970,6 +1059,11 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        // BaseBuilding
+        m_BaseBuilding = asset.FindActionMap("BaseBuilding", throwIfNotFound: true);
+        m_BaseBuilding_PlaceObject = m_BaseBuilding.FindAction("PlaceObject", throwIfNotFound: true);
+        m_BaseBuilding_RotateClockwise = m_BaseBuilding.FindAction("RotateClockwise", throwIfNotFound: true);
+        m_BaseBuilding_RotateCounterclockwise = m_BaseBuilding.FindAction("RotateCounterclockwise", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1036,6 +1130,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Special;
     private readonly InputAction m_Player_Reload;
     private readonly InputAction m_Player_Scroll;
+    private readonly InputAction m_Player_Tab;
     public struct PlayerActions
     {
         private @InputActions m_Wrapper;
@@ -1047,6 +1142,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         public InputAction @Special => m_Wrapper.m_Player_Special;
         public InputAction @Reload => m_Wrapper.m_Player_Reload;
         public InputAction @Scroll => m_Wrapper.m_Player_Scroll;
+        public InputAction @Tab => m_Wrapper.m_Player_Tab;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1077,6 +1173,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Scroll.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnScroll;
                 @Scroll.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnScroll;
                 @Scroll.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnScroll;
+                @Tab.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTab;
+                @Tab.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTab;
+                @Tab.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTab;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1102,6 +1201,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Scroll.started += instance.OnScroll;
                 @Scroll.performed += instance.OnScroll;
                 @Scroll.canceled += instance.OnScroll;
+                @Tab.started += instance.OnTab;
+                @Tab.performed += instance.OnTab;
+                @Tab.canceled += instance.OnTab;
             }
         }
     }
@@ -1211,6 +1313,55 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // BaseBuilding
+    private readonly InputActionMap m_BaseBuilding;
+    private IBaseBuildingActions m_BaseBuildingActionsCallbackInterface;
+    private readonly InputAction m_BaseBuilding_PlaceObject;
+    private readonly InputAction m_BaseBuilding_RotateClockwise;
+    private readonly InputAction m_BaseBuilding_RotateCounterclockwise;
+    public struct BaseBuildingActions
+    {
+        private @InputActions m_Wrapper;
+        public BaseBuildingActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PlaceObject => m_Wrapper.m_BaseBuilding_PlaceObject;
+        public InputAction @RotateClockwise => m_Wrapper.m_BaseBuilding_RotateClockwise;
+        public InputAction @RotateCounterclockwise => m_Wrapper.m_BaseBuilding_RotateCounterclockwise;
+        public InputActionMap Get() { return m_Wrapper.m_BaseBuilding; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(BaseBuildingActions set) { return set.Get(); }
+        public void SetCallbacks(IBaseBuildingActions instance)
+        {
+            if (m_Wrapper.m_BaseBuildingActionsCallbackInterface != null)
+            {
+                @PlaceObject.started -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnPlaceObject;
+                @PlaceObject.performed -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnPlaceObject;
+                @PlaceObject.canceled -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnPlaceObject;
+                @RotateClockwise.started -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnRotateClockwise;
+                @RotateClockwise.performed -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnRotateClockwise;
+                @RotateClockwise.canceled -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnRotateClockwise;
+                @RotateCounterclockwise.started -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnRotateCounterclockwise;
+                @RotateCounterclockwise.performed -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnRotateCounterclockwise;
+                @RotateCounterclockwise.canceled -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnRotateCounterclockwise;
+            }
+            m_Wrapper.m_BaseBuildingActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @PlaceObject.started += instance.OnPlaceObject;
+                @PlaceObject.performed += instance.OnPlaceObject;
+                @PlaceObject.canceled += instance.OnPlaceObject;
+                @RotateClockwise.started += instance.OnRotateClockwise;
+                @RotateClockwise.performed += instance.OnRotateClockwise;
+                @RotateClockwise.canceled += instance.OnRotateClockwise;
+                @RotateCounterclockwise.started += instance.OnRotateCounterclockwise;
+                @RotateCounterclockwise.performed += instance.OnRotateCounterclockwise;
+                @RotateCounterclockwise.canceled += instance.OnRotateCounterclockwise;
+            }
+        }
+    }
+    public BaseBuildingActions @BaseBuilding => new BaseBuildingActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1265,6 +1416,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         void OnSpecial(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
         void OnScroll(InputAction.CallbackContext context);
+        void OnTab(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
@@ -1278,5 +1430,11 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+    }
+    public interface IBaseBuildingActions
+    {
+        void OnPlaceObject(InputAction.CallbackContext context);
+        void OnRotateClockwise(InputAction.CallbackContext context);
+        void OnRotateCounterclockwise(InputAction.CallbackContext context);
     }
 }

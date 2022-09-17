@@ -174,7 +174,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _SampleGI: 0
-    - _Smoothness: 0.5
+    - _Smoothness: 0.2
     - _Smoothness0: 0.5
     - _Smoothness1: 0.5
     - _Smoothness2: 0.5
@@ -191,5 +191,5 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _TerrainColor: {r: 0.5176471, g: 0.52582806, b: 0.5294118, a: 1}
+    - _TerrainColor: {r: 0.34901962, g: 0.38039216, b: 0.27058825, a: 1}
   m_BuildTextureStacks: []

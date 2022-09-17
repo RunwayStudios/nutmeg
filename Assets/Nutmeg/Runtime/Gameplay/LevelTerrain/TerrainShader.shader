@@ -4,13 +4,18 @@ Shader "Custom/TerrainShader"
     {
         // shader properties; editable in material
         //_MainTex ("Texture", 2D) = "white" {}
+        
+        // Metallic workflow
+        
         _TerrainColor ("Terrain Color", Color) = (.25, .5, .3, 1)
+        _Smoothness("Smoothness", Range(0.0, 1.0)) = 0.2
+        _Metallic("Metallic", Range(0.0, 1.0)) = 0.0
     }
     SubShader
     {
         Tags
         {
-            "RenderType"="Opaque" "RenderPipeline" = "UniversalPipeline"
+            "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline"
         }
         //LOD 100
 
@@ -37,6 +42,7 @@ Shader "Custom/TerrainShader"
 
             //
             //#pragma multi_compile_shadowcaster
+            //#pragma shader_feature_local_fragment _ENVIRONMENTREFLECTIONS_OFF
 
             // Lighting and shadow keywords
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS

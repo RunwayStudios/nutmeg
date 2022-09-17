@@ -6,6 +6,9 @@
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #include "NMGGeometryHelpers.hlsl"
 
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
+
 // This structure is created by the renderer and passed to the Vertex function
 // It holds data stored on the model, per vertex
 struct Attributes
@@ -21,6 +24,7 @@ struct Attributes
 struct VertexOutput
 {
     float3 positionWS : TEXCOORD0; // Position in world space
+    //half4 fogFactorAndVertexLight : TEXCOORD1; // x: fogFactor, yzw: vertex light
     //float2 uv           : TEXCOORD1; // UVs
 };
 
@@ -29,12 +33,13 @@ struct VertexOutput
 struct GeometryOutput
 {
     float3 positionWS : TEXCOORD0; // Position in world space
-    float3 normalWS : TEXCOORD1; // Normal vector in world space
+    half3 normalWS : TEXCOORD1; // Normal vector in world space
+    half fogFactor : TEXCOORD2; // x: fogFactor, yzw: vertex light
+    half3 environmentColorAdjustment : TEXCOORD3; // x: fogFactor, yzw: vertex light
     //float3 diff : TEXCOORD2;
     //float2 uv                       : TEXCOORD2; // UVs
 
     float4 positionCS : SV_POSITION; // Position in clip space
-
 };
 
 // The _MainTex property. The sampler and scale/offset vector is also created
@@ -43,7 +48,9 @@ struct GeometryOutput
 //float _PyramidHeight;
 
 // color of the terrain
-float3 _TerrainColor;
+half3 _TerrainColor;
+half _Smoothness;
+half _Metallic;
 
 // Vertex functions
 
@@ -56,8 +63,8 @@ VertexOutput Vertex(Attributes input)
     // The analogous function for normals is GetVertexNormalInputs
     //VertexPositionInputs vertexInput = GetVertexPositionInputs(input.positionOS.xyz);
     //output.positionWS = vertexInput.positionWS;
+    
     output.positionWS = TransformObjectToWorld(input.positionOS);
-
 
     // TRANSFORM_TEX is a macro which scales and offsets the UVs based on the _MainTex_ST variable
     //output.uv = TRANSFORM_TEX(input.uv, _MainTex);
@@ -66,62 +73,42 @@ VertexOutput Vertex(Attributes input)
 
 // Geometry functions
 
-GeometryOutput SetupVertex(float3 positionWS, float3 normalWS/*, float2 uv*/)
+GeometryOutput SetupVertex(float3 positionWS, half3 normalWS, half3 environmentColorAdjustment/*, float2 uv*/)
 {
     // Setup an output struct
     GeometryOutput output = (GeometryOutput)0;
     output.positionWS = positionWS;
     output.normalWS = normalWS;
-    
-    
+
+    // This function calculates clip space position, taking the shadow caster pass into account
+    float4 positionCS = CalculatePositionCSWithShadowCasterLogic(positionWS, normalWS);
+    //half3 vertexLight = VertexLighting(positionWS, normalWS);
+    output.fogFactor = ComputeFogFactor(positionCS.z);
+
+    output.environmentColorAdjustment = environmentColorAdjustment;
+
     //output.diff = _TerrainColor.rgb * normalWS;
 
 
     //output.uv = uv;
-    // This function calculates clip space position, taking the shadow caster pass into account
-    output.positionCS = CalculatePositionCSWithShadowCasterLogic(positionWS, normalWS);
+    output.positionCS = positionCS;
     return output;
 }
 
-// void SetupAndOutputTriangle(inout TriangleStream<GeometryOutput> outputStream, VertexOutput a, VertexOutput b, VertexOutput c) {
-//     // Restart the triangle strip, signaling the next appends are disconnected from the last
-//     outputStream.RestartStrip();
-//     // Since we extrude the center face, the normal must be recalculated
-//     float3 normalWS = GetNormalFromTriangle(a.positionWS, b.positionWS, c.positionWS);
-//     // Add the output data to the output stream, creating a triangle
-//     outputStream.Append(SetupVertex(a.positionWS, normalWS, a.uv));
-//     outputStream.Append(SetupVertex(b.positionWS, normalWS, b.uv));
-//     outputStream.Append(SetupVertex(c.positionWS, normalWS, c.uv));
-// }
-
-// We create three triangles from one, so there will be 9 vertices
+// Geometry Shader calculating a normal per triangle; flat lighting
 [maxvertexcount(3)]
 void Geometry(triangle VertexOutput inputs[3], inout TriangleStream<GeometryOutput> outputStream)
 {
-    // Create a fake VertexOutput for the center vertex
-    //VertexOutput center = (VertexOutput)0;
-    // We need the triangle's normal to extrude the center point
-    const float3 triNormal = GetNormalFromTriangle(inputs[0].positionWS, inputs[1].positionWS, inputs[2].positionWS);
-
-    // Find the center position and extrude by _PyramidHeight along the normal
-    //center.positionWS = GetTriangleCenter(inputs[0].positionWS, inputs[1].positionWS, inputs[2].positionWS) + triNormal * _PyramidHeight;
-    // Average the UVs as well
-    //center.uv = GetTriangleCenter(inputs[0].uv, inputs[1].uv, inputs[2].uv);
-
-    // Create the three triangles.
-    // Triangles must wind clockwise or they will not render by default
-    //SetupAndOutputTriangle(outputStream, inputs[0], inputs[1], inputs[2]);
-    //SetupAndOutputTriangle(outputStream, inputs[1], inputs[2], center);
-    //SetupAndOutputTriangle(outputStream, inputs[2], inputs[0], center);
+    // We need the triangle's normal
+    const half3 triNormal = GetNormalFromTriangle(inputs[0].positionWS, inputs[1].positionWS, inputs[2].positionWS);
+    const half3 environmentColorAdjustment = SampleSH(triNormal) * _TerrainColor.rgb;
 
     // Restart the triangle strip, signaling the next appends are disconnected from the last
     //outputStream.RestartStrip();
-    // Since we extrude the center face, the normal must be recalculated
-    //float3 normalWS = GetNormalFromTriangle(a.positionWS, b.positionWS, c.positionWS);
     // Add the output data to the output stream, creating a triangle
-    outputStream.Append(SetupVertex(inputs[0].positionWS, triNormal));
-    outputStream.Append(SetupVertex(inputs[1].positionWS, triNormal));
-    outputStream.Append(SetupVertex(inputs[2].positionWS, triNormal));
+    outputStream.Append(SetupVertex(inputs[0].positionWS, triNormal, environmentColorAdjustment));
+    outputStream.Append(SetupVertex(inputs[1].positionWS, triNormal, environmentColorAdjustment));
+    outputStream.Append(SetupVertex(inputs[2].positionWS, triNormal, environmentColorAdjustment));
 }
 
 // Fragment functions
@@ -134,122 +121,117 @@ float4 Fragment(GeometryOutput input) : SV_Target
     // It's enough to signal that should will cast a shadow
     return 0;
     #else
-    // Initialize some information for the lighting function
-    InputData lightingInput = (InputData)0;
-    lightingInput.positionWS = input.positionWS;
-    lightingInput.normalWS = input.normalWS; // No need to renormalize, since triangles all share normals
-    lightingInput.viewDirectionWS = GetViewDirectionFromPosition(input.positionWS);
-    lightingInput.shadowCoord = CalculateShadowCoord(input.positionWS, input.positionCS);
 
-    // Read the main texture
-    //float3 albedo = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv).rgb;
-
-    // Call URP's simple lighting function
-    // The arguments are lightingInput, albedo color, specular color, smoothness, emission color, and alpha
-    //return float4(_TerrainColor, 1);
+    //half4 specGloss = half4(0, 0, 0, _Smoothness);
     
-    // half alpha = 1;
-    // BRDFData brdfData;
+    //SurfaceData surfaceData;
+    half alpha = 1.0h;
+    //surfaceData.alpha = 1;
+    //surfaceData.albedo = _TerrainColor.rgb;
+    //surfaceData.metallic = _Metallic;
+    //surfaceData.specular = half3(0, 0, 0);
+    //surfaceData.smoothness = _Smoothness;
+    //surfaceData.normalTS = half3(0, 0, 1);
+    //surfaceData.occlusion = 1;
+    //surfaceData.emission = 0;
+    //surfaceData.clearCoatMask = 0;
+    //surfaceData.clearCoatSmoothness = 0;
+    
+    //InputData inputData = (InputData)0;
+    //inputData.positionWS = input.positionWS;
+    //inputData.normalWS = input.normalWS;
+    const float3 viewDirectionWS = GetViewDirectionFromPosition(input.positionWS);
+    //inputData.viewDirectionWS = GetViewDirectionFromPosition(input.positionWS);
+    //inputData.shadowCoord = TransformWorldToShadowCoord(input.positionWS);
+    //inputData.fogCoord = input.fogFactorAndVertexLight.x;
+    //inputData.vertexLighting = input.fogFactorAndVertexLight.yzw;
+    //inputData.bakedGI = half3(0, 0, 0);
+    //inputData.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(input.positionCS);
+    //inputData.shadowMask = half4(1, 1, 1, 1);
+
+    Light mainLight = GetMainLight();
+    mainLight.shadowAttenuation = MainLightRealtimeShadow(TransformWorldToShadowCoord(input.positionWS));
+    
+    // AmbientOcclusionFactor aoFactor = GetScreenSpaceAmbientOcclusion(inputData.normalizedScreenSpaceUV);
+    // mainLight.color *= aoFactor.directAmbientOcclusion;
+    // surfaceData.occlusion = min(surfaceData.occlusion, aoFactor.indirectAmbientOcclusion);
+    
+    BRDFData brdfData;
+    // NOTE: can modify alpha
+    InitializeBRDFData(_TerrainColor.rgb, _Metallic, half3(0.0h, 0.0h, 0.0h), _Smoothness, alpha, brdfData);
+    
+    const BRDFData brdfDataClearCoat = (BRDFData)0;
+
+    
+    //MixRealtimeAndBakedGI(mainLight, inputData.normalWS, inputData.bakedGI);
+    half3 color = GlobalIllumination(brdfData, brdfDataClearCoat, 0.0h,
+                                     half3(0.0h, 0.0h, 0.0h), 1.0h,
+                                     input.normalWS, viewDirectionWS);
+    color += LightingPhysicallyBased(brdfData, brdfDataClearCoat,
+                                     mainLight,
+                                     input.normalWS, viewDirectionWS,
+                                     0.0h, false);
+
+
+    const uint pixelLightCount = GetAdditionalLightsCount();
+    for (uint lightIndex = 0u; lightIndex < pixelLightCount; ++lightIndex)
+    {
+        const Light light = GetAdditionalLight(lightIndex, input.positionWS, half4(1.0h, 1.0h, 1.0h, 1.0h));
+        // #if defined(_SCREEN_SPACE_OCCLUSION)
+        // light.color *= aoFactor.directAmbientOcclusion;
+        // #endif
+        color += LightingPhysicallyBased(brdfData, brdfDataClearCoat,
+                                         light,
+                                         input.normalWS, viewDirectionWS,
+                                         0.0h, false);
+    }
+
+    //#ifdef _ADDITIONAL_LIGHTS_VERTEX
+    //color += inputData.vertexLighting * brdfData.diffuse;
+    //#endif
+
+    //color += surfaceData.emission;
+    color += input.environmentColorAdjustment;
+    color = MixFog(color, input.fogFactor);
+
+    // // MainLight
+    // half nl = max(0, dot(input.normalWS, _MainLightPosition.xyz));
+    // half4 diff = nl * _MainLightColor;
     //
-    // //                 albedo, metallic, specular, smoothness, alpha
-    // InitializeBRDFData(_TerrainColor.rgb, 0, 1, 0.1, alpha, brdfData);
+    // // environment lighting (skybox)
+    // diff.rgb += SampleSH(input.normalWS);
+    // //diff.rgb = SampleSH(input.normalWS);
+    // //diff.a = 1;
     //
-    // //                     brdfData, indirectDiffuse, indirectSpecular, fresnelTerm
+    // float4 col = float4(_TerrainColor.rgb, 1);
+    // col *= diff;
+    
+    return half4(color, alpha);;
+
+
+    // // old super basic mainlight + skylight/environment light lighting
+    // InputData lightingInput = (InputData)0;
+    // lightingInput.positionWS = input.positionWS;
+    // lightingInput.normalWS = input.normalWS; // No need to renormalize, since triangles all share normals
+    // lightingInput.viewDirectionWS = GetViewDirectionFromPosition(input.positionWS);
+    // lightingInput.shadowCoord = CalculateShadowCoord(input.positionWS, input.positionCS);
     //
-    // SurfaceData s;
-    // s.albedo              = _TerrainColor.rgb;
-    // s.metallic            = 0;
-    // s.specular            = 0;
-    // s.smoothness          = 0;
-    // s.occlusion           = 0;
-    // s.emission            = 0;
-    // s.alpha               = 1;
-    // s.clearCoatMask       = 0.0;
-    // s.clearCoatSmoothness = 1.0;
-    
-    //return UniversalFragmentPBR(lightingInput, s);
-    
-    //return float4(EnvironmentBRDF(brdfData, 1, 1, 1),1);
-
-    
-    half4 shadowMask = half4(1, 1, 1, 1);
-    Light mainLight = GetMainLight(lightingInput.shadowCoord, input.positionWS, shadowMask);
-
-    
-    half nl = max(0, dot(input.normalWS, _MainLightPosition.xyz));
-    half4 diff = nl * _MainLightColor;
-    diff.rgb += SampleSH(input.normalWS);
-
-    diff.rgb = SampleSH(input.normalWS);
-    diff.a = 1;
-    
-    float4 col = float4(_TerrainColor.rgb, 1);
-    col *= diff;
-    return diff;
-    
-//     return UniversalFragmentBlinnPhong(lightingInput, _TerrainColor.rgb, 0, 0, 0, 1) + ;
-//
-//
-//     InputData inputData = lightingInput;
-//     half3 diffuse = _TerrainColor.rgb;
-//     half4 specularGloss = 0;
-//     half smoothness = 0;
-//     half3 emission = 0;
-//     half alpha = 1;
-//
-//
-//     
-// // To ensure backward compatibility we have to avoid using shadowMask input, as it is not present in older shaders
-// // #if defined(SHADOWS_SHADOWMASK) && defined(LIGHTMAP_ON)
-// //     half4 shadowMask = inputData.shadowMask;
-// // #elif !defined (LIGHTMAP_ON)
-// //     half4 shadowMask = unity_ProbesOcclusion;
-// // #else
-//      half4 shadowMask = half4(0, 0, 0, 0);
-// // #endif
-//
-//     Light mainLight = GetMainLight(inputData.shadowCoord, inputData.positionWS, shadowMask);
-//
-//     #if defined(_SCREEN_SPACE_OCCLUSION)
-//         AmbientOcclusionFactor aoFactor = GetScreenSpaceAmbientOcclusion(inputData.normalizedScreenSpaceUV);
-//         mainLight.color *= aoFactor.directAmbientOcclusion;
-//         inputData.bakedGI *= aoFactor.indirectAmbientOcclusion;
-//     #endif
-//
-//     MixRealtimeAndBakedGI(mainLight, inputData.normalWS, inputData.bakedGI);
-//
-//     half3 attenuatedLightColor = mainLight.color * (mainLight.distanceAttenuation * mainLight.shadowAttenuation);
-//     half3 diffuseColor = inputData.bakedGI + LightingLambert(attenuatedLightColor, mainLight.direction, inputData.normalWS);
-//     half3 specularColor = LightingSpecular(attenuatedLightColor, mainLight.direction, inputData.normalWS, inputData.viewDirectionWS, specularGloss, smoothness);
-//
-// #ifdef _ADDITIONAL_LIGHTS
-//     uint pixelLightCount = GetAdditionalLightsCount();
-//     for (uint lightIndex = 0u; lightIndex < pixelLightCount; ++lightIndex)
-//     {
-//         Light light = GetAdditionalLight(lightIndex, inputData.positionWS, shadowMask);
-//         #if defined(_SCREEN_SPACE_OCCLUSION)
-//             light.color *= aoFactor.directAmbientOcclusion;
-//         #endif
-//         half3 attenuatedLightColor = light.color * (light.distanceAttenuation * light.shadowAttenuation);
-//         diffuseColor += LightingLambert(attenuatedLightColor, light.direction, inputData.normalWS);
-//         specularColor += LightingSpecular(attenuatedLightColor, light.direction, inputData.normalWS, inputData.viewDirectionWS, specularGloss, smoothness);
-//     }
-// #endif
-//
-// #ifdef _ADDITIONAL_LIGHTS_VERTEX
-//     diffuseColor += inputData.vertexLighting;
-// #endif
-//
-//     half3 finalColor = diffuseColor * diffuse + emission;
-//
-// #if defined(_SPECGLOSSMAP) || defined(_SPECULAR_COLOR)
-//     finalColor += specularColor;
-// #endif
-//
-//     return half4(finalColor, alpha);
-//
-//     
-//     //return float4(0, 1, 0, 1);
+    //
+    // half4 shadowMask = half4(1, 1, 1, 1);
+    // Light mainLight = GetMainLight(lightingInput.shadowCoord, input.positionWS, shadowMask);
+    //
+    //
+    // half nl = max(0, dot(input.normalWS, _MainLightPosition.xyz));
+    // half4 diff = nl * _MainLightColor;
+    //
+    // // environment lighting (skybox)
+    // diff.rgb += SampleSH(input.normalWS);
+    // //diff.rgb = SampleSH(input.normalWS);
+    // //diff.a = 1;
+    //
+    // float4 col = float4(_TerrainColor.rgb, 1);
+    // col *= diff;
+    // return col;
     #endif
 }
 

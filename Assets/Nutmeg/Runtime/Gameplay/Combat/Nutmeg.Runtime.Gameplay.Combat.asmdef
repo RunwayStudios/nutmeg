@@ -1,0 +1,4 @@
+{
+	"name": "Nutmeg.Runtime.Gameplay.Combat",
+	"references":[ "GUID:011587713577bc94bbd7364acb3ac0ce" ]
+}
