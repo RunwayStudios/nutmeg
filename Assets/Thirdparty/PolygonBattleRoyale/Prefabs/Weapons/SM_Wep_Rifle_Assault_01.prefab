@@ -365,6 +365,7 @@ MonoBehaviour:
   itemDataObject: {fileID: 0}
   stats: {fileID: 11400000, guid: 572e54b3987040f419bdb4a029050912, type: 2}
   muzzleFlareFX: {fileID: 157586, guid: 2574ca206a571a342a7fab69fdfb87aa, type: 3}
+  muzzleFlareFXPoolSize: 0
   bulletTrailFX: {fileID: 7655137983007208036, guid: bc80d15a7b9a94148b7db359d766bbb1, type: 3}
   barrelEnd: {fileID: 3993105123699785846}
   barrelPosition: {fileID: 0}

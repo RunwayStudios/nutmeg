@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using Mirror;
-using Nutmeg.Runtime.Gameplay.Items;
-using Nutmeg.Runtime.Gameplay.Weapons;
 using Nutmeg.Runtime.Utility.InputSystem;
 using Nutmeg.Runtime.Utility.MouseController;
 using Nutmeg.Runtime.Utility.StateMachine;
@@ -24,7 +22,6 @@ namespace Nutmeg.Runtime.Gameplay.Player
         [SerializeField] private AnimationCurve dashAcceleration;
 
 
-        [SerializeField] private Item equippedWeapon;
         [SerializeField] private GameObject equippedThrowable;
         [SerializeField] private Transform hand;
 
@@ -194,21 +191,16 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
             //TODO doesnt make sense to add to stateAction
             //Feels like a cheap work around
-            if (equippedWeapon != null)
-                stateAction += equippedWeapon.Use;
         }
 
         private void OnPrimaryActionCanceled()
         {
             //TODO doesnt make sense to add to stateAction
-            if (equippedWeapon != null)
-                stateAction -= equippedWeapon.Use;
         }
 
         private void OnReloadActionPerformed()
         {
             //TODO check tag
-            equippedWeapon.GetComponent<Weapon>().ReloadWeapon();
         }
 
         private void OnSecondaryActionPerformed()
