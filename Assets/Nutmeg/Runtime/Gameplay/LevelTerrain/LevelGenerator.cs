@@ -1,15 +1,19 @@
 using System;
 using System.Diagnostics;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 namespace Gameplay.Level.LevelGenerator
 {
     public class LevelGenerator : MonoBehaviour
     {
         [HideInInspector] public static LevelGenerator Main;
-        
+
+
+        [SerializeField] private Material terrainMaterial;
         
         [Header("General")] [SerializeField] [Tooltip("Size of a terrainUnit")]
         private int seed = 0;
@@ -54,6 +58,10 @@ namespace Gameplay.Level.LevelGenerator
         private void Awake()
         {
             Main = this;
+            
+            navMesh = GetComponentInChildren<NavMeshSurface>();
+            navMesh.layerMask = LayerMask.GetMask(new string[] {"Terrain", "NavMeshObstacle"});
+            navMesh.BuildNavMesh();
         }
 
         // Start is called before the first frame update
@@ -77,14 +85,14 @@ namespace Gameplay.Level.LevelGenerator
 
         private void OnValidate()
         {
-            if (regenerate)
-            {
-                regenerate = false;
-                terrainGenStopwatch.Restart();
-                GenerateLevel();
-                terrainGenStopwatch.Stop();
-                generateMS = terrainGenStopwatch.Elapsed.TotalMilliseconds;
-            }
+            // if (regenerate)
+            // {
+            //     regenerate = false;
+            //     terrainGenStopwatch.Restart();
+            //     GenerateLevel();
+            //     terrainGenStopwatch.Stop();
+            //     generateMS = terrainGenStopwatch.Elapsed.TotalMilliseconds;
+            // }
         }
 
 
@@ -199,8 +207,8 @@ namespace Gameplay.Level.LevelGenerator
                     //curMesh = meshes[curMeshX, curMeshZ];
 
                     float terrainYOffsetMultiplier = SampleTerrainMultiplier(x, z);
-                    float terrainYOffset = Mathf.PerlinNoise((positiveX + 0.1f) * noiseScale + noiseOffsetX, (positiveZ + 0.1f) * noiseScale + noiseOffsetY) * noiseMultiplier -
-                                           noiseMultiplier / 2;
+                    float terrainYOffset = Mathf.PerlinNoise((1000 - terrainSizeUnityUnitsHalf + positiveX + 0.1f) * noiseScale + noiseOffsetX,
+                                               (1000 - terrainSizeUnityUnitsHalf + positiveZ + 0.1f) * noiseScale + noiseOffsetY) * noiseMultiplier - noiseMultiplier / 2;
                     terrainYOffset *= terrainYOffsetMultiplier;
 
                     // x + random Number from -1 to (excluding)1 * max offset
@@ -263,24 +271,29 @@ namespace Gameplay.Level.LevelGenerator
                 {
                     curMesh = meshes[meshX, meshZ];
 
+                    curMesh.name = "mesh-" + meshX + "-" + meshZ;
                     curMesh.SetVertexBufferParams(vertexCount, layout);
                     curMesh.SetVertexBufferData(verts[meshX][meshZ], 0, 0, vertexCount, 0, MeshUpdateFlags.Default);
                     curMesh.SetIndices(triangles[meshX][meshZ], MeshTopology.Triangles, 0, false, 0);
 
                     //mesh.RecalculateNormals();
                     curMesh.RecalculateBounds();
+                    
+                    AssetDatabase.CreateAsset(curMesh, "Assets/TerrainMeshes/" + curMesh.name + ".asset");
+                    AssetDatabase.SaveAssets();
 
                     go = new GameObject("levelMesh [" + meshX + ", " + meshZ + "]",
                         typeof(MeshFilter), typeof(MeshCollider), typeof(MeshRenderer));
                     go.transform.SetParent(transform);
                     go.isStatic = true;
 
-                    go.GetComponent<MeshRenderer>().material = GetComponent<MeshRenderer>().material;
+                    go.GetComponent<MeshRenderer>().material = terrainMaterial;
                     go.GetComponent<MeshFilter>().mesh = curMesh;
                     go.GetComponent<MeshCollider>().sharedMesh = curMesh;
                     go.layer = 11;
                 }
             }
+            
 
             if (go != null)
             {
