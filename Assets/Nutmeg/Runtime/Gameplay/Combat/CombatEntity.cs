@@ -36,6 +36,11 @@ namespace Nutmeg.Runtime.Gameplay.Combat
             }
         }
 
+        private void OnValidate()
+        {
+            modules = GetComponents<CombatModule>();
+        }
+
 
         public bool TryGetModule(Type type, out CombatModule module)
         {
