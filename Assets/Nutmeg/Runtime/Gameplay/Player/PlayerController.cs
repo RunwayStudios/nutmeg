@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Mirror;
 using Nutmeg.Runtime.Utility.InputSystem;
 using Nutmeg.Runtime.Utility.MouseController;
 using Nutmeg.Runtime.Utility.StateMachine;
@@ -8,7 +7,7 @@ using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Player
 {
-    public class PlayerController : NetworkBehaviour
+    public class PlayerController : MonoBehaviour
     {
         [SerializeField] private InputEventChannel input;
         [SerializeField] private CharacterController cc;
@@ -46,7 +45,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
             animationController = GetComponent<PlayerAnimationController>();
 
-            if (isLocalPlayer)
+            //if (isLocalPlayer)
             {
                 c_player = this;
 

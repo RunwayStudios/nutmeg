@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Mirror;
 using Steamworks;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ namespace Nutmeg.Runtime.Core.Networking.Lobby
 {
     public class SteamLobbyManager : MonoBehaviour
     {
-        private NutmegNetworkManager networkManager;
+        //private NutmegNetworkManager networkManager;
 
         protected Callback<LobbyCreated_t> c_lobbyCreated;
         protected Callback<LobbyEnter_t> c_lobbyEnter;
@@ -27,7 +26,7 @@ namespace Nutmeg.Runtime.Core.Networking.Lobby
                 return;
             }
             
-            networkManager = GetComponent<NutmegNetworkManager>();
+            //networkManager = GetComponent<NutmegNetworkManager>();
 
             c_lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
             c_lobbyEnter = Callback<LobbyEnter_t>.Create(OnLobbyEnter);
@@ -40,7 +39,7 @@ namespace Nutmeg.Runtime.Core.Networking.Lobby
 
         public void HostLobby(ELobbyType lobbyType)
         {
-            SteamMatchmaking.CreateLobby(lobbyType, networkManager.maxConnections);
+            //SteamMatchmaking.CreateLobby(lobbyType, networkManager.maxConnections);
         }
 
         private void OnLobbyCreated(LobbyCreated_t context)
@@ -49,7 +48,7 @@ namespace Nutmeg.Runtime.Core.Networking.Lobby
             {
                 case EResult.k_EResultOK:
                 {
-                    networkManager.StartHost();
+                    //networkManager.StartHost();
                     Id = new CSteamID(context.m_ulSteamIDLobby);
 
                     SetLobbyData(LobbyKeys.HOST_STEAM_ID, SteamUser.GetSteamID().ToString());
@@ -78,14 +77,14 @@ namespace Nutmeg.Runtime.Core.Networking.Lobby
 
         private void OnLobbyEnter(LobbyEnter_t context)
         {
-            if(NetworkServer.active) return;
+            //if(NetworkServer.active) return;
 
             Id = new CSteamID(context.m_ulSteamIDLobby);
 
             string hostAddress = SteamMatchmaking.GetLobbyData(Id, LobbyKeys.HOST_STEAM_ID);
 
-            networkManager.networkAddress = hostAddress;
-            networkManager.StartClient();
+            //networkManager.networkAddress = hostAddress;
+            //networkManager.StartClient();
 
             Debug.Log("Entered lobby");
         }
