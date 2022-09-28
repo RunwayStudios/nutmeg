@@ -34,7 +34,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
 
         public override void Use()
         {
-            if (fireRateCooldown > 0f && ammunitionComponent == null || !ammunitionComponent.Get(out object _))
+            if (fireRateCooldown > 0f || ammunitionComponent == null || !ammunitionComponent.Get(out object _))
                 return;
 
             if (hitComponent.Get(out object hit))

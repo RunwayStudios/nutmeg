@@ -152,7 +152,7 @@ MonoBehaviour:
     width: 0.2
   m_Looped: 0
   m_Waypoints:
-  - position: {x: 0, y: 4.578344, z: 1.044276}
+  - position: {x: 0, y: 7.2551856, z: 2.6173186}
     roll: 0
   - position: {x: 0, y: 2.1419559, z: 0.7543094}
     roll: 0
@@ -221,7 +221,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7781457, y: 1}
+    m_SensorSize: {x: 1.7788461, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4151,7 +4151,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   equippedThrowable: {fileID: 1499745551670331490, guid: c2ce2eec04a7d464a997101ebe4e8421, type: 3}
-  Weapon: {fileID: 8081128233840030371}
+  weapon: {fileID: 0}
   hand: {fileID: 0}
 --- !u!114 &1657339566588044094
 MonoBehaviour:
@@ -5281,17 +5281,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5727368773705947816, guid: be20da268d490c44c8460e91a7cd3a44, type: 3}
   m_PrefabInstance: {fileID: 100978989565260323}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8081128233840030371 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8161455507668369536, guid: be20da268d490c44c8460e91a7cd3a44, type: 3}
-  m_PrefabInstance: {fileID: 100978989565260323}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19400855fe9649c7985c2018f8476907, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &8835555119490498752 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8933045212545888995, guid: be20da268d490c44c8460e91a7cd3a44, type: 3}
