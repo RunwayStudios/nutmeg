@@ -40,6 +40,12 @@ namespace Nutmeg.Runtime.Gameplay.Player
         public bool IsWalking { get; private set; }
         public bool IsDashing { get; private set; }
 
+        private void Awake()
+        {
+            c_player = this;
+
+        }
+
         private void Start()
         {
             stateMachine.onStateEnter += OnStateEnter;
@@ -48,16 +54,13 @@ namespace Nutmeg.Runtime.Gameplay.Player
             animationController = GetComponent<PlayerAnimationController>();
 
             //if (isLocalPlayer)
-            {
-                c_player = this;
 
-                input.onMoveActionPerformed += OnMoveActionPerformed;
-                input.onMoveActionCanceled += OnMoveActionCanceled;
-                input.onPrimaryActionPerformed += OnPrimaryActionPerformed;
-                input.onPrimaryActionCanceled += OnPrimaryActionCanceled;
-                input.onReloadActionPerformed += OnReloadActionPerformed;
-                input.onSecondaryActionPerformed += OnSecondaryActionPerformed;
-            }
+            input.onMoveActionPerformed += OnMoveActionPerformed;
+            input.onMoveActionCanceled += OnMoveActionCanceled;
+            input.onPrimaryActionPerformed += OnPrimaryActionPerformed;
+            input.onPrimaryActionCanceled += OnPrimaryActionCanceled;
+            input.onReloadActionPerformed += OnReloadActionPerformed;
+            input.onSecondaryActionPerformed += OnSecondaryActionPerformed;
         }
 
         private void OnStateEnter(PlayerState state)
@@ -71,7 +74,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
                     stateAction += OnWalking;
                     break;
                 case PlayerState.Dashing:
-                    StartCoroutine(Dash()); 
+                    StartCoroutine(Dash());
                     break;
             }
         }
@@ -188,7 +191,6 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void OnPrimaryActionPerformed()
         {
-            
             //animationController.SetNewAnimationParamBool("rifle", true);
 
             //TODO doesnt make sense to add to stateAction
@@ -209,7 +211,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void OnSecondaryActionPerformed()
         {
-            if(!IsDashing)
+            if (!IsDashing)
                 IsDashing = true;
             //TODO make more modular. Mybe the secondary wont be a nade
             //Instantiate(equippedThrowable, hand.position, hand.rotation);
@@ -223,7 +225,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
             while (velocity < 1f)
             {
                 Debug.Log(velocity);
-                
+
                 //velocity = dashAcceleration.Evaluate(elapsedDashTime / dashSpeed);
                 velocity = elapsedDashTime / dashSpeed;
                 elapsedDashTime += Time.deltaTime;
@@ -231,8 +233,8 @@ namespace Nutmeg.Runtime.Gameplay.Player
                 cc.Move((Vector3.left * moveVector.x + Vector3.back * moveVector.y) * (velocity) * dashDistance *
                         Time.deltaTime);
                 yield return null;
-            } 
-            
+            }
+
             IsDashing = false;
         }
 

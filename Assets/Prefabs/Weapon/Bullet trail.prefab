@@ -10,13 +10,14 @@ GameObject:
   m_Component:
   - component: {fileID: 7655137983007208038}
   - component: {fileID: 7655137983007208039}
+  - component: {fileID: -7224307209512136054}
   m_Layer: 0
   m_Name: Bullet trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7655137983007208038
 Transform:
   m_ObjectHideFlags: 0
@@ -140,3 +141,16 @@ TrailRenderer:
   m_MinVertexDistance: 1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &-7224307209512136054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7655137983007208036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fbe8f8d143e43859b2f59de5eedfefa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeTime: 250

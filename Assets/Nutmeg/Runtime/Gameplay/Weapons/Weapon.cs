@@ -11,6 +11,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
         public WeaponStats stats;
         public WeaponComponent hitComponent;
         public WeaponComponent ammunitionComponent;
+        public WeaponComponent bulletComponent;
         public WeaponComponent originComponent;
 
         private float fireRateCooldown;
@@ -24,6 +25,9 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
                 : null;
             originComponent = TryGetComponent(typeof(WeaponOriginComponent), out var woc)
                 ? (WeaponComponent) woc
+                : null;
+            bulletComponent = TryGetComponent(typeof(WeaponBulletComponent), out var wbc)
+                ? (WeaponComponent) wbc
                 : null;
         }
 

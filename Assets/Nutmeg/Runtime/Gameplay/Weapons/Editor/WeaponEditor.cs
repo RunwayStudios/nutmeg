@@ -19,7 +19,8 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.Editor
                 WeaponPreset.Rifle,
                 new[]
                 {
-                    typeof(WeaponHitScanComponent), typeof(WeaponAmmunitionComponent), typeof(WeaponOriginComponent)
+                    typeof(WeaponHitScanComponent), typeof(WeaponAmmunitionComponent), typeof(WeaponOriginComponent),
+                    typeof(WeaponBulletComponent)
                 }
             },
             {WeaponPreset.RocketLauncher, new[] {typeof(WeaponAmmunitionComponent)}}
@@ -80,7 +81,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.Editor
         {
             Type[] targetComponents = root.GetComponents<WeaponComponent>().Select(c => c.GetType()).ToArray();
             Type[] presetComponents = Type.EmptyTypes;
-            
+
             try
             {
                 presetComponents = presets[root.preset];
@@ -89,7 +90,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.Editor
             {
                 //ignored
             }
-            
+
             List<Type> excessiveComponents = targetComponents.ToList();
             List<Type> missingComponents = presetComponents.ToList();
 
@@ -98,6 +99,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.Editor
                 if (excessiveComponents.Contains(component))
                     excessiveComponents.Remove(component);
             }
+
             RemoveComponents(excessiveComponents.ToArray());
 
             foreach (var component in targetComponents)
@@ -105,6 +107,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.Editor
                 if (missingComponents.Contains(component))
                     missingComponents.Remove(component);
             }
+
             AddComponents(missingComponents.ToArray());
         }
     }
