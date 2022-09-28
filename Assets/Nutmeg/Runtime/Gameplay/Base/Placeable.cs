@@ -16,20 +16,10 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         private bool curPositionValid;
 
         private Material prevMaterial;
+        private Material placingMaterial;
 
         private bool intersectingOtherPlaceable = true;
         private bool baseBoundsValid = true;
-
-
-        // Start is called before the first frame update
-        void Start()
-        {
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        }
 
 
         #region Placing
@@ -42,30 +32,15 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             
             OnStartPlacing.Invoke();
 
-            Collider[] colliders = GetComponents<Collider>();
-            foreach (Collider collider in colliders)
-            {
-                collider.enabled = false;
-            }
+
+            prevMaterial = GetComponent<MeshRenderer>().material;
+
+            placingMaterial = BaseManager.Main.transparentDefaultMaterial;
+            placingMaterial.mainTexture = prevMaterial.mainTexture;
+            placingMaterial.color = BaseManager.Main.validMaterialColor;
 
 
-            Material material = GetComponent<MeshRenderer>().material;
-            prevMaterial = material;
-
-            Material newMaterial = BaseManager.Main.transparentDefaultMaterial;
-            newMaterial.mainTexture = material.mainTexture;
-            newMaterial.color = BaseManager.Main.validMaterialColor;
-
-
-            MeshRenderer rendererTest = GetComponent<MeshRenderer>();
-            if (rendererTest)
-                rendererTest.material = newMaterial;
-            MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
-
-            foreach (MeshRenderer meshRenderer in meshRenderers)
-            {
-                meshRenderer.material = rendererTest.material;
-            }
+            SetMaterial(placingMaterial);
         }
 
         public void StopPlacing()
@@ -74,22 +49,19 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             
             OnStopPlacing.Invoke();
 
-            Destroy(gameObject.GetComponent<Rigidbody>());
             // todo reset to original position if there was one / delete otherwise
 
-            Collider[] colliders = GetComponents<Collider>();
+            SetMaterial(prevMaterial);
+            prevMaterial = null;
+            placingMaterial = null;
+        }
 
-            //todo safe which controllers were activated?
-            foreach (Collider collider in colliders)
-            {
-                collider.enabled = true;
-            }
-
-            GetComponent<MeshRenderer>().material = prevMaterial;
+        private void SetMaterial(Material newMaterial)
+        {
             MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
             foreach (MeshRenderer meshRenderer in meshRenderers)
             {
-                meshRenderer.material = prevMaterial;
+                meshRenderer.material = newMaterial;
             }
         }
 
@@ -105,13 +77,13 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             if (newValue != curPositionValid)
             {
                 if (!newValue)
-                    GetComponent<MeshRenderer>().material.color = BaseManager.Main.invalidMaterialColor;
+                    placingMaterial.color = BaseManager.Main.invalidMaterialColor;
 
                 if (newValue)
-                    GetComponent<MeshRenderer>().material.color = BaseManager.Main.validMaterialColor;
+                    placingMaterial.color = BaseManager.Main.validMaterialColor;
+                
+                curPositionValid = newValue;
             }
-
-            curPositionValid = newValue;
         }
 
         public void CheckBaseBounds(Texture2D baseMap)
@@ -176,29 +148,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             intersectingOtherPlaceable = false;
             UpdateCurrentPositionValid();
         }
-        
-        /*private void OnTriggerEnter(Collider other)
-        {
-            if (beingPlaced && other.CompareTag("Placeable"))
-            {
-                intersectingOtherPlaceable++;
 
-                if (intersectingOtherPlaceable < 2)
-                    UpdateCurrentPositionValid();
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (beingPlaced && other.CompareTag("Placeable"))
-            {
-                intersectingOtherPlaceable--;
-
-                if (intersectingOtherPlaceable < 1)
-                    UpdateCurrentPositionValid();
-            }
-        }*/
-        
         #endregion
 
         
