@@ -146,13 +146,6 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             Collider[] colliders = Physics.OverlapBox(boundsCenter.position, boundsHalfExtends, boundsCenter.rotation);
             foreach (Collider c in colliders)
             {
-                // Placeable placeable = c.GetComponent<Placeable>();
-                // if (placeable != null && placeable != this)
-                // {
-                //     intersectingOtherPlaceable = true;
-                //     UpdateCurrentPositionValid();
-                //     return;
-                // }
                 CombatEntity entity = c.GetComponent<CombatEntity>();
                 if (entity != null && entity != GetComponent<CombatEntity>())
                 {
