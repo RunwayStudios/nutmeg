@@ -113,16 +113,10 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             curPlacingOriginalGo = blueprint;
             curPlacingGo = Instantiate(blueprint, placeablePos, Quaternion.Euler(Vector3.zero));
 
-            if (!curPlacingGo.GetComponent<Collider>())
-            {
-                Debug.LogError("Placeable objects require colliders!");
-                return;
-            }
-
             curPlacingPlaceable = curPlacingGo.GetComponent<Placeable>();
             curPlacingPlaceable.StartPlacing();
 
-            UpdatePositionOfObjectBeingPlaced();
+            UpdatePositionOfObjectBeingPlaced(true);
 
             placingObject = true;
         }
@@ -170,11 +164,11 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             placingObject = false;
         }
 
-        private void UpdatePositionOfObjectBeingPlaced()
+        private void UpdatePositionOfObjectBeingPlaced(bool forceUpdate = false)
         {
             if (TryGetNewPlacementPosition(out var newPos))
             {
-                if (previousPosition == newPos)
+                if (previousPosition == newPos && !forceUpdate)
                     return;
 
                 previousPosition = newPos;

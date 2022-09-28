@@ -27,14 +27,13 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
                     LevelGenerator.Main.UpdateNavMesh();
             }
         }
-
-
-        public enum DamageType
-        {
-            Default,
-            Fire,
-            Explosion,
-            Water
-        }
+    }
+    
+    public enum DamageType
+    {
+        Default,
+        Fire,
+        Explosion,
+        Water
     }
 }

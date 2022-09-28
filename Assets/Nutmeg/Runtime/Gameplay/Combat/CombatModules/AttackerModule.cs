@@ -48,7 +48,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         {
             if (target.TryGetModule(typeof(DamageableModule), out CombatModule module))
             {
-                ((DamageableModule)module).Damage(attackDamage, DamageableModule.DamageType.Default);
+                ((DamageableModule)module).Damage(attackDamage, DamageType.Default);
             }
         }
 
