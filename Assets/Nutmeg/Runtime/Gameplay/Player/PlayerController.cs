@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Nutmeg.Runtime.Gameplay.Items;
 using Nutmeg.Runtime.Utility.InputSystem;
 using Nutmeg.Runtime.Utility.MouseController;
 using Nutmeg.Runtime.Utility.StateMachine;
@@ -22,6 +23,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
 
         [SerializeField] private GameObject equippedThrowable;
+        [SerializeField] private Item weapon;
         [SerializeField] private Transform hand;
 
         public static PlayerController c_player;
@@ -186,15 +188,18 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void OnPrimaryActionPerformed()
         {
+            
             //animationController.SetNewAnimationParamBool("rifle", true);
 
             //TODO doesnt make sense to add to stateAction
             //Feels like a cheap work around
+            stateAction += weapon.Use;
         }
 
         private void OnPrimaryActionCanceled()
         {
             //TODO doesnt make sense to add to stateAction
+            stateAction -= weapon.Use;
         }
 
         private void OnReloadActionPerformed()

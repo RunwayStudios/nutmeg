@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Weapons
 {
+    [DisallowMultipleComponent]
     public class WeaponAmmunitionComponent : WeaponComponent
     {
         private int currentAmmunition;

@@ -19,7 +19,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.Editor
                 WeaponPreset.Rifle,
                 new[]
                 {
-                    typeof(WeaponHitScanComponent), typeof(WeaponAmmunitionComponent)
+                    typeof(WeaponHitScanComponent), typeof(WeaponAmmunitionComponent), typeof(WeaponOriginComponent)
                 }
             },
             {WeaponPreset.RocketLauncher, new[] {typeof(WeaponAmmunitionComponent)}}
@@ -107,16 +107,5 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.Editor
             }
             AddComponents(missingComponents.ToArray());
         }
-    }
-
-
-    public enum WeaponPreset
-    {
-        None,
-        Melee,
-        Rifle,
-        ShotGun,
-        RocketLauncher,
-        GrenadeLauncher
     }
 }

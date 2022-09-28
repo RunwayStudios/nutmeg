@@ -4,6 +4,7 @@ using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Gameplay.Weapons.Editor;
 using Nutmeg.Runtime.Utility.MouseController;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Nutmeg.Runtime.Gameplay.Weapons
 {
@@ -20,7 +21,9 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
         protected virtual bool HitScan(out DamageableModule hit)
         {
             hit = default;
-
+            root.originComponent.Get(out object t);
+            Transform transform = (Transform) t;
+            
             Vector3 targetPosition =
                 MouseController.ShootRayFromCameraToMouse(~0)?.point ??
                 MouseController.GetLastMouseLookTargetPoint();
@@ -28,12 +31,15 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
             Vector3 normalizedDirection = new Vector3(
                 (targetPosition - transform.position).normalized.x, 0f,
                 (targetPosition - transform.position).normalized.z);
+            
+            Vector3 offsetDirection = CalcRandomTargetOffsetByAccuracy(
+                normalizedDirection);
 
             
-            Debug.DrawRay(transform.position, normalizedDirection * root.stats.range, Color.red,
-                root.stats.fireRate / (1000f / 60f));
+            Debug.DrawRay(transform.position, offsetDirection * root.stats.range, Color.red,
+                1f / (root.stats.fireRate / 60f));
 
-            if (Physics.Raycast(transform.position, normalizedDirection, out RaycastHit h, root.stats.range))
+            if (Physics.Raycast(transform.position, offsetDirection, out RaycastHit h, root.stats.range))
             {
                 if (h.transform.TryGetComponent(out DamageableModule m))
                 {
@@ -43,6 +49,18 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
             }
 
             return false;
+        }
+        
+        private Vector3 CalcRandomTargetOffsetByAccuracy(Vector3 origin)
+        {
+            float r = .4f * Mathf.Sqrt(Random.Range(0f,
+                1f - 2 * root.stats.accuracy + root.stats.accuracy * root.stats.accuracy));
+            float theta = Random.Range(0f, 1f) * 2f * Mathf.PI;
+
+            origin.x += r * Mathf.Cos(theta);
+            origin.z += r * Mathf.Sin(theta);
+
+            return origin;
         }
     }
 }
