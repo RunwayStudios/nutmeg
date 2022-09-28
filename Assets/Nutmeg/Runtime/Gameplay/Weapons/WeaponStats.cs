@@ -6,7 +6,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
     [CreateAssetMenu(fileName = "new WeaponStats", menuName = "Weapon/Stats")]
     public class WeaponStats : ScriptableObject
     {
-        public DamageableModule.DamageType damageType;
+        public DamageType damageType;
         public float fireRate;
         public float reloadTime;
         public float damage;
