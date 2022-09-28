@@ -1,3 +1,4 @@
+using Nutmeg.Runtime.Gameplay.Combat;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -22,8 +23,6 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         private bool baseBoundsValid = true;
 
 
-        #region Placing
-
         public void StartPlacing()
         {
             beingPlaced = true;
@@ -39,7 +38,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             placingMaterial.mainTexture = prevMaterial.mainTexture;
             placingMaterial.color = BaseManager.Main.validMaterialColor;
 
-
+            SetCollidersEnabled(false);
             SetMaterial(placingMaterial);
         }
 
@@ -51,11 +50,22 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
 
             // todo reset to original position if there was one / delete otherwise
 
+            SetCollidersEnabled(true);
             SetMaterial(prevMaterial);
             prevMaterial = null;
             placingMaterial = null;
         }
 
+        private void SetCollidersEnabled(bool enable)
+        {
+            //todo maybe safe which colliders were activated before
+            Collider[] colliders = GetComponentsInChildren<Collider>();
+            foreach (Collider c in colliders)
+            {
+                c.enabled = enable;
+            }
+        }
+        
         private void SetMaterial(Material newMaterial)
         {
             MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
@@ -134,10 +144,17 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         public void CheckIntersecting()
         {
             Collider[] colliders = Physics.OverlapBox(boundsCenter.position, boundsHalfExtends, boundsCenter.rotation);
-            foreach (Collider collider1 in colliders)
+            foreach (Collider c in colliders)
             {
-                Placeable placeable = collider1.GetComponent<Placeable>();
-                if (placeable != null && placeable != this)
+                // Placeable placeable = c.GetComponent<Placeable>();
+                // if (placeable != null && placeable != this)
+                // {
+                //     intersectingOtherPlaceable = true;
+                //     UpdateCurrentPositionValid();
+                //     return;
+                // }
+                CombatEntity entity = c.GetComponent<CombatEntity>();
+                if (entity != null && entity != GetComponent<CombatEntity>())
                 {
                     intersectingOtherPlaceable = true;
                     UpdateCurrentPositionValid();
@@ -149,9 +166,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             UpdateCurrentPositionValid();
         }
 
-        #endregion
 
-        
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.cyan;
