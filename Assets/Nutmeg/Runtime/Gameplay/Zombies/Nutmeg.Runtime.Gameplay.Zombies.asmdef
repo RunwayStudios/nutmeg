@@ -2,7 +2,8 @@
     "name": "Nutmeg.Runtime.Gameplay.Zombies",
     "rootNamespace": "",
     "references": [
-        "GUID:73106583b323919458c1e05166706ce3"
+        "GUID:73106583b323919458c1e05166706ce3",
+        "GUID:fda93277e0c25ef419be130d5cda021c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

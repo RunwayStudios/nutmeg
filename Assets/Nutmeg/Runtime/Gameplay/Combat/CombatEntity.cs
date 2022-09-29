@@ -22,11 +22,6 @@ namespace Nutmeg.Runtime.Gameplay.Combat
             }
         }
 
-        private void OnDestroy()
-        {
-            CombatEntityManager.Main.RemoveCombatEntity(this, group);
-        }
-
         // Update is called once per frame
         void Update()
         {
@@ -36,6 +31,17 @@ namespace Nutmeg.Runtime.Gameplay.Combat
             }
         }
 
+        private void OnDestroy()
+        {
+            OnDeath();
+        }
+
+        public void OnDeath()
+        {
+            CombatEntityManager.Main.RemoveCombatEntity(this, group);
+            enabled = false;
+        }
+        
         private void OnValidate()
         {
             modules = GetComponents<CombatModule>();

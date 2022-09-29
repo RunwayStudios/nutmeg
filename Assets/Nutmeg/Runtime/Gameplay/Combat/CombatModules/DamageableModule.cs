@@ -19,8 +19,8 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
 
             if (health <= 0f)
             {
+                Entity.OnDeath();
                 OnDeath.Invoke();
-                DestroyImmediate(gameObject);
                 
                 // todo call event instead
                 if (Entity.Group == CombatGroup.Building)

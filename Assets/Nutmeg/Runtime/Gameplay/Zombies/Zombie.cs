@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Nutmeg.Runtime.Gameplay.Combat;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -22,12 +23,10 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
             int rndmSkinIndex = Random.Range(0, skins.Count);
             skins[rndmSkinIndex].SetActive(true);
-
-
-            animator = GetComponent<Animator>();
-            Debug.Log(animator.isInitialized);
-
+            
+            
             navMeshAgent = GetComponent<NavMeshAgent>();
+            animator = GetComponent<Animator>();
 
             // todo set base center/hut?
             navMeshAgent.SetDestination(new Vector3(0, 0, 0));
@@ -60,6 +59,20 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         {
             navMeshAgent.isStopped = false;
             SetAnimationState("walk");
+        }
+        
+        public void OnDeath()
+        {
+            SetAnimationState("walk", false);
+            SetAnimationState("die");
+
+            Collider[] colliders = GetComponentsInChildren<Collider>();
+            foreach (Collider c in colliders)
+            {
+                c.enabled = false;
+            }
+
+            GetComponent<NavMeshAgent>().enabled = false;
         }
     }
 }
