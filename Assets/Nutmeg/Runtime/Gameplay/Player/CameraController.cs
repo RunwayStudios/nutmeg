@@ -17,19 +17,19 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void Start()
         {
-            input = InputManager.input;
+            input = InputManager.Input;
             
             virtualCamera = GetComponent<CinemachineVirtualCamera>();
             virtualCamera.m_LookAt = PlayerController.c_player.transform;
             virtualCamera.m_Follow = PlayerController.c_player.transform;
             dolly = virtualCamera.GetCinemachineComponent<CinemachineTrackedDolly>();
+            
+            input.Player.Scroll.performed += OnScrollActionPerformed;
         }
 
         private void Update()
         {
         }
-
-        private void OnEnable() => input.Player.Scroll.performed += OnScrollActionPerformed;
 
         private void UpdateDollyPosition() => dolly.m_Path.transform.position =
             new Vector3(virtualCamera.m_LookAt.position.x + dollyOffset.x, dollyOffset.y,

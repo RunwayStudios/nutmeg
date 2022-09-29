@@ -1,7 +1,6 @@
 using System;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Gameplay.Items;
-using Nutmeg.Runtime.Gameplay.Weapons.Editor;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Weapons
@@ -11,6 +10,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
         public WeaponStats stats;
         public WeaponComponent hitComponent;
         public WeaponComponent ammunitionComponent;
+        public WeaponComponent bulletComponent;
         public WeaponComponent originComponent;
 
         private float fireRateCooldown;
@@ -24,6 +24,9 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
                 : null;
             originComponent = TryGetComponent(typeof(WeaponOriginComponent), out var woc)
                 ? (WeaponComponent) woc
+                : null;
+            bulletComponent = TryGetComponent(typeof(WeaponBulletComponent), out var wbc)
+                ? (WeaponComponent) wbc
                 : null;
         }
 

@@ -1,7 +1,6 @@
 using System;
 using JetBrains.Annotations;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
-using Nutmeg.Runtime.Gameplay.Weapons.Editor;
 using Nutmeg.Runtime.Utility.MouseController;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -20,35 +19,48 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
 
         protected virtual bool HitScan(out DamageableModule hit)
         {
-            hit = default;
+            hit = null;
             root.originComponent.Get(out object t);
-            Transform transform = (Transform) t;
+            Transform origin = (Transform) t;
             
             Vector3 targetPosition =
                 MouseController.ShootRayFromCameraToMouse(~0)?.point ??
                 MouseController.GetLastMouseLookTargetPoint();
 
             Vector3 normalizedDirection = new Vector3(
-                (targetPosition - transform.position).normalized.x, 0f,
-                (targetPosition - transform.position).normalized.z);
+                (targetPosition - origin.position).normalized.x, 0f,
+                (targetPosition - origin.position).normalized.z);
             
             Vector3 offsetDirection = CalcRandomTargetOffsetByAccuracy(
                 normalizedDirection);
 
             
-            Debug.DrawRay(transform.position, offsetDirection * root.stats.range, Color.red,
+            Debug.DrawRay(origin.position, offsetDirection * root.stats.range, Color.red,
                 1f / (root.stats.fireRate / 60f));
 
-            if (Physics.Raycast(transform.position, offsetDirection, out RaycastHit h, root.stats.range))
+            if (Physics.Raycast(origin.position, offsetDirection, out RaycastHit h, root.stats.range))
             {
                 if (h.transform.TryGetComponent(out DamageableModule m))
                 {
                     hit = m;
                     return true;
                 }
+                
+                SpawnBullet(origin.position, h.point);
             }
-
+            else
+            {
+                SpawnBullet(origin.position, origin.position + offsetDirection * root.stats.range);
+            }
+            
             return false;
+        }
+
+        private void SpawnBullet(Vector3 origin, Vector3 target)
+        {
+            root.bulletComponent.Get(out var b);
+            Bullet bullet = (Bullet)b;
+            bullet.Initialize(origin, target);
         }
         
         private Vector3 CalcRandomTargetOffsetByAccuracy(Vector3 origin)

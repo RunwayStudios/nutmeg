@@ -278,9 +278,10 @@ namespace Gameplay.Level.LevelGenerator
 
                     //mesh.RecalculateNormals();
                     curMesh.RecalculateBounds();
-                    
+                    #if UNITY_EDITOR
                     AssetDatabase.CreateAsset(curMesh, "Assets/TerrainMeshes/" + curMesh.name + ".asset");
                     AssetDatabase.SaveAssets();
+                    #endif
 
                     go = new GameObject("levelMesh [" + meshX + ", " + meshZ + "]",
                         typeof(MeshFilter), typeof(MeshCollider), typeof(MeshRenderer));
