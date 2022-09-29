@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using IngameDebugConsole;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Zombies
@@ -34,7 +34,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         // Start is called before the first frame update
         void Start()
         {
-        
+            DebugLogConsole.AddCommand<int>("Zombies.StartWave", "Start Wave", StartWave, "waveIndex");
         }
 
         // Update is called once per frame
