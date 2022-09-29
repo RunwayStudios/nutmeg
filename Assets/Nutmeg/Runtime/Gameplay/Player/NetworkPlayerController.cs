@@ -16,7 +16,6 @@ namespace Nutmeg.Runtime.Gameplay.Player
         [SerializeField] private Transform playerBody;
         [SerializeField] private Item weapon;
 
-
         private InputActions input;
         private Action perFrameActions;
 
@@ -33,6 +32,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
             if (!IsLocalPlayer) return;
             cc = GetComponent<CharacterController>();
 
+            Debug.developerConsoleVisible = true;
 
             perFrameActions += RotatePlayer;
 
@@ -97,6 +97,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void PrimaryAction()
         {
+            Debug.Log(NetworkManager.Singleton.LocalClientId);   
             //Use Item
             weapon.Use();
 

@@ -2,10 +2,8 @@
     "name": "Nutmeg.Runtime.Core.Networking",
     "rootNamespace": "",
     "references": [
-        "GUID:30817c1a0e6d646d99c048fc403f5979",
-        "GUID:68bd7fdb68ef2684e982e8a9825b18a5",
-        "GUID:08216a7979532da49b94a9c4e3ea12e5",
-        "GUID:1491147abca9d7d4bb7105af628b223e"
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:3de88c88fbbb8f944b9210d496af9762"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

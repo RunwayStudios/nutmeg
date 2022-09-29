@@ -1,8 +1,11 @@
 {
-    "name": "Nutmeg.External",
-    "rootNamespace": "",
-    "references": [],
-    "includePlatforms": [],
+    "name": "IngameDebugConsole.Editor",
+    "references": [
+        "IngameDebugConsole.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
