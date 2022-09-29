@@ -38,6 +38,8 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
         {
             this.origin = origin;
             this.target = target;
+            transform.position = origin;
+            gameObject.SetActive(true);
             locked = false;
         }
     }

@@ -28,7 +28,10 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
             return bullet;
         }
 
-        private void GetBullet(GameObject bullet) => bullet.SetActive(true);
+        private void GetBullet(GameObject bullet)
+        {
+            //bullet.SetActive(true);
+        }
 
         private void ReleaseBullet(GameObject bullet) => bullet.SetActive(false);
 
