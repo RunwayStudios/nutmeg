@@ -41,9 +41,9 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
             input.Player.Move.performed += OnMoveActionPerformed;
             input.Player.Move.canceled += OnMoveActionCanceled;
-            
+
             input.Player.Primary.performed += OnPrimaryActionPerformed;
-            input.Player.Primary.canceled += OnPrimaryActionCancled;
+            input.Player.Primary.canceled += OnPrimaryActionCanceled;
         }
 
         private void OnPrimaryActionPerformed(InputAction.CallbackContext context)
@@ -51,11 +51,11 @@ namespace Nutmeg.Runtime.Gameplay.Player
             perFrameActions += PrimaryAction;
         }
 
-        private void OnPrimaryActionCancled(InputAction.CallbackContext context)
+        private void OnPrimaryActionCanceled(InputAction.CallbackContext context)
         {
             perFrameActions -= PrimaryAction;
         }
-        
+
         private void Update()
         {
             perFrameActions?.Invoke();
@@ -73,7 +73,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void OnMoveActionCanceled(InputAction.CallbackContext context)
         {
-                perFrameActions -= MovePlayer;
+            perFrameActions -= MovePlayer;
             IsMoving = false;
         }
 
@@ -102,10 +102,10 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
             List<ulong> ids = NetworkManager.Singleton.ConnectedClientsIds.ToList();
             ids.Remove(NetworkManager.Singleton.LocalClientId);
-            
+
             if (IsLocalPlayer)
             {
-                PrimaryActionClientRpc(new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = ids }});
+                PrimaryActionClientRpc(new ClientRpcParams {Send = new ClientRpcSendParams {TargetClientIds = ids}});
             }
         }
 
