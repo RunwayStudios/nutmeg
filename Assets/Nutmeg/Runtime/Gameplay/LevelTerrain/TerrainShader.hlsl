@@ -3,11 +3,10 @@
 #define PYRAMIDFACES_INCLUDED
 
 // Include helper functions from URP
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #include "NMGGeometryHelpers.hlsl"
 
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
 
 // This structure is created by the renderer and passed to the Vertex function
 // It holds data stored on the model, per vertex

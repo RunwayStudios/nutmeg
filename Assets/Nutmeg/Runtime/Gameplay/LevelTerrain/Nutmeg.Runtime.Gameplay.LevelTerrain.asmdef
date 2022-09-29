@@ -2,7 +2,8 @@
     "name": "Nutmeg.Runtime.Gameplay.LevelTerrain",
     "rootNamespace": "",
     "references": [
-        "GUID:8c4dd21966739024fbd72155091d199e"
+        "GUID:8c4dd21966739024fbd72155091d199e",
+        "GUID:ab67fb10353d84448ac887a7367cbda8"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
