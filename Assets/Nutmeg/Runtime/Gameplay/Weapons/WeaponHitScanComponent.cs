@@ -1,7 +1,6 @@
 using System;
 using JetBrains.Annotations;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
-using Nutmeg.Runtime.Gameplay.Weapons.Editor;
 using Nutmeg.Runtime.Utility.MouseController;
 using UnityEngine;
 using Random = UnityEngine.Random;

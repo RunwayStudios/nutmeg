@@ -44,7 +44,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         // Start is called before the first frame update
         void Start()
         {
-            input = InputManager.input;
+            input = InputManager.Input;
             input.BaseBuilding.PlaceObject.performed += PlacePlaceable;
             input.BaseBuilding.RotateClockwise.performed += StartRotatingPlaceableClockwise;
             input.BaseBuilding.RotateClockwise.canceled += StopRotatingPlaceableClockwise;

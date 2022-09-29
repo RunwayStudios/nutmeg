@@ -1,7 +1,6 @@
 using System;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Gameplay.Items;
-using Nutmeg.Runtime.Gameplay.Weapons.Editor;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Weapons

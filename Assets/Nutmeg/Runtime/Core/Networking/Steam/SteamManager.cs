@@ -1,17 +1,21 @@
 using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Nutmeg.Runtime.Core.Networking.Steam
 {
     public class SteamManager : MonoBehaviour
     {
-        private void Start()
+        private void Awake()
         {
+            //TODO temporary REMOVE
+            Steamworks.SteamClient.Shutdown();
+            
             try
             {
                 Steamworks.SteamClient.Init(480);
             }
-            catch (System.Exception e)
+            catch (Exception)
             {
                 // Something went wrong - it's one of these:
                 //
@@ -20,16 +24,11 @@ namespace Nutmeg.Runtime.Core.Networking.Steam
                 //     Don't have permission to play app?
                 //
 
-                Debug.LogError("Something went wring while starting SteamClient");
+                Debug.LogError("Failed to init SteamClient");
             }
         }
 
-        private void Update()
-        {
-            Steamworks.SteamClient.RunCallbacks();
-        }
-
-        private void OnDestroy()
+        private void OnApplicationQuit()
         {
             Steamworks.SteamClient.Shutdown();
         }

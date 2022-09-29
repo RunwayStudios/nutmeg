@@ -4,11 +4,12 @@ using Nutmeg.Runtime.Gameplay.Items;
 using Nutmeg.Runtime.Utility.InputSystem;
 using Nutmeg.Runtime.Utility.MouseController;
 using Nutmeg.Runtime.Utility.StateMachine;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Player
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : NetworkBehaviour
     {
         [SerializeField] private InputEventChannel input;
         [SerializeField] private CharacterController cc;
@@ -40,27 +41,29 @@ namespace Nutmeg.Runtime.Gameplay.Player
         public bool IsWalking { get; private set; }
         public bool IsDashing { get; private set; }
 
-        private void Awake()
-        {
-            c_player = this;
 
+        public override void OnNetworkSpawn()
+        {
+            if (IsOwner)
+            {
+                c_player = this;
+                stateMachine.onStateEnter += OnStateEnter;
+                stateMachine.onStateExit += OnStateExit;
+
+                animationController = GetComponent<PlayerAnimationController>();
+
+                input.onMoveActionPerformed += OnMoveActionPerformed;
+                input.onMoveActionCanceled += OnMoveActionCanceled;
+                input.onPrimaryActionPerformed += OnPrimaryActionPerformed;
+                input.onPrimaryActionCanceled += OnPrimaryActionCanceled;
+                input.onReloadActionPerformed += OnReloadActionPerformed;
+                input.onSecondaryActionPerformed += OnSecondaryActionPerformed;
+            }
         }
 
-        private void Start()
+        public void Start()
         {
-            stateMachine.onStateEnter += OnStateEnter;
-            stateMachine.onStateExit += OnStateExit;
-
-            animationController = GetComponent<PlayerAnimationController>();
-
-            //if (isLocalPlayer)
-
-            input.onMoveActionPerformed += OnMoveActionPerformed;
-            input.onMoveActionCanceled += OnMoveActionCanceled;
-            input.onPrimaryActionPerformed += OnPrimaryActionPerformed;
-            input.onPrimaryActionCanceled += OnPrimaryActionCanceled;
-            input.onReloadActionPerformed += OnReloadActionPerformed;
-            input.onSecondaryActionPerformed += OnSecondaryActionPerformed;
+           
         }
 
         private void OnStateEnter(PlayerState state)
@@ -96,31 +99,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void OnWalking()
         {
-            float dot = Vector3.Dot(new Vector3(-moveVector.x, 0f, moveVector.y), transform.forward);
-            Vector3 cross = Vector3.Cross(new Vector3(-moveVector.x, 0f, moveVector.y), transform.forward);
-
-            //not working correctly
-            //velocity gets added without needed ???
-
-            animationVelocity = new Vector2(
-                Mathf.Clamp(
-                    animationVelocity.x + (cross.y != 0f
-                        ? -cross.y * acceleration
-                        : animationVelocity.x > .03f || animationVelocity.x < -.03f
-                            ? animationVelocity.x > 0f ? -acceleration : acceleration
-                            : animationVelocity.x), -Math.Abs(cross.y),
-                    Math.Abs(cross.y)),
-                Mathf.Clamp(
-                    animationVelocity.y + (dot != 0f
-                        ? -dot * acceleration
-                        : animationVelocity.y > .03f || animationVelocity.y < -.03f
-                            ? animationVelocity.y > 0f ? -acceleration : acceleration
-                            : animationVelocity.y), -Math.Abs(dot),
-                    Math.Abs(dot))
-            );
-
-            animationController.UpdateFloatParam("Forward_Velocity", Mathf.Clamp(animationVelocity.y, -.75f, .75f));
-            animationController.UpdateFloatParam("Strafe_Velocity", Mathf.Clamp(animationVelocity.x, -.75f, .75f));
+            UpdateMoveVectorServerRpc();
 
             //Back or Forth
             /*if(cross.y > 0)
@@ -236,6 +215,37 @@ namespace Nutmeg.Runtime.Gameplay.Player
             }
 
             IsDashing = false;
+        }
+
+
+        [ServerRpc]
+        private void UpdateMoveVectorServerRpc()
+        {
+            float dot = Vector3.Dot(new Vector3(-moveVector.x, 0f, moveVector.y), transform.forward);
+            Vector3 cross = Vector3.Cross(new Vector3(-moveVector.x, 0f, moveVector.y), transform.forward);
+
+            //not working correctly
+            //velocity gets added without needed ???
+
+            animationVelocity = new Vector2(
+                Mathf.Clamp(
+                    animationVelocity.x + (cross.y != 0f
+                        ? -cross.y * acceleration
+                        : animationVelocity.x > .03f || animationVelocity.x < -.03f
+                            ? animationVelocity.x > 0f ? -acceleration : acceleration
+                            : animationVelocity.x), -Math.Abs(cross.y),
+                    Math.Abs(cross.y)),
+                Mathf.Clamp(
+                    animationVelocity.y + (dot != 0f
+                        ? -dot * acceleration
+                        : animationVelocity.y > .03f || animationVelocity.y < -.03f
+                            ? animationVelocity.y > 0f ? -acceleration : acceleration
+                            : animationVelocity.y), -Math.Abs(dot),
+                    Math.Abs(dot))
+            );
+
+            animationController.UpdateFloatParam("Forward_Velocity", Mathf.Clamp(animationVelocity.y, -.75f, .75f));
+            animationController.UpdateFloatParam("Strafe_Velocity", Mathf.Clamp(animationVelocity.x, -.75f, .75f));
         }
 
         private void Move()

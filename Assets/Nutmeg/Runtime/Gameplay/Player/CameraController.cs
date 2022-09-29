@@ -17,7 +17,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void Start()
         {
-            input = InputManager.input;
+            input = InputManager.Input;
             
             virtualCamera = GetComponent<CinemachineVirtualCamera>();
             virtualCamera.m_LookAt = PlayerController.c_player.transform;

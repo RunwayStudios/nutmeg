@@ -7,7 +7,7 @@ namespace Nutmeg.Runtime.Utility.InputSystem
     {
         [SerializeField] private InputEventChannel eventChannel;
 
-        public static InputActions input { get; private set; }
+        public static InputActions Input { get; private set; }
 
         private void Start()
         {
@@ -15,20 +15,20 @@ namespace Nutmeg.Runtime.Utility.InputSystem
 
         private void OnEnable()
         {
-            input = new InputActions();
+            Input = new InputActions();
 
             
             //TODO use static input
-            input.Player.Move.performed += MoveOnPerformed;
-            input.Player.Move.canceled += MoveOnCanceled;
-            input.Player.Primary.performed += PrimaryOnPerformed;
-            input.Player.Primary.canceled += PrimaryOnCanceled;
-            input.Player.Reload.performed += ReloadOnPerformed;
-            input.Player.Reload.canceled += ReloadOnCanceled;
-            input.Player.Secondary.performed += SecondaryOnPerformed;
-            input.Player.Secondary.canceled += SecondaryOnCanceled;
-            input.Player.Scroll.performed += ScrollOnPerformed;
-            input.Player.Enable();
+            Input.Player.Move.performed += MoveOnPerformed;
+            Input.Player.Move.canceled += MoveOnCanceled;
+            Input.Player.Primary.performed += PrimaryOnPerformed;
+            Input.Player.Primary.canceled += PrimaryOnCanceled;
+            Input.Player.Reload.performed += ReloadOnPerformed;
+            Input.Player.Reload.canceled += ReloadOnCanceled;
+            Input.Player.Secondary.performed += SecondaryOnPerformed;
+            Input.Player.Secondary.canceled += SecondaryOnCanceled;
+            Input.Player.Scroll.performed += ScrollOnPerformed;
+            Input.Player.Enable();
         }
 
         private void ScrollOnPerformed(InputAction.CallbackContext context)

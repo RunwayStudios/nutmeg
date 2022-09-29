@@ -38,10 +38,12 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
 
         private void OnDrawGizmosSelected()
         {
+            #if UNITY_EDITOR
             Handles.color = new Color(0f, 0.5f, 0.5f);
             Handles.DrawWireDisc(transform.position, Vector3.up, fromRadius);
             Handles.color = Color.cyan;
             Handles.DrawWireDisc(transform.position, Vector3.up, toRadius);
+            #endif
         }
     }
 }
