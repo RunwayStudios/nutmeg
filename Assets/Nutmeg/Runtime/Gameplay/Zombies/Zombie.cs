@@ -8,8 +8,8 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
     {
         [SerializeField] private List<GameObject> skins = new List<GameObject>();
 
-        [SerializeField] private NavMeshAgent navMeshAgent;
-
+        private NavMeshAgent navMeshAgent;
+        private Animator animator;
 
         // Start is called before the first frame update
         void Start()
@@ -24,11 +24,14 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             skins[rndmSkinIndex].SetActive(true);
 
 
-            if (navMeshAgent == null)
-                navMeshAgent = GetComponent<NavMeshAgent>();
+            animator = GetComponent<Animator>();
+            Debug.Log(animator.isInitialized);
+
+            navMeshAgent = GetComponent<NavMeshAgent>();
 
             // todo set base center/hut?
             navMeshAgent.SetDestination(new Vector3(0, 0, 0));
+            SetAnimationState("walk");
         }
 
         // Update is called once per frame
@@ -37,14 +40,26 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             
         }
 
+        public void SetAnimationState(string parameter, bool value = true)
+        {
+            animator.SetBool(parameter, value);
+        }
+        
         public void OnStartAttacking()
         {
             navMeshAgent.isStopped = true;
+            SetAnimationState("walk", false);
+        }
+
+        public void OnAttack()
+        {
+            SetAnimationState("attack");
         }
         
         public void OnStopAttacking()
         {
             navMeshAgent.isStopped = false;
+            SetAnimationState("walk");
         }
     }
 }

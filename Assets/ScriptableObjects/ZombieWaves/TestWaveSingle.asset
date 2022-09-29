@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: TestWaveSingle
   m_EditorClassIdentifier: 
   parts:
-  - id: 0
+  - rid: 0
   references:
-    version: 1
-    00000000:
+    version: 2
+    RefIds:
+    - rid: 0
       type: {class: SpawnSingleWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
       data:
         zombiePrefab: {fileID: 1144529266033343354, guid: e6c37a22b3513bc4792c09756ed3de11, type: 3}

@@ -12,8 +12,9 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         private float lastAttackTry;
         private bool attacking = false;
 
-        [Space] [Header("Events")] [SerializeField]
-        private UnityEvent OnStartAttacking;
+        [Space] [Header("Events")]
+        [SerializeField] private UnityEvent OnStartAttacking;
+        [SerializeField] private UnityEvent OnAttack;
         [SerializeField] private UnityEvent OnStopAttacking;
 
 
@@ -25,12 +26,13 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
             {
                 if (detector.TryGetTarget(out CombatEntity target))
                 {
-                    Attack(target);
                     if (!attacking)
                     {
                         attacking = true;
                         OnStartAttacking.Invoke();
                     }
+                    Attack(target);
+                    OnAttack.Invoke();
                 }
                 else
                 {

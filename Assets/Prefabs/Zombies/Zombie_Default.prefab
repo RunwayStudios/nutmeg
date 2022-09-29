@@ -1496,7 +1496,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.25
+  m_Radius: 0.35
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
@@ -1521,7 +1521,6 @@ MonoBehaviour:
   - {fileID: 1144284481727758232}
   - {fileID: 1144351501613103966}
   - {fileID: 1143968507234138292}
-  navMeshAgent: {fileID: -6260215301360327920}
 --- !u!195 &-6260215301360327920
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1610,6 +1609,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+  OnAttack:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 884813880285531491}
+        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Zombies.Zombie, Nutmeg.Runtime.Gameplay.Zombies
+        m_MethodName: OnAttack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnStopAttacking:
     m_PersistentCalls:
       m_Calls:
@@ -1639,7 +1653,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetGroup: 1
   obstacleDetectorCenter: {fileID: 8848264433010967649}
-  obstacleDetectorHalfExtends: {x: 0.19, y: 0.85, z: 0.13}
+  obstacleDetectorHalfExtends: {x: 0.19, y: 0.85, z: 0.3}
 --- !u!1 &1144534140835846824
 GameObject:
   m_ObjectHideFlags: 0
@@ -2206,7 +2220,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1150139812882267634
 Transform:
   m_ObjectHideFlags: 0
@@ -2926,7 +2940,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8110201916900105736}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0.27}
+  m_LocalPosition: {x: 0, y: 1, z: 0.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
