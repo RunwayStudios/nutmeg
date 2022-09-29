@@ -97,19 +97,24 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void PrimaryAction()
         {
-            Debug.Log(NetworkManager.Singleton.LocalClientId);   
             //Use Item
             weapon.Use();
 
-            List<ulong> ids = NetworkManager.Singleton.ConnectedClientsIds.ToList();
-            ids.Remove(NetworkManager.Singleton.LocalClientId);
-
             if (IsLocalPlayer)
             {
-                PrimaryActionClientRpc(new ClientRpcParams {Send = new ClientRpcSendParams {TargetClientIds = ids}});
+                //PrimaryActionServerRpc(NetworkManager.Singleton.LocalClientId);   
             }
         }
 
+        [ServerRpc]
+        private void PrimaryActionServerRpc(ulong id)
+        {
+            List<ulong> ids = NetworkManager.Singleton.ConnectedClientsIds.ToList();
+            ids.Remove(id);
+            
+            PrimaryActionClientRpc(new ClientRpcParams {Send = new ClientRpcSendParams {TargetClientIds = ids}});
+        } 
+        
         [ClientRpc]
         private void PrimaryActionClientRpc(ClientRpcParams param) => PrimaryAction();
     }
