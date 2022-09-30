@@ -211,6 +211,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2512163678534367179}
     m_Modifications:
+    - target: {fileID: 6055918396736635514, guid: d788a325800a2ba47af4539a6477ffe3, type: 3}
+      propertyPath: test
+      value: 
+      objectReference: {fileID: 4362445027498271886, guid: aa16cd114e481c94eabd14a11f2cb1ee, type: 3}
     - target: {fileID: 6056895647441699530, guid: d788a325800a2ba47af4539a6477ffe3, type: 3}
       propertyPath: m_Name
       value: SM_Wep_Rifle_Assault_01

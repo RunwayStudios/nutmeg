@@ -1,10 +1,11 @@
 ﻿using System;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Nutmeg.Runtime.Utility.MouseController
 {
-    public class MouseController : MonoBehaviour
+    public class MouseController : NetworkBehaviour
     {
         public static Camera camera;
         private static RaycastHit? lastLookTarget;

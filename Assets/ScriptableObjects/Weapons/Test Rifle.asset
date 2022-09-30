@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Test Rifle
   m_EditorClassIdentifier: 
   damageType: 0
-  fireRate: 600
+  fireRate: 200
   reloadTime: 1
-  damage: 20
+  damage: 25
   range: 100
   maxAmmunition: 15
   accuracy: 1

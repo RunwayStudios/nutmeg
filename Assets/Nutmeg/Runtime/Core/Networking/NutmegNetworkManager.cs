@@ -9,12 +9,12 @@ namespace Nutmeg.Runtime.Core.Networking
     {
         private void Start()
         {
-            DebugLogConsole.AddCommand("StartHost", "Start as host", StartHost);
-            DebugLogConsole.AddCommand("StartClient", "Start as client", StartClient);
-            DebugLogConsole.AddCommand("HostServer", "Start as server", StartServer);
-            DebugLogConsole.AddCommand("Disconnect", "Disconnect from the server",
+            DebugLogConsole.AddCommand("Networking.StartHost", "Start as host", StartHost);
+            DebugLogConsole.AddCommand("Networking.StartClient", "Start as client", StartClient);
+            DebugLogConsole.AddCommand("Networking.HostServer", "Start as server", StartServer);
+            DebugLogConsole.AddCommand("Networking.Disconnect", "Disconnect from the server",
                 () => DisconnectClient(LocalClientId));
-            DebugLogConsole.AddCommand("Shutdown", "Shutdown Server", () => Shutdown());
+            DebugLogConsole.AddCommand("Networking.Shutdown", "Shutdown Server", () => Shutdown());
         }
     }
 }
