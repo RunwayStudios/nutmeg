@@ -98,8 +98,9 @@ namespace Nutmeg.Runtime.Gameplay.Player
         private void PrimaryAction()
         {
             //Use Item
-            weapon.Use();
 
+              weapon.Use();
+            
             if (IsLocalPlayer)
             {
                 //PrimaryActionServerRpc(NetworkManager.Singleton.LocalClientId);   

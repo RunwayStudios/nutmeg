@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Utility.MouseController;
+using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -55,12 +58,36 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
             
             return false;
         }
+        
+        private struct BulletData
+        {
+            public Vector3 origin;
+            public Vector3 target;
+        }
 
         private void SpawnBullet(Vector3 origin, Vector3 target)
         {
             root.bulletComponent.Get(out var b);
             Bullet bullet = (Bullet)b;
             bullet.Initialize(origin, target);
+            
+            if(IsLocalPlayer)
+                SpawnBulletServerRpc(origin, target, NetworkManager.LocalClientId);
+        }
+
+        [ServerRpc]
+        private void SpawnBulletServerRpc(Vector3 origin, Vector3 target, ulong id)
+        {
+            List<ulong> ids = NetworkManager.Singleton.ConnectedClientsIds.ToList();
+            ids.Remove(id);
+            
+            SpawnBulletClientRpc(origin, target, new ClientRpcParams {Send = new ClientRpcSendParams {TargetClientIds = ids}});
+        }
+        
+        [ClientRpc]
+        private void SpawnBulletClientRpc(Vector3 origin, Vector3 target, ClientRpcParams clientRpcParams)
+        {
+            SpawnBullet(origin, target);
         }
         
         private Vector3 CalcRandomTargetOffsetByAccuracy(Vector3 origin)
