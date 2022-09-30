@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -16,6 +17,12 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
         {
             base.Start();
 
+           InitializeServerRpc();
+        }
+
+        [ServerRpc]
+        private void InitializeServerRpc()
+        {
             pool = new ObjectPool<GameObject>(CreateBullet, GetBullet, ReleaseBullet, DestroyBullet, false,
                 defaultPoolSize, maxPoolSize);
         }
@@ -25,6 +32,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
             GameObject bullet = Instantiate(bulletPrefab);
             bullet.SetActive(false);
             bullet.GetComponent<Bullet>().SetReleaseAction(pool.Release);
+            bulletPrefab.GetComponent<NetworkObject>().SpawnWithOwnership(NetworkManager.LocalClientId, true);
             return bullet;
         }
 
@@ -35,13 +43,24 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
 
         private void ReleaseBullet(GameObject bullet) => bullet.SetActive(false);
 
-        private void DestroyBullet(GameObject bullet) => Destroy(bullet);
+        private void DestroyBullet(GameObject bullet)
+        {
+            DestroyBulletServerRpc(bullet.GetComponent<NetworkObject>());
+            Destroy(bullet);
+        }
+
+        [ServerRpc]
+        private void DestroyBulletServerRpc(NetworkObjectReference reference)
+        {
+            if (reference.TryGet(out var bullet))
+                bullet.Despawn();
+        }
 
 
         public override bool Get(out object data)
         {
             data = pool.Get().GetComponent<Bullet>();
-            
+
             return true;
         }
     }
