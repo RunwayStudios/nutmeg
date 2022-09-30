@@ -1,8 +1,9 @@
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Combat
 {
-    public abstract class CombatModule : MonoBehaviour
+    public abstract class CombatModule : NetworkBehaviour
     {
         private CombatEntity entity;
 

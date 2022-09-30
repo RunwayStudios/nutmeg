@@ -1,4 +1,17 @@
 {
-	"name": "Nutmeg.Runtime.Gameplay.Combat",
-	"references":[ "GUID:011587713577bc94bbd7364acb3ac0ce" ]
+    "name": "Nutmeg.Runtime.Gameplay.Combat",
+    "rootNamespace": "",
+    "references": [
+        "GUID:011587713577bc94bbd7364acb3ac0ce",
+        "GUID:1491147abca9d7d4bb7105af628b223e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

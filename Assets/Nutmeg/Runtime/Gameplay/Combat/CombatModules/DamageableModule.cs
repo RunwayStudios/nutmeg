@@ -1,4 +1,5 @@
 using Gameplay.Level.LevelGenerator;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,26 +10,45 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         [SerializeField] private float health = 100f;
         [SerializeField] private UnityEvent OnReceiveDamage;
         [SerializeField] private UnityEvent OnDeath;
+        private bool dead = false;
 
 
         public virtual void Damage(float value, DamageType type)
         {
-            health -= value;
+            DamageServerRpc(value, type);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void DamageServerRpc(float value, DamageType type)
+        {
+            if (dead)
+                return;
             
-            OnReceiveDamage.Invoke();
+            health -= value;
+
+            DamageClientRpc();
 
             if (health <= 0f)
             {
-                Entity.OnDeath();
-                OnDeath.Invoke();
-                
-                // todo call event instead
-                if (Entity.Group == CombatGroup.Building)
-                    LevelGenerator.Main.UpdateNavMesh();
+                dead = true;
+                DeathClientRpc();
             }
         }
+
+        [ClientRpc]
+        private void DamageClientRpc()
+        {
+            OnReceiveDamage.Invoke();
+        }
+        
+        [ClientRpc]
+        private void DeathClientRpc()
+        {
+            Entity.OnDeath();
+            OnDeath.Invoke();
+        }
     }
-    
+
     public enum DamageType
     {
         Default,

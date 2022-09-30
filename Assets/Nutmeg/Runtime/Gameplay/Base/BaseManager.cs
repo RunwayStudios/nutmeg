@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Gameplay.Level.LevelGenerator;
+using Nutmeg.Runtime.Gameplay.Base;
 using Nutmeg.Runtime.Utility.InputSystem;
 using Nutmeg.Runtime.Utility.MouseController;
 using UnityEngine;

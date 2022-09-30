@@ -1,9 +1,10 @@
+using Gameplay.Level.LevelGenerator;
+using Nutmeg.Runtime.Gameplay.BaseBuilding;
 using Nutmeg.Runtime.Gameplay.Combat;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.Events;
 
-namespace Nutmeg.Runtime.Gameplay.BaseBuilding
+namespace Nutmeg.Runtime.Gameplay.Base
 {
     public class Placeable : MonoBehaviour
     {
@@ -157,6 +158,12 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             
             intersectingOtherPlaceable = false;
             UpdateCurrentPositionValid();
+        }
+
+        public void OnDeath()
+        {
+            DestroyImmediate(gameObject);
+            LevelGenerator.Main.UpdateNavMesh();
         }
 
 
