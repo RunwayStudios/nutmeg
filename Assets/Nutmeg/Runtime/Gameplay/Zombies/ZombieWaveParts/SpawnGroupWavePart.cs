@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Nutmeg.Runtime.Gameplay.Zombies;
+using Unity.Netcode;
 using UnityEngine;
 
 public class SpawnGroupWavePart : ZombieWavePart
@@ -17,7 +18,8 @@ public class SpawnGroupWavePart : ZombieWavePart
         Vector3 position = spawningLocations[Random.Range(0, spawningLocations.Count)].position;
         for (int i = 0; i < groupSize; i++)
         {
-            Object.Instantiate(zombiePrefab, position, new Quaternion());
+            GameObject go = Object.Instantiate(zombiePrefab, position, new Quaternion());
+            go.GetComponent<NetworkObject>().Spawn(true);
         }
 
         return true;

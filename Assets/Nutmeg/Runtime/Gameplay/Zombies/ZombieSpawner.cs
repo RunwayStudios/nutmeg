@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using IngameDebugConsole;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.Zombies
 {
-    public class ZombieSpawner : MonoBehaviour
+    public class ZombieSpawner : NetworkBehaviour
     {
         public static ZombieSpawner Main;
         
@@ -34,7 +35,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         // Start is called before the first frame update
         void Start()
         {
-            DebugLogConsole.AddCommand<int>("Zombies.StartWave", "Start Wave", StartWave, "waveIndex");
+            DebugLogConsole.AddCommand<int>("Zombies.StartWave", "Start Wave", StartWaveServerRpc, "waveIndex");
         }
 
         // Update is called once per frame
@@ -49,6 +50,12 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             UpdateWave();
         }
 
+
+        [ServerRpc(RequireOwnership = false)]
+        private void StartWaveServerRpc(int index)
+        {
+            StartWave(index);
+        }
 
         private void StartWave(int index)
         {
