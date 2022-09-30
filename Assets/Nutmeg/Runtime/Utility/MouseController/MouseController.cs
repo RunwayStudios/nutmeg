@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace Nutmeg.Runtime.Utility.MouseController
 {
-    public class MouseController : NetworkBehaviour
+    public class MouseController : MonoBehaviour
     {
         public static Camera camera;
         private static RaycastHit? lastLookTarget;

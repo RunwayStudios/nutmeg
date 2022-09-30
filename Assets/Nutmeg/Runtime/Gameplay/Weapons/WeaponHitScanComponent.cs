@@ -72,14 +72,14 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
             bullet.Initialize(origin, target);
             
             if(IsLocalPlayer)
-                SpawnBulletServerRpc(origin, target, NetworkManager.LocalClientId);
+                SpawnBulletServerRpc(origin, target);
         }
 
         [ServerRpc]
-        private void SpawnBulletServerRpc(Vector3 origin, Vector3 target, ulong id)
+        private void SpawnBulletServerRpc(Vector3 origin, Vector3 target, ServerRpcParams serverRpcParams = default)
         {
             List<ulong> ids = NetworkManager.Singleton.ConnectedClientsIds.ToList();
-            ids.Remove(id);
+            ids.Remove(serverRpcParams.Receive.SenderClientId);
             
             SpawnBulletClientRpc(origin, target, new ClientRpcParams {Send = new ClientRpcSendParams {TargetClientIds = ids}});
         }
