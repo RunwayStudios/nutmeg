@@ -1456,7 +1456,6 @@ GameObject:
   - component: {fileID: 4853782146285696133}
   - component: {fileID: 2559359259358476368}
   - component: {fileID: -7333130699766255940}
-  - component: {fileID: 8104858683463031601}
   - component: {fileID: 2222171531711261991}
   m_Layer: 0
   m_Name: Zombie_Default
@@ -1706,19 +1705,6 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &8104858683463031601
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1144529266033343354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Animator: {fileID: 1059452761220779612}
 --- !u!114 &2222171531711261991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1740,8 +1726,8 @@ MonoBehaviour:
   SyncScaleX: 0
   SyncScaleY: 0
   SyncScaleZ: 0
-  PositionThreshold: 0.05
-  RotAngleThreshold: 1
+  PositionThreshold: 0.1
+  RotAngleThreshold: 5
   ScaleThreshold: 0.01
   InLocalSpace: 0
   Interpolate: 1

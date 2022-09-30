@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Nutmeg.Runtime.Gameplay.Combat;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -25,11 +26,14 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             skins[rndmSkinIndex].SetActive(true);
             
             
-            navMeshAgent = GetComponent<NavMeshAgent>();
             animator = GetComponent<Animator>();
 
-            // todo set base center/hut?
-            navMeshAgent.SetDestination(new Vector3(0, 0, 0));
+            if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
+            {
+                navMeshAgent = GetComponent<NavMeshAgent>();
+                // todo set base center/hut?
+                navMeshAgent.SetDestination(new Vector3(0, 0, 0));
+            }
             SetAnimationState("walk");
         }
 
