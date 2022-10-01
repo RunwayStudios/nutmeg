@@ -1,27 +1,29 @@
 using Gameplay.Level.LevelGenerator;
-using Nutmeg.Runtime.Gameplay.BaseBuilding;
 using Nutmeg.Runtime.Gameplay.Combat;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Nutmeg.Runtime.Gameplay.Base
 {
-    public class Placeable : MonoBehaviour
+    public class Placeable : NetworkBehaviour
     {
-        [SerializeField] private Transform boundsCenter;
+        [SerializeField] public int price = 0;
+        [Space] [SerializeField] private Transform boundsCenter;
         [SerializeField] private Vector3 boundsHalfExtends = Vector3.one;
 
         [SerializeField] private UnityEvent OnStartPlacing;
         [SerializeField] private UnityEvent OnStopPlacing;
-        
+
         private bool beingPlaced;
         private bool curPositionValid;
+        private bool purchasable;
 
         private Material prevMaterial;
         private Material placingMaterial;
 
         private bool intersectingOtherPlaceable = true;
-        private bool baseBoundsValid = true;
+        private bool baseBoundsValid = false;
 
 
         public void StartPlacing()
@@ -29,7 +31,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
             beingPlaced = true;
 
             curPositionValid = true;
-            
+
             OnStartPlacing.Invoke();
 
 
@@ -37,7 +39,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
 
             placingMaterial = BaseManager.Main.transparentDefaultMaterial;
             placingMaterial.mainTexture = prevMaterial.mainTexture;
-            placingMaterial.color = BaseManager.Main.validMaterialColor;
+            SetMaterialColor(BaseManager.Main.validMaterialColor);
 
             SetCollidersEnabled(false);
             SetMaterial(placingMaterial);
@@ -46,7 +48,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
         public void StopPlacing()
         {
             beingPlaced = false;
-            
+
             OnStopPlacing.Invoke();
 
             // todo reset to original position if there was one / delete otherwise
@@ -66,7 +68,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
                 c.enabled = enable;
             }
         }
-        
+
         private void SetMaterial(Material newMaterial)
         {
             MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
@@ -76,25 +78,36 @@ namespace Nutmeg.Runtime.Gameplay.Base
             }
         }
 
+        private void SetMaterialColor(Color color)
+        {
+            if (beingPlaced)
+                placingMaterial.color = color;
+        }
+
         public bool IsCurrentPositionValid()
         {
             return curPositionValid;
+        }
+
+        public bool CanPurchase()
+        {
+            return purchasable;
         }
 
         private void UpdateCurrentPositionValid()
         {
             bool newValue = !intersectingOtherPlaceable && baseBoundsValid;
 
-            if (newValue != curPositionValid)
-            {
-                if (!newValue)
-                    placingMaterial.color = BaseManager.Main.invalidMaterialColor;
+            if (newValue && curPositionValid)
+                return;
 
-                if (newValue)
-                    placingMaterial.color = BaseManager.Main.validMaterialColor;
-                
-                curPositionValid = newValue;
-            }
+            curPositionValid = newValue;
+
+            if (!newValue)
+                SetMaterialColor(BaseManager.Main.invalidMaterialColor);
+
+            if (newValue)
+                SetMaterialColor(purchasable ? BaseManager.Main.validMaterialColor : BaseManager.Main.noMoneyMaterialColor);
         }
 
         public void CheckBaseBounds(Texture2D baseMap)
@@ -155,9 +168,30 @@ namespace Nutmeg.Runtime.Gameplay.Base
                     return;
                 }
             }
-            
+
             intersectingOtherPlaceable = false;
             UpdateCurrentPositionValid();
+        }
+
+        public void UpdatePurchasable()
+        {
+            bool newPurchasable = MoneyManager.Main.CanAfford(price);
+            if (purchasable && newPurchasable)
+                return;
+
+            purchasable = newPurchasable;
+
+            if (!curPositionValid)
+                return;
+
+            SetMaterialColor(purchasable ? BaseManager.Main.validMaterialColor : BaseManager.Main.noMoneyMaterialColor);
+        }
+
+        public void Deactivate()
+        {
+            enabled = false;
+            CombatEntity entity = GetComponent<CombatEntity>();
+            entity.enabled = false;
         }
 
         public void OnDeath()

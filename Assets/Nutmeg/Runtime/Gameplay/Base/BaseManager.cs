@@ -1,14 +1,15 @@
 using System.Collections.Generic;
+using System.Linq;
 using Gameplay.Level.LevelGenerator;
-using Nutmeg.Runtime.Gameplay.Base;
 using Nutmeg.Runtime.Utility.InputSystem;
 using Nutmeg.Runtime.Utility.MouseController;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Nutmeg.Runtime.Gameplay.BaseBuilding
+namespace Nutmeg.Runtime.Gameplay.Base
 {
-    public class BaseManager : MonoBehaviour
+    public class BaseManager : NetworkBehaviour
     {
         public static BaseManager Main;
 
@@ -16,7 +17,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
 
         [SerializeField] [Tooltip("")] private Texture2D baseFlatteningMap;
 
-        [SerializeField] [Tooltip("")] private GameObject debugToPlace;
+        [SerializeField] [Tooltip("")] private int debugToPlace;
 
         [Space] [SerializeField] [Tooltip("")] private float baseY = 0.0f;
 
@@ -26,6 +27,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         private bool placingObject = false;
         private bool inBuildingMode = false;
         private GameObject curPlacingGo;
+        private int curPlacingIndex;
         private GameObject curPlacingOriginalGo;
         private Placeable curPlacingPlaceable;
         private Vector3 previousPosition = Vector3.zero;
@@ -34,7 +36,10 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
 
         public Material transparentDefaultMaterial;
         public Color invalidMaterialColor;
+        public Color noMoneyMaterialColor;
         public Color validMaterialColor;
+
+        [SerializeField] private GameObject[] placeables;
 
 
         private void Awake()
@@ -70,6 +75,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             if (placingObject)
             {
                 UpdatePositionOfObjectBeingPlaced();
+                curPlacingPlaceable.UpdatePurchasable();
                 RotatePlaceable();
             }
         }
@@ -100,7 +106,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             inBuildingMode = true;
         }
 
-        private void StartPlacingObject(GameObject blueprint)
+        private void StartPlacingObject(int index)
         {
             if (placingObject)
                 return;
@@ -111,8 +117,8 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             if (!inBuildingMode)
                 EnterBuildingMode();
 
-            curPlacingOriginalGo = blueprint;
-            curPlacingGo = Instantiate(blueprint, placeablePos, Quaternion.Euler(Vector3.zero));
+            curPlacingOriginalGo = placeables[index];
+            curPlacingGo = Instantiate(curPlacingOriginalGo, placeablePos, Quaternion.Euler(Vector3.zero));
 
             curPlacingPlaceable = curPlacingGo.GetComponent<Placeable>();
             curPlacingPlaceable.StartPlacing();
@@ -138,11 +144,10 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
 
         private void PlacePlaceable(InputAction.CallbackContext context)
         {
-            if (!placingObject || !curPlacingPlaceable.IsCurrentPositionValid())
+            if (!placingObject || !curPlacingPlaceable.IsCurrentPositionValid() || !curPlacingPlaceable.CanPurchase())
                 return;
 
-            Placeable placeable = Instantiate(curPlacingOriginalGo, curPlacingGo.transform.position, curPlacingGo.transform.rotation).GetComponent<Placeable>();
-            placed.Add(placeable);
+            PlacePlaceableServerRpc(curPlacingIndex, curPlacingGo.transform.position, curPlacingGo.transform.rotation);
 
             // todo necessary when moving objects
             // curPlacingPlaceable.SetBeingPlaced(false);
@@ -150,10 +155,46 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
             // todo separate single place mode?
             // Destroy(curPlacingGo);
             // placingObject = false;
-            
+            // ExitBuildingMode();
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void PlacePlaceableServerRpc(int index, Vector3 position, Quaternion rotation)
+        {
+            GameObject go = Instantiate(placeables[index], position, rotation);
+            Placeable placeable = go.GetComponent<Placeable>();
+            placeable.CheckBaseBounds(baseFlatteningMap);
+            placeable.CheckIntersecting();
+            placeable.UpdatePurchasable();
+
+            if (!placeable.IsCurrentPositionValid() || !MoneyManager.Main.SubtractBalance(placeable.price))
+            {
+                DestroyImmediate(go);
+                Debug.Log("illegal placeable attempt");
+                return;
+            }
+
+            placed.Add(placeable);
+
             LevelGenerator.Main.UpdateNavMesh();
 
-            // ExitBuildingMode();
+            PlacePlaceableClientRpc(index, position, rotation);
+        }
+
+        [ClientRpc]
+        private void PlacePlaceableClientRpc(int index, Vector3 position, Quaternion rotation)
+        {
+            if (IsHost)
+                return;
+            
+            GameObject go = Instantiate(placeables[index], position, rotation);
+            Placeable placeable = go.GetComponent<Placeable>();
+            placeable.Deactivate();
+
+            placed.Add(placeable);
+
+            // todo only do if client side pathfinding
+            // LevelGenerator.Main.UpdateNavMesh();
         }
 
         private void CancelPlacingPlaceable()
@@ -200,12 +241,12 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         {
             currentRotation += rotateSpeed;
         }
-        
+
         private void StopRotatingPlaceableClockwise(InputAction.CallbackContext context)
         {
             currentRotation -= rotateSpeed;
         }
-        
+
         private void StartRotatingPlaceableCounterclockwise(InputAction.CallbackContext context)
         {
             currentRotation -= rotateSpeed;
@@ -220,7 +261,7 @@ namespace Nutmeg.Runtime.Gameplay.BaseBuilding
         {
             if (currentRotation == 0f)
                 return;
-            
+
             curPlacingGo.transform.Rotate(Vector3.up, currentRotation * Time.deltaTime);
         }
     }

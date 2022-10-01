@@ -1,0 +1,17 @@
+{
+    "name": "Nutmeg.Runtime.Gameplay",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3de88c88fbbb8f944b9210d496af9762",
+        "GUID:1491147abca9d7d4bb7105af628b223e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
