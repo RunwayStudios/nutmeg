@@ -37,7 +37,7 @@ namespace Nutmeg.Runtime.Core.Networking.Steam
 
         private void SteamMatchmakingOnLobbyInvite(Friend friend, Lobby lobby)
         {
-            throw new NotImplementedException();
+            Debug.Log( friend.Name + " invited you to a lobby " + lobby.Id);
         }
 
         private void SteamMatchmakingOnLobbyEntered(Lobby lobby)
@@ -49,7 +49,7 @@ namespace Nutmeg.Runtime.Core.Networking.Steam
 
             if (!NetworkManager.Singleton.IsHost)
             {
-                //transport.StartClient();
+                transport.StartClient();
                 NetworkManager.Singleton.StartClient();
                 lobby.SetMemberData(SteamDataKeys.INTERNAL_NETWORK_ID,
                     NetworkManager.Singleton.LocalClientId.ToString());
@@ -69,7 +69,7 @@ namespace Nutmeg.Runtime.Core.Networking.Steam
                 {
                     Debug.Log("Created new Steam lobby " + lobby.Id);
 
-                    //transport.StartServer();
+                    transport.StartServer();
                     NetworkManager.Singleton.StartHost();
                     break;
                 }
