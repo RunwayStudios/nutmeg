@@ -43,13 +43,13 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
 
             if (Physics.Raycast(origin.position, offsetDirection, out RaycastHit h, root.stats.range))
             {
+                SpawnBullet(origin.position, h.point);
+             
                 if (h.transform.TryGetComponent(out DamageableModule m))
                 {
                     hit = m;
                     return true;
                 }
-                
-                SpawnBullet(origin.position, h.point);
             }
             else
             {

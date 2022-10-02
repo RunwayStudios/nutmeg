@@ -1147,6 +1147,10 @@ PrefabInstance:
       propertyPath: toggleBinding.m_SingletonActionBindings.Array.data[0].m_Id
       value: a9ddd8fd-5a4e-4ac5-96d5-0450a416aa19
       objectReference: {fileID: 0}
+    - target: {fileID: 11452418, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
+      propertyPath: toggleBinding.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/rightBracket
+      objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2335,7 +2339,7 @@ MonoBehaviour:
   LogLevel: 1
   NetworkConfig:
     ProtocolVersion: 0
-    NetworkTransport: {fileID: 1748427562}
+    NetworkTransport: {fileID: 1748427563}
     PlayerPrefab: {fileID: 6661202302193707924, guid: 6e9065344833ca646a514fe4b9eb37e7, type: 3}
     NetworkPrefabs:
     - Override: 0
