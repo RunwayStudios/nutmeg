@@ -31,8 +31,8 @@ namespace Nutmeg.Runtime.Core.Networking.Steam
         {
             Debug.LogWarning("Lobby member " + friend.Id + " lost connection");
             
-            NetworkManager.Singleton.DisconnectClient(
-                Convert.ToUInt64(lobby.GetMemberData(friend, SteamDataKeys.INTERNAL_NETWORK_ID)));
+           // NetworkManager.Singleton.DisconnectClient(
+           //     Convert.ToUInt64(lobby.GetMemberData(friend, SteamDataKeys.INTERNAL_NETWORK_ID)));
         }
 
         private void SteamMatchmakingOnLobbyInvite(Friend friend, Lobby lobby)
@@ -43,16 +43,15 @@ namespace Nutmeg.Runtime.Core.Networking.Steam
         private void SteamMatchmakingOnLobbyEntered(Lobby lobby)
         {
             Debug.Log("Entered new Steam lobby " + lobby.Id);
-
             transport.targetSteamId = lobby.Owner.Id;
             Lobby = lobby;
 
             if (!NetworkManager.Singleton.IsHost)
             {
-                transport.StartClient();
-                NetworkManager.Singleton.StartClient();
-                lobby.SetMemberData(SteamDataKeys.INTERNAL_NETWORK_ID,
-                    NetworkManager.Singleton.LocalClientId.ToString());
+                //transport.StartClient();
+                //NetworkManager.Singleton.StartClient();
+                //lobby.SetMemberData(SteamDataKeys.INTERNAL_NETWORK_ID,
+                //    NetworkManager.Singleton.LocalClientId.ToString());
             }
         }
 
@@ -69,8 +68,9 @@ namespace Nutmeg.Runtime.Core.Networking.Steam
                 {
                     Debug.Log("Created new Steam lobby " + lobby.Id);
 
-                    transport.StartServer();
-                    NetworkManager.Singleton.StartHost();
+                    lobby.SetFriendsOnly();
+                    //transport.StartServer();
+                    //NetworkManager.Singleton.StartHost();
                     break;
                 }
             }
