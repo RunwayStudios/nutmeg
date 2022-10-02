@@ -49,7 +49,7 @@ namespace Nutmeg.Runtime.Core.Networking.Steam
             if (!NetworkManager.Singleton.IsHost)
             {
                 //transport.StartClient();
-                //NetworkManager.Singleton.StartClient();
+                NetworkManager.Singleton.StartClient();
                 //lobby.SetMemberData(SteamDataKeys.INTERNAL_NETWORK_ID,
                 //    NetworkManager.Singleton.LocalClientId.ToString());
             }
@@ -69,7 +69,7 @@ namespace Nutmeg.Runtime.Core.Networking.Steam
                     Debug.Log("Created new Steam lobby " + lobby.Id);
 
                     lobby.SetFriendsOnly();
-                    //transport.StartServer();
+                    transport.StartServer();
                     //NetworkManager.Singleton.StartHost();
                     break;
                 }
