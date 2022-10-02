@@ -1,5 +1,6 @@
 using Gameplay.Level.LevelGenerator;
 using Nutmeg.Runtime.Gameplay.Combat;
+using Nutmeg.Runtime.Gameplay.Money;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
