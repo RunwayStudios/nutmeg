@@ -1,50 +1,37 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
-using Nutmeg.Runtime.Utility.MouseController;
+using Nutmeg.Runtime.Gameplay.Weapons.Misc;
 using Unity.Netcode;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Nutmeg.Runtime.Gameplay.Weapons
 {
     [DisallowMultipleComponent]
     public class WeaponHitScanComponent : WeaponDamageComponent
     {
-        public override bool Get(out object data)
+        protected override void Start()
         {
-            bool b = HitScan(out DamageableModule r);
-            data = r;
-            return b;
+            base.Start();
+            root.poolComponent.releaseAction = obj => obj.SetActive(false);
         }
 
+        public override bool Get(out object data)
+        {
+            bool success = HitScan(out var r);
+            data =  new[] { r };
+            return success;
+        }
+        
         protected virtual bool HitScan(out DamageableModule hit)
         {
-            hit = null;
-            root.originComponent.Get(out object t);
-            Transform origin = (Transform) t;
-            
-            Vector3 targetPosition =
-                MouseController.ShootRayFromCameraToMouse(~0)?.point ??
-                MouseController.GetLastMouseLookTargetPoint();
-
-            Vector3 normalizedDirection = new Vector3(
-                (targetPosition - origin.position).normalized.x, 0f,
-                (targetPosition - origin.position).normalized.z);
-            
-            Vector3 offsetDirection = CalcRandomTargetOffsetByAccuracy(
-                normalizedDirection);
-
-            
-            Debug.DrawRay(origin.position, offsetDirection * root.stats.range, Color.red,
+            Debug.DrawRay(Origin, OffsetDirection * root.stats.range, Color.red,
                 1f / (root.stats.fireRate / 60f));
 
-            if (Physics.Raycast(origin.position, offsetDirection, out RaycastHit h, root.stats.range))
+            if (Physics.Raycast(Origin, OffsetDirection, out RaycastHit h, root.stats.range))
             {
-                SpawnBullet(origin.position, h.point);
-             
+                SpawnBullet(Origin, h.point);
+
                 if (h.transform.TryGetComponent(out DamageableModule m))
                 {
                     hit = m;
@@ -53,25 +40,20 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
             }
             else
             {
-                SpawnBullet(origin.position, origin.position + offsetDirection * root.stats.range);
+                SpawnBullet(Origin, Origin + OffsetDirection * root.stats.range);
             }
-            
+
+            hit = null;
             return false;
-        }
-        
-        private struct BulletData
-        {
-            public Vector3 origin;
-            public Vector3 target;
         }
 
         private void SpawnBullet(Vector3 origin, Vector3 target)
         {
-            root.bulletComponent.Get(out var b);
-            Bullet bullet = (Bullet)b;
-            bullet.Initialize(origin, target);
-            
-            if(IsLocalPlayer)
+            root.poolComponent.Get(out var b);
+            Projectile projectile = ((GameObject) b).GetComponent<Projectile>();
+            projectile.Initialize(origin, target);
+
+            if (root.playerNetworkObject.IsLocalPlayer)
                 SpawnBulletServerRpc(origin, target);
         }
 
@@ -80,26 +62,15 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
         {
             List<ulong> ids = NetworkManager.Singleton.ConnectedClientsIds.ToList();
             ids.Remove(serverRpcParams.Receive.SenderClientId);
-            
-            SpawnBulletClientRpc(origin, target, new ClientRpcParams {Send = new ClientRpcSendParams {TargetClientIds = ids}});
+
+            SpawnBulletClientRpc(origin, target,
+                new ClientRpcParams {Send = new ClientRpcSendParams {TargetClientIds = ids}});
         }
-        
+
         [ClientRpc]
         private void SpawnBulletClientRpc(Vector3 origin, Vector3 target, ClientRpcParams clientRpcParams)
         {
             SpawnBullet(origin, target);
-        }
-        
-        private Vector3 CalcRandomTargetOffsetByAccuracy(Vector3 origin)
-        {
-            float r = .4f * Mathf.Sqrt(Random.Range(0f,
-                1f - 2 * root.stats.accuracy + root.stats.accuracy * root.stats.accuracy));
-            float theta = Random.Range(0f, 1f) * 2f * Mathf.PI;
-
-            origin.x += r * Mathf.Cos(theta);
-            origin.z += r * Mathf.Sin(theta);
-
-            return origin;
         }
     }
 }

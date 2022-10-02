@@ -8,25 +8,31 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
     public class Weapon : Item
     {
         public WeaponStats stats;
-        public WeaponComponent hitComponent;
+        public WeaponDamageComponent hitComponent;
         public WeaponComponent ammunitionComponent;
-        public WeaponComponent bulletComponent;
+        public WeaponPoolComponent poolComponent;
         public WeaponComponent originComponent;
+        public WeaponDamageOverrideComponent damageOverrideComponent;
 
         private float fireRateCooldown;
 
         [HideInInspector] public WeaponPreset preset;
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
+            
             ammunitionComponent = TryGetComponent(typeof(WeaponAmmunitionComponent), out var wac)
                 ? (WeaponComponent) wac
                 : null;
             originComponent = TryGetComponent(typeof(WeaponOriginComponent), out var woc)
                 ? (WeaponComponent) woc
                 : null;
-            bulletComponent = TryGetComponent(typeof(WeaponBulletComponent), out var wbc)
-                ? (WeaponComponent) wbc
+            poolComponent = TryGetComponent(typeof(WeaponPoolComponent), out var wbc)
+                ? (WeaponPoolComponent) wbc
+                : null;
+            damageOverrideComponent = TryGetComponent(typeof(WeaponDamageOverrideComponent), out var wdoc)
+                ? (WeaponDamageOverrideComponent) wdoc
                 : null;
         }
 
@@ -35,19 +41,32 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
             UpdateFireRate();
         }
 
+        //TODO should be async because of delayed projectiles
         public override void Use()
         {
             if (fireRateCooldown > 0f || ammunitionComponent == null || !ammunitionComponent.Get(out object _))
                 return;
 
-            if (hitComponent.Get(out object hit))
+            if (hitComponent.Get(out var dms))
             {
-                DamageableModule m = (DamageableModule) hit;
-
-                m.Damage(stats.damage, stats.damageType);
+                AddDamage((DamageableModule[]) dms);
             }
 
             fireRateCooldown = 1f / (stats.fireRate / 60f);
+        }
+
+        private void AddDamage(DamageableModule[] dms)
+        {
+            if (damageOverrideComponent != null)
+            {
+                damageOverrideComponent.modules = dms;
+                damageOverrideComponent.Get();
+            }
+            else
+            {
+                foreach (var m in dms)
+                    m.Damage(stats.damage, stats.damageType);
+            }
         }
 
         private void UpdateFireRate()
@@ -66,6 +85,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
         Rifle,
         ShotGun,
         RocketLauncher,
+        ExplosionObject,
         GrenadeLauncher
     }
 }

@@ -1,12 +1,13 @@
 using System;
-using Unity.Netcode;
+using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using UnityEngine;
+using UnityEngine.Events;
 
-namespace Nutmeg.Runtime.Gameplay.Weapons
+namespace Nutmeg.Runtime.Gameplay.Weapons.Misc
 {
-    public class Bullet : MonoBehaviour
+    public class Projectile : MonoBehaviour, IWeaponPoolObject
     {
-        [SerializeField] private float lifeTime = .1f;
+        [SerializeField] private float speed = 250f;
         private Vector3 origin;
         private Vector3 target;
 
@@ -15,12 +16,14 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
 
         private Action<GameObject> releaseAction;
 
+        public UnityEvent onImpact;
+        
         private void Update()
         {
             if (locked)
                 return;
             transform.position = Vector3.Lerp(origin, target,
-                elapsedTime += Time.deltaTime / (Vector3.Distance(origin, target) / lifeTime));
+                elapsedTime += Time.deltaTime / (Vector3.Distance(origin, target) / speed));
 
             if (transform.position == target)
                 ReleaseBullet();
@@ -28,11 +31,13 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
 
         public void SetReleaseAction(Action<GameObject> action) => releaseAction = action;
 
-        private void ReleaseBullet()
+        protected virtual void ReleaseBullet()
         {
+            onImpact?.Invoke();
+            releaseAction.Invoke(gameObject);
+            
             locked = true;
             elapsedTime = 0f;
-            releaseAction.Invoke(gameObject);
         }
 
         public void Initialize(Vector3 origin, Vector3 target)

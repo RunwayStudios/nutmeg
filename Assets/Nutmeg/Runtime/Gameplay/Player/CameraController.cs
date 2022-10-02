@@ -1,15 +1,17 @@
 using System;
 using Cinemachine;
 using Nutmeg.Runtime.Utility.InputSystem;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Nutmeg.Runtime.Gameplay.Player
 {
-    public class CameraController : MonoBehaviour
+    public class CameraController : NetworkBehaviour
     {
         [SerializeField] private float scrollSpeed;
         [SerializeField] private Vector3 dollyOffset;
+        [SerializeField] private NetworkObject playerNetworkObject;
 
         private CinemachineVirtualCamera virtualCamera;
         private CinemachineTrackedDolly dolly;
@@ -17,18 +19,18 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
         private void Start()
         {
-            input = InputManager.Input;
+            if (playerNetworkObject.IsLocalPlayer)
+            {
+                virtualCamera = GetComponent<CinemachineVirtualCamera>();
+                dolly = virtualCamera.GetCinemachineComponent<CinemachineTrackedDolly>();
+                
+                virtualCamera.enabled = true;
+                virtualCamera.m_LookAt = NetworkPlayerController.Main.transform;
+                virtualCamera.m_Follow = NetworkPlayerController.Main.transform;
             
-            virtualCamera = GetComponent<CinemachineVirtualCamera>();
-            virtualCamera.m_LookAt = PlayerController.c_player.transform;
-            virtualCamera.m_Follow = PlayerController.c_player.transform;
-            dolly = virtualCamera.GetCinemachineComponent<CinemachineTrackedDolly>();
-            
-            input.Player.Scroll.performed += OnScrollActionPerformed;
-        }
-
-        private void Update()
-        {
+                input = InputManager.Input;
+                input.Player.Scroll.performed += OnScrollActionPerformed; 
+            }
         }
 
         private void UpdateDollyPosition() => dolly.m_Path.transform.position =

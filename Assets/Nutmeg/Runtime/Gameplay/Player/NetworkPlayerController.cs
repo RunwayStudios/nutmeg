@@ -16,6 +16,8 @@ namespace Nutmeg.Runtime.Gameplay.Player
         [SerializeField] private Transform playerBody;
         [SerializeField] private Item weapon;
 
+        public static NetworkPlayerController Main { get; private set; }
+        
         private InputActions input;
         private Action perFrameActions;
 
@@ -24,14 +26,17 @@ namespace Nutmeg.Runtime.Gameplay.Player
         private Vector2 rawMoveVector;
 
         private bool movePlayer;
-
+        
         public bool IsMoving { get; private set; }
 
         private void Start()
         {
             if (!IsLocalPlayer) return;
+            Main = this;
+            
             cc = GetComponent<CharacterController>();
 
+            //TODO ???
             Debug.developerConsoleVisible = true;
 
             perFrameActions += RotatePlayer;
@@ -83,7 +88,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
             //Destroy(gameObject);
 
-            cc.Move((Vector3.left * rawMoveVector.x + Vector3.back * rawMoveVector.y) * moveSpeed *
+            cc.Move((Vector3.left * rawMoveVector.x + Vector3.back * rawMoveVector.y + Vector3.down * .4f) * moveSpeed *
                     Time.deltaTime);
             //MovePlayerClientRpc((Vector3.left * rawMoveVector.x + Vector3.back * rawMoveVector.y) * moveSpeed *
             //      Time.deltaTime);
