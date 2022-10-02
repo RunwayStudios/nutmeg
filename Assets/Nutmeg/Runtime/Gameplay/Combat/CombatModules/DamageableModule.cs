@@ -1,4 +1,3 @@
-using Gameplay.Level.LevelGenerator;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,7 +14,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
 
         public virtual void Damage(float value, DamageType type)
         {
-            DamageServerRpc(value, type);
+                DamageServerRpc(value, type);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -23,7 +22,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         {
             if (dead)
                 return;
-            
+
             health -= value;
 
             DamageClientRpc();
@@ -40,7 +39,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         {
             OnReceiveDamage.Invoke();
         }
-        
+
         [ClientRpc]
         private void DeathClientRpc()
         {

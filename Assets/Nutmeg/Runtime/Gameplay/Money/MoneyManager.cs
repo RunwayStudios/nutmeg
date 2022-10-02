@@ -8,7 +8,7 @@ namespace Nutmeg.Runtime.Gameplay.Money
     {
         public static MoneyManager Main;
 
-        private int balance = 0;
+        private int balance = 1000;
     
         private void Awake()
         {

@@ -1,5 +1,5 @@
-using Gameplay.Level.LevelGenerator;
 using Nutmeg.Runtime.Gameplay.Combat;
+using Nutmeg.Runtime.Gameplay.LevelTerrain;
 using Nutmeg.Runtime.Gameplay.Money;
 using Unity.Netcode;
 using UnityEngine;
@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 namespace Nutmeg.Runtime.Gameplay.Base
 {
-    public class Placeable : NetworkBehaviour
+    public class Placeable : MonoBehaviour
     {
         [SerializeField] public int price = 0;
         [Space] [SerializeField] private Transform boundsCenter;
@@ -188,17 +188,21 @@ namespace Nutmeg.Runtime.Gameplay.Base
             SetMaterialColor(purchasable ? BaseManager.Main.validMaterialColor : BaseManager.Main.noMoneyMaterialColor);
         }
 
-        public void Deactivate()
+        public void Activate()
         {
-            enabled = false;
+            enabled = true;
             CombatEntity entity = GetComponent<CombatEntity>();
-            entity.enabled = false;
+            entity.enabled = true;
         }
 
         public void OnDeath()
         {
-            DestroyImmediate(gameObject);
-            LevelGenerator.Main.UpdateNavMesh();
+            if (NetworkManager.Singleton.IsServer)
+            {
+                GetComponent<NetworkObject>().Despawn();
+                DestroyImmediate(gameObject);
+                LevelGenerator.Main.UpdateNavMesh();
+            }
         }
 
 

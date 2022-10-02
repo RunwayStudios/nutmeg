@@ -10,6 +10,13 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
     {
         [SerializeField] private List<GameObject> skins = new List<GameObject>();
 
+        [SerializeField] private float decayDelay = 5f;
+        [SerializeField] private float decayDuration = 10f;
+        [SerializeField] private float decayDisplacement = -1;
+        private bool decaying;
+        private float decayStart;
+        private float decayingOriginalY;
+
         private NavMeshAgent navMeshAgent;
         private Animator animator;
 
@@ -24,8 +31,8 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
             int rndmSkinIndex = Random.Range(0, skins.Count);
             skins[rndmSkinIndex].SetActive(true);
-            
-            
+
+
             animator = GetComponent<Animator>();
 
             if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
@@ -34,37 +41,69 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
                 // todo set base center/hut?
                 navMeshAgent.SetDestination(new Vector3(0, 0, 0));
             }
+
             SetAnimationState("walk");
         }
 
         // Update is called once per frame
         void Update()
         {
-            
+            UpdateDecay();
         }
 
-        public void SetAnimationState(string parameter, bool value = true)
+
+        private void UpdateDecay()
+        {
+            if (!decaying)
+                return;
+
+            if (Time.time > decayStart + decayDelay + decayDuration)
+            {
+                decaying = false;
+                Destroy(gameObject);
+                return;
+            }
+
+            if (Time.time > decayStart + decayDelay)
+            {
+                transform.position = new Vector3(transform.position.x,
+                    transform.position.y + decayDisplacement * (Time.deltaTime / decayDuration), transform.position.z);
+            }
+        }
+
+        private void Decay()
+        {
+            decaying = true;
+            decayStart = Time.time;
+            decayingOriginalY = transform.position.y;
+        }
+
+        private void SetAnimationState(string parameter, bool value = true)
         {
             animator.SetBool(parameter, value);
         }
-        
+
         public void OnStartAttacking()
         {
-            navMeshAgent.isStopped = true;
             SetAnimationState("walk", false);
+
+            if (NetworkManager.Singleton.IsServer)
+                navMeshAgent.isStopped = true;
         }
 
         public void OnAttack()
         {
             SetAnimationState("attack");
         }
-        
+
         public void OnStopAttacking()
         {
-            navMeshAgent.isStopped = false;
             SetAnimationState("walk");
+
+            if (NetworkManager.Singleton.IsServer)
+                navMeshAgent.isStopped = false;
         }
-        
+
         public void OnDeath()
         {
             SetAnimationState("walk", false);
@@ -77,6 +116,9 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             }
 
             GetComponent<NavMeshAgent>().enabled = false;
+
+            if (NetworkManager.Singleton.IsServer)
+                Decay();
         }
     }
 }

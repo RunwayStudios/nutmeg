@@ -9,12 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 980333740804898706}
+  - component: {fileID: -6388321959170256796}
+  - component: {fileID: 8209782075105829126}
   - component: {fileID: 1007734765915614494}
   - component: {fileID: 999538440060213280}
   - component: {fileID: 8135982948086013061}
   - component: {fileID: 8152759806622698048}
   - component: {fileID: 2235136340972572173}
-  - component: {fileID: -6388321959170256796}
   m_Layer: 0
   m_Name: P_Spawn_Tent_01
   m_TagString: Untagged
@@ -40,6 +41,43 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-6388321959170256796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976971321457957950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &8209782075105829126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976971321457957950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27b279687199ee54baee7255b4b0131b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  price: 0
+  boundsCenter: {fileID: 4087628911397064235}
+  boundsHalfExtends: {x: 2.8, y: 1, z: 4.15}
+  OnStartPlacing:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStopPlacing:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!33 &1007734765915614494
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -149,22 +187,18 @@ MonoBehaviour:
           m_StringArgument: Game Over
           m_BoolArgument: 1
         m_CallState: 2
---- !u!114 &-6388321959170256796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 976971321457957950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
+      - m_Target: {fileID: 8209782075105829126}
+        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Base.Placeable, Nutmeg.Runtime.Gameplay.Base
+        m_MethodName: OnDeath
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1001 &696783203996441390
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -340,6 +374,11 @@ PrefabInstance:
 --- !u!4 &2286976354550359319 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3244904399482749508, guid: c2e21e51265bf5742afbf782a5eaf0b5, type: 3}
+  m_PrefabInstance: {fileID: 3653773601044473683}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4087628911397064235 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 724766648393066872, guid: c2e21e51265bf5742afbf782a5eaf0b5, type: 3}
   m_PrefabInstance: {fileID: 3653773601044473683}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7033931706644241130

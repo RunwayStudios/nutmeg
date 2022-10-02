@@ -6,16 +6,15 @@ namespace Nutmeg.Runtime.Gameplay.Combat
     public class CombatEntity : MonoBehaviour
     {
         [SerializeField] private CombatGroup group;
-        
+
         [SerializeField] private CombatModule[] modules;
-        
-        
-        
+
+
         // Start is called before the first frame update
         void Start()
         {
             CombatEntityManager.Main.AddCombatEntity(this, group);
-            
+
             for (int i = 0; i < modules.Length; i++)
             {
                 modules[i].InitializeModule(this);
@@ -41,11 +40,13 @@ namespace Nutmeg.Runtime.Gameplay.Combat
             CombatEntityManager.Main.RemoveCombatEntity(this, group);
             enabled = false;
         }
-        
+
+#if UNITY_EDITOR
         private void OnValidate()
         {
             modules = GetComponents<CombatModule>();
         }
+#endif
 
 
         public bool TryGetModule(Type type, out CombatModule module)
@@ -66,8 +67,8 @@ namespace Nutmeg.Runtime.Gameplay.Combat
 
         public CombatGroup Group => group;
     }
-    
-    
+
+
     public enum CombatGroup
     {
         Zombie,

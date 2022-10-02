@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Nutmeg.Runtime.Utility.Networking
 {
+    [DefaultExecutionOrder(100000)] // this is needed to catch the update time after the transform was updated by user scripts
     public class BetterNetworkTransform : NetworkBehaviour
     {
         [SerializeField] private bool check;

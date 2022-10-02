@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Gameplay.Level.LevelGenerator;
+using Nutmeg.Runtime.Gameplay.LevelTerrain;
 using Nutmeg.Runtime.Gameplay.Money;
 using Nutmeg.Runtime.Utility.InputSystem;
 using Nutmeg.Runtime.Utility.MouseController;
@@ -60,7 +60,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
             input.Player.Tab.performed += SwapBuildingMode;
         }
 
-        private void OnDestroy()
+        public override void OnDestroy()
         {
             input.BaseBuilding.PlaceObject.performed -= PlacePlaceable;
             input.BaseBuilding.RotateClockwise.performed -= StartRotatingPlaceableClockwise;
@@ -164,6 +164,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
         {
             GameObject go = Instantiate(placeables[index], position, rotation);
             Placeable placeable = go.GetComponent<Placeable>();
+            placeable.Activate();
             placeable.CheckBaseBounds(baseFlatteningMap);
             placeable.CheckIntersecting();
             placeable.UpdatePurchasable();
@@ -175,24 +176,21 @@ namespace Nutmeg.Runtime.Gameplay.Base
                 return;
             }
 
+            NetworkObject no = go.GetComponent<NetworkObject>();
+            no.Spawn();
             placed.Add(placeable);
-
             LevelGenerator.Main.UpdateNavMesh();
 
-            PlacePlaceableClientRpc(index, position, rotation);
+            PlacedPlaceableClientRpc(no.NetworkObjectId);
         }
 
         [ClientRpc]
-        private void PlacePlaceableClientRpc(int index, Vector3 position, Quaternion rotation)
+        private void PlacedPlaceableClientRpc(ulong id)
         {
             if (IsHost)
                 return;
             
-            GameObject go = Instantiate(placeables[index], position, rotation);
-            Placeable placeable = go.GetComponent<Placeable>();
-            placeable.Deactivate();
-
-            placed.Add(placeable);
+            // placed.Add(placeable);
 
             // todo only do if client side pathfinding
             // LevelGenerator.Main.UpdateNavMesh();

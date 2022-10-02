@@ -1,12 +1,10 @@
-using System;
 using System.Diagnostics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
-using UnityEngine.SceneManagement;
 
-namespace Gameplay.Level.LevelGenerator
+namespace Nutmeg.Runtime.Gameplay.LevelTerrain
 {
     public class LevelGenerator : MonoBehaviour
     {
@@ -300,6 +298,7 @@ namespace Gameplay.Level.LevelGenerator
             {
                 navMesh = go.AddComponent<NavMeshSurface>();
                 navMesh.layerMask = LayerMask.GetMask(new string[] {"Terrain", "NavMeshObstacle"});
+                navMesh.tileSize = 100;
                 navMesh.BuildNavMesh();
             }
 

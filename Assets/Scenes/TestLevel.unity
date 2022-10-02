@@ -5572,12 +5572,12 @@ MonoBehaviour:
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
+  m_OverrideTileSize: 1
+  m_TileSize: 100
+  m_OverrideVoxelSize: 1
   m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 765ed42c7d0c3fa48a9358e9dfd8abc3, type: 2}
 --- !u!23 &1041439404
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7722,10 +7722,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1438796909}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4f784c1dccfc8d4699f5f654b628a97, type: 3}
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  check: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
 --- !u!1001 &1444717320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9567,7 +9580,6 @@ GameObject:
   - component: {fileID: 1748427555}
   - component: {fileID: 1748427561}
   - component: {fileID: 1748427554}
-  - component: {fileID: 1748427557}
   - component: {fileID: 1748427558}
   - component: {fileID: 1748427559}
   - component: {fileID: 1748427563}
@@ -9606,18 +9618,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1748427557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1748427553}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: daa2412d69e94ac4891174c8728fe4ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1748427558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9634,7 +9634,7 @@ MonoBehaviour:
   LogLevel: 1
   NetworkConfig:
     ProtocolVersion: 0
-    NetworkTransport: {fileID: 1748427563}
+    NetworkTransport: {fileID: 1748427562}
     PlayerPrefab: {fileID: 6661202302193707924, guid: 6e9065344833ca646a514fe4b9eb37e7, type: 3}
     NetworkPrefabs:
     - Override: 0
@@ -9644,6 +9644,11 @@ MonoBehaviour:
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
       Prefab: {fileID: 1144529266033343354, guid: e6c37a22b3513bc4792c09756ed3de11, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 1170082105736364, guid: 4b900d05903a60f44a0fde047647d1d0, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
@@ -9796,8 +9801,16 @@ PrefabInstance:
       value: 298d7cf1-f3b4-47ca-8e1d-de4d5d571409
       objectReference: {fileID: 0}
     - target: {fileID: 11452418, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
+      propertyPath: toggleBinding.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11452418, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: toggleBinding.m_SingletonActionBindings.Array.data[0].m_Id
-      value: 21f0ff3c-8adb-466e-b9fc-b2867d2040c5
+      value: 3938e635-ad9e-4346-83ac-ce96e9e7e40b
+      objectReference: {fileID: 0}
+    - target: {fileID: 11452418, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
+      propertyPath: toggleBinding.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/rightBracket
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x

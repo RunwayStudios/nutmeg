@@ -1544,6 +1544,9 @@ MonoBehaviour:
   - {fileID: 1144284481727758232}
   - {fileID: 1144351501613103966}
   - {fileID: 1143968507234138292}
+  decayDelay: 5
+  decayDuration: 10
+  decayDisplacement: -1
 --- !u!195 &-6260215301360327920
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1726,7 +1729,7 @@ MonoBehaviour:
   SyncScaleX: 0
   SyncScaleY: 0
   SyncScaleZ: 0
-  PositionThreshold: 0.1
+  PositionThreshold: 0.2
   RotAngleThreshold: 5
   ScaleThreshold: 0.01
   InLocalSpace: 0
