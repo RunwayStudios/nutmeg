@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Nutmeg.Runtime.Gameplay.Combat;
+using Nutmeg.Runtime.Gameplay.Money;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,8 +9,8 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 {
     public class Zombie : MonoBehaviour
     {
-        [SerializeField] private List<GameObject> skins = new List<GameObject>();
-
+        [SerializeField] private int killReward = 0;
+        [Space]
         [SerializeField] private float decayDelay = 5f;
         [SerializeField] private float decayDuration = 10f;
         [SerializeField] private float decayDisplacement = -1;
@@ -17,6 +18,9 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         private float decayStart;
         private float decayingOriginalY;
 
+        [Space]
+        [SerializeField] private List<GameObject> skins = new List<GameObject>();
+        
         private NavMeshAgent navMeshAgent;
         private Animator animator;
 
@@ -106,6 +110,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
         public void OnDeath()
         {
+            SetAnimationState("attack", false);
             SetAnimationState("walk", false);
             SetAnimationState("die");
 
@@ -118,7 +123,10 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             GetComponent<NavMeshAgent>().enabled = false;
 
             if (NetworkManager.Singleton.IsServer)
+            {
+                MoneyManager.Main.AddBalance(killReward);
                 Decay();
+            }
         }
     }
 }

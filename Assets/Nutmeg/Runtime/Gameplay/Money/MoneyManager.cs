@@ -1,6 +1,7 @@
 using IngameDebugConsole;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Nutmeg.Runtime.Gameplay.Money
 {
@@ -8,29 +9,46 @@ namespace Nutmeg.Runtime.Gameplay.Money
     {
         public static MoneyManager Main;
 
-        private int balance = 1000;
-    
+        [SerializeField] private int startBalance = 500;
+        private NetworkVariable<int> balance = new NetworkVariable<int>(0);
+        [SerializeField] private UnityEvent OnBalanceChange;
+
+
         private void Awake()
         {
             Main = this;
+
+            balance.OnValueChanged += OnBalanceChanged;
+            if (!IsClient || IsHost)
+                balance.Value = startBalance;
         }
 
         void Start()
         {
             DebugLogConsole.AddCommand<int>("Money.Set", "Set Money", SetBalanceConsole, "amount");
-            DebugLogConsole.AddCommand<int>("Money.Add", "Add Money", AddBalanceConsole, "amount");
-            DebugLogConsole.AddCommand<int>("Money.Subtract", "Subtract Money", SubtractBalanceConsole, "amount");
         }
 
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            balance.OnValueChanged -= OnBalanceChanged;
+        }
+
+
+        private void OnBalanceChanged(int previousValue, int newValue)
+        {
+            OnBalanceChange.Invoke();
+        }
 
         private bool EnsureServer()
         {
             if (IsServer || IsHost) return true;
-        
+
             Debug.LogError("illegal client side balance modification");
             return false;
         }
-    
+
         private void SetBalanceConsole(int amount)
         {
             SetBalanceConsoleServerRpc(amount);
@@ -41,28 +59,18 @@ namespace Nutmeg.Runtime.Gameplay.Money
         {
             SetBalance(amount);
         }
-    
-        private void AddBalanceConsole(int amount)
-        {
-            AddBalance(amount);
-        }
-
-        private void SubtractBalanceConsole(int amount)
-        {
-            SubtractBalance(amount);
-        }
 
 
-        public int Balance => balance;
+        public int Balance => balance.Value;
 
         private bool SetBalance(int amount)
         {
             if (amount < 0)
                 return false;
-        
-            balance = amount;
-            if (IsServer || IsHost)
-                UpdateClients();
+
+            balance.Value = amount;
+            //if (IsServer || IsHost)
+            //UpdateClients();
             return true;
         }
 
@@ -74,8 +82,8 @@ namespace Nutmeg.Runtime.Gameplay.Money
             if (amount < 0)
                 return false;
 
-            balance += amount;
-            UpdateClients();
+            balance.Value += amount;
+            //UpdateClients();
             return true;
         }
 
@@ -87,32 +95,32 @@ namespace Nutmeg.Runtime.Gameplay.Money
             if (amount < 0)
                 return false;
 
-            if (balance - amount < 0)
+            if (balance.Value - amount < 0)
                 return false;
 
-            balance -= amount;
-            UpdateClients();
+            balance.Value -= amount;
+            //UpdateClients();
             return true;
         }
 
         public bool CanAfford(int price)
         {
-            return balance - price >= 0;
+            return balance.Value - price >= 0;
         }
 
 
-        private void UpdateClients()
+        /*private void UpdateClients()
         {
             if (!EnsureServer())
                 return;
         
-            UpdateClientsClientRpc(balance);
+            UpdateClientsClientRpc(balance.Value);
         }
     
         [ClientRpc]
         private void UpdateClientsClientRpc(int newBalance)
         {
-            balance = newBalance;
-        }
+            balance.Value = newBalance;
+        }*/
     }
 }

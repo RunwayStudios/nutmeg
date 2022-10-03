@@ -1535,6 +1535,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9cb4816a7f9f4546856236cca6ca36a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  killReward: 3
+  decayDelay: 5
+  decayDuration: 10
+  decayDisplacement: -1
   skins:
   - {fileID: 1144795861201128400}
   - {fileID: 1144246163657971326}
@@ -1544,9 +1548,6 @@ MonoBehaviour:
   - {fileID: 1144284481727758232}
   - {fileID: 1144351501613103966}
   - {fileID: 1143968507234138292}
-  decayDelay: 5
-  decayDuration: 10
-  decayDisplacement: -1
 --- !u!195 &-6260215301360327920
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -199,8 +199,8 @@ namespace Nutmeg.Runtime.Gameplay.Base
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                GetComponent<NetworkObject>().Despawn();
-                DestroyImmediate(gameObject);
+                // GetComponent<NetworkObject>().Despawn();
+                // DestroyImmediate(gameObject);
                 LevelGenerator.Main.UpdateNavMesh();
             }
         }
