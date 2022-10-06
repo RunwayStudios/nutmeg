@@ -11,12 +11,11 @@ namespace Nutmeg.Runtime.Gameplay.Combat
         {
             this.entity = entity;
         }
-    
+
         public virtual void UpdateModule()
         {
-        
+            
         }
-
 
         protected CombatEntity Entity => entity;
     }

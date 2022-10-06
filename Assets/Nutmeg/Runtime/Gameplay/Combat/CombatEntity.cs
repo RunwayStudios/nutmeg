@@ -54,7 +54,8 @@ namespace Nutmeg.Runtime.Gameplay.Combat
             module = null;
             for (int i = 0; i < modules.Length; i++)
             {
-                if (modules[i].GetType() == type)
+                Type curType = modules[i].GetType();
+                if (curType == type || type.IsAssignableFrom(curType))
                 {
                     module = modules[i];
                     return true;

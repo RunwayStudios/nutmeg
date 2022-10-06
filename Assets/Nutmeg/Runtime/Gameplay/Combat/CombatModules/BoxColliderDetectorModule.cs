@@ -22,6 +22,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
                     continue;
 
                 target = entity;
+                mostRecentTarget = target;
                 return true;
             }
 

@@ -31,7 +31,10 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
             }
 
             if (found)
+            {
                 target = targets[closestIndex].Entity;
+                mostRecentTarget = target;
+            }
             
             return found;
         }

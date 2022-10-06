@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Nutmeg.Runtime.Gameplay.Combat;
+using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Gameplay.Money;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,17 +11,15 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
     public class Zombie : MonoBehaviour
     {
         [SerializeField] private int killReward = 0;
-        [Space]
-        [SerializeField] private float decayDelay = 5f;
+        [Space] [SerializeField] private float decayDelay = 5f;
         [SerializeField] private float decayDuration = 10f;
         [SerializeField] private float decayDisplacement = -1;
         private bool decaying;
         private float decayStart;
         private float decayingOriginalY;
 
-        [Space]
-        [SerializeField] private List<GameObject> skins = new List<GameObject>();
-        
+        [Space] [SerializeField] private List<GameObject> skins = new List<GameObject>();
+
         private NavMeshAgent navMeshAgent;
         private Animator animator;
 
@@ -70,8 +69,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
             if (Time.time > decayStart + decayDelay)
             {
-                transform.position = new Vector3(transform.position.x,
-                    transform.position.y + decayDisplacement * (Time.deltaTime / decayDuration), transform.position.z);
+                transform.position = new Vector3(transform.position.x, transform.position.y + decayDisplacement * (Time.deltaTime / decayDuration), transform.position.z);
             }
         }
 
@@ -98,6 +96,18 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         public void OnAttack()
         {
             SetAnimationState("attack");
+        }
+
+        public void RotateToTarget()
+        {
+            if (!GetComponent<CombatEntity>().TryGetModule(typeof(RadiusDetectorModule), out CombatModule module))
+                return;
+            
+            CombatEntity target = ((DetectorModule)module).MostRecentTarget;
+            if (!target) 
+                return;
+            
+            transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
         }
 
         public void OnStopAttacking()

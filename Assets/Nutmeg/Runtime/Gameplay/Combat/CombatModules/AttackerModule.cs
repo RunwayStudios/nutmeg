@@ -14,33 +14,35 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
 
         [Space] [Header("Events")]
         [SerializeField] private UnityEvent OnStartAttacking;
+        [SerializeField] private UnityEvent OnStartedAttacking;
         [SerializeField] private UnityEvent OnAttack;
-        [SerializeField] private UnityEvent OnStopAttacking;
+        [SerializeField] private UnityEvent OnStoppedAttacking;
 
 
         public override void UpdateModule()
         {
-            base.UpdateModule();
-
-            if (ShouldTryAttack())
+            if (!ShouldTryAttack()) return;
+            
+            if (detector.TryGetTarget(out CombatEntity target))
             {
-                if (detector.TryGetTarget(out CombatEntity target))
+                if (!attacking)
                 {
-                    if (!attacking)
-                    {
-                        attacking = true;
-                        OnStartAttacking.Invoke();
-                    }
-                    Attack(target);
-                    OnAttack.Invoke();
+                    OnStartAttacking.Invoke();
                 }
-                else
+                Attack(target);
+                if (!attacking)
                 {
-                    if (attacking)
-                    {
-                        attacking = false;
-                        OnStopAttacking.Invoke();
-                    }
+                    OnStartedAttacking.Invoke();
+                    attacking = true;
+                }
+                OnAttack.Invoke();
+            }
+            else
+            {
+                if (attacking)
+                {
+                    attacking = false;
+                    OnStoppedAttacking.Invoke();
                 }
             }
         }
