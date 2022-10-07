@@ -2,7 +2,9 @@
     "name": "Nutmeg.Runtime.UI",
     "rootNamespace": "",
     "references": [
-        "GUID:efd6245cf45cde342a5e5552a6fa85a0"
+        "GUID:efd6245cf45cde342a5e5552a6fa85a0",
+        "GUID:2330a1a6f349cbe45ad9d1799cc023f5",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
