@@ -14,7 +14,7 @@ namespace Nutmeg.Editor.UI
         private UIState uiState;
         private InputActions inputActions;
 
-        private bool[] actionMaps;
+        private bool[] actionMapsFoldouts;
 
         private void OnEnable()
         {
@@ -39,7 +39,7 @@ namespace Nutmeg.Editor.UI
                 activeInputActions.Add(iaIterator.Current.id);
             }
 
-            actionMaps = new bool[actionMapCount];
+            actionMapsFoldouts = new bool[actionMapCount];
             iaIterator.Dispose();
 
 
@@ -63,6 +63,7 @@ namespace Nutmeg.Editor.UI
         {
             IEnumerator<InputAction> iaIterator = inputActions.GetEnumerator();
             int actionMapIndex = -1;
+            int inputActionIndex = 0;
             Guid prevActionMap = Guid.Empty;
             while (iaIterator.MoveNext())
             {
@@ -71,83 +72,120 @@ namespace Nutmeg.Editor.UI
                     prevActionMap = iaIterator.Current.actionMap.id;
                     actionMapIndex++;
 
-                    Rect r = EditorGUILayout.BeginHorizontal("Button");
-                    actionMaps[actionMapIndex] = EditorGUILayout.Foldout(actionMaps[actionMapIndex], iaIterator.Current.actionMap.name);
-                    if (actionMaps[actionMapIndex])
+                    ToggleGroupState actionMapToggles = CheckAllActionMapToggles(inputActionIndex, iaIterator.Current.actionMap.id);
+                    bool toggleTo = false;
+                    bool curActionMapToggleDisplayValue = false;
+                    switch (actionMapToggles)
                     {
-                        Rect buttonRect = r;
-                        buttonRect.width /= 2;
-                        buttonRect.x += buttonRect.width / 2;
-                        if (GUI.Button(buttonRect, "toggle all"))
-                        {
-                            ToggleAll(actionMapIndex, iaIterator.Current.actionMap.id);
-                        }
+                        case ToggleGroupState.AllTrue:
+                            curActionMapToggleDisplayValue = true;
+                            break;
+                        case ToggleGroupState.AllFalse:
+                            toggleTo = true;
+                            break;
+                        case ToggleGroupState.Mixed:
+                            toggleTo = true;
+                            break;
                     }
+
+                    Rect r = EditorGUILayout.BeginHorizontal();
+                    
+                    actionMapsFoldouts[actionMapIndex] = EditorGUILayout.Foldout(actionMapsFoldouts[actionMapIndex], GUIContent.none);
+                    r.x += 5;
+                    
+                    EditorGUI.BeginChangeCheck();
+                    GUI.Toggle(r, curActionMapToggleDisplayValue, GUIContent.none);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        ToggleAll(inputActionIndex, iaIterator.Current.actionMap.id, toggleTo);
+                    }
+                    
+                    if (actionMapToggles == ToggleGroupState.Mixed)
+                    {
+                        r.y -= 1;
+                        GUIStyle guiStyle = new GUIStyle(GUI.skin.label)
+                        {
+                            // default 12
+                            fontSize = 20,
+                            fontStyle = FontStyle.Bold
+                        };
+                        GUI.Label(r, "-", guiStyle);
+                        r.y += 1;
+                    }
+                    r.x += 15;
+                    GUI.Label(r, iaIterator.Current.actionMap.name);
 
                     EditorGUILayout.EndHorizontal();
                 }
 
-                if (actionMaps[actionMapIndex])
+                if (actionMapsFoldouts[actionMapIndex])
                     uiState.inputs[iaIterator.Current.id] = EditorGUILayout.ToggleLeft(iaIterator.Current.name, uiState.inputs[iaIterator.Current.id]);
+
+                inputActionIndex++;
             }
 
             iaIterator.Dispose();
         }
 
 
-        private void ToggleAll(int startIndex, Guid id)
+        private enum ToggleGroupState
+        {
+            AllTrue,
+            AllFalse,
+            Mixed
+        }
+        
+        private ToggleGroupState CheckAllActionMapToggles(int startIndex, Guid actionMapID)
         {
             IEnumerator<InputAction> iaIterator = inputActions.GetEnumerator();
-            int actionMapIndex = -1;
+            int inputActionIndex = -1;
             bool first = false;
             while (iaIterator.MoveNext())
             {
-                actionMapIndex++;
-                if (actionMapIndex < startIndex)
+                inputActionIndex++;
+                if (inputActionIndex < startIndex)
                     continue;
 
-                if (actionMapIndex == startIndex)
+                if (inputActionIndex == startIndex)
                 {
-                    first = actionMaps[actionMapIndex];
+                    first = uiState.inputs[iaIterator.Current.id];
                     continue;
                 }
 
-                if (id != iaIterator.Current.actionMap.id)
+                if (actionMapID != iaIterator.Current.actionMap.id)
                 {
                     iaIterator.Dispose();
-                    ToggleAll(startIndex, id, !first);
-                    return;
+                    return first ? ToggleGroupState.AllTrue : ToggleGroupState.AllFalse;
                 }
 
-                if (first == actionMaps[actionMapIndex])
+                if (first == uiState.inputs[iaIterator.Current.id])
                     continue;
-                
+
                 iaIterator.Dispose();
-                ToggleAll(startIndex, id, false);
-                return;
+                return ToggleGroupState.Mixed;
             }
 
             iaIterator.Dispose();
-            ToggleAll(startIndex, id, !first);
+            return first ? ToggleGroupState.AllTrue : ToggleGroupState.AllFalse;
         }
-        
-        private void ToggleAll(int startIndex, Guid id,  bool value)
+
+        private void ToggleAll(int startIndex, Guid actionMapID, bool value)
         {
             IEnumerator<InputAction> iaIterator = inputActions.GetEnumerator();
-            int actionMapIndex = -1;
+            int inputActionIndex = -1;
             while (iaIterator.MoveNext())
             {
-                actionMapIndex++;
-                if (actionMapIndex < startIndex)
+                inputActionIndex++;
+                if (inputActionIndex < startIndex)
                     continue;
 
-                if (id != iaIterator.Current.actionMap.id)
+                if (actionMapID != iaIterator.Current.actionMap.id)
                 {
                     iaIterator.Dispose();
                     return;
                 }
 
-                actionMaps[actionMapIndex] = value;
+                uiState.inputs[iaIterator.Current.id] = value;
             }
 
             iaIterator.Dispose();
