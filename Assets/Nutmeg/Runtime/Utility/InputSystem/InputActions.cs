@@ -935,6 +935,15 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenBaseBuildingMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""e8afb648-1bb1-4903-a575-27a7674df59a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -968,6 +977,17 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""RotateCounterclockwise"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""66123edb-72ed-4a79-ac88-58e7b8439046"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenBaseBuildingMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1064,6 +1084,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_BaseBuilding_PlaceObject = m_BaseBuilding.FindAction("PlaceObject", throwIfNotFound: true);
         m_BaseBuilding_RotateClockwise = m_BaseBuilding.FindAction("RotateClockwise", throwIfNotFound: true);
         m_BaseBuilding_RotateCounterclockwise = m_BaseBuilding.FindAction("RotateCounterclockwise", throwIfNotFound: true);
+        m_BaseBuilding_OpenBaseBuildingMode = m_BaseBuilding.FindAction("OpenBaseBuildingMode", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1320,6 +1341,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_BaseBuilding_PlaceObject;
     private readonly InputAction m_BaseBuilding_RotateClockwise;
     private readonly InputAction m_BaseBuilding_RotateCounterclockwise;
+    private readonly InputAction m_BaseBuilding_OpenBaseBuildingMode;
     public struct BaseBuildingActions
     {
         private @InputActions m_Wrapper;
@@ -1327,6 +1349,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         public InputAction @PlaceObject => m_Wrapper.m_BaseBuilding_PlaceObject;
         public InputAction @RotateClockwise => m_Wrapper.m_BaseBuilding_RotateClockwise;
         public InputAction @RotateCounterclockwise => m_Wrapper.m_BaseBuilding_RotateCounterclockwise;
+        public InputAction @OpenBaseBuildingMode => m_Wrapper.m_BaseBuilding_OpenBaseBuildingMode;
         public InputActionMap Get() { return m_Wrapper.m_BaseBuilding; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1345,6 +1368,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @RotateCounterclockwise.started -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnRotateCounterclockwise;
                 @RotateCounterclockwise.performed -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnRotateCounterclockwise;
                 @RotateCounterclockwise.canceled -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnRotateCounterclockwise;
+                @OpenBaseBuildingMode.started -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnOpenBaseBuildingMode;
+                @OpenBaseBuildingMode.performed -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnOpenBaseBuildingMode;
+                @OpenBaseBuildingMode.canceled -= m_Wrapper.m_BaseBuildingActionsCallbackInterface.OnOpenBaseBuildingMode;
             }
             m_Wrapper.m_BaseBuildingActionsCallbackInterface = instance;
             if (instance != null)
@@ -1358,6 +1384,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @RotateCounterclockwise.started += instance.OnRotateCounterclockwise;
                 @RotateCounterclockwise.performed += instance.OnRotateCounterclockwise;
                 @RotateCounterclockwise.canceled += instance.OnRotateCounterclockwise;
+                @OpenBaseBuildingMode.started += instance.OnOpenBaseBuildingMode;
+                @OpenBaseBuildingMode.performed += instance.OnOpenBaseBuildingMode;
+                @OpenBaseBuildingMode.canceled += instance.OnOpenBaseBuildingMode;
             }
         }
     }
@@ -1436,5 +1465,6 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         void OnPlaceObject(InputAction.CallbackContext context);
         void OnRotateClockwise(InputAction.CallbackContext context);
         void OnRotateCounterclockwise(InputAction.CallbackContext context);
+        void OnOpenBaseBuildingMode(InputAction.CallbackContext context);
     }
 }

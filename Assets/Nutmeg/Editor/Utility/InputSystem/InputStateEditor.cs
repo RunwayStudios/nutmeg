@@ -20,6 +20,8 @@ namespace Nutmeg.Editor.Utility.InputSystem
         {
             inputState = (InputState)target;
             inputActions = InputManager.Input ?? new InputActions();
+            
+            // Debug.Log("OnEnable editor" + inputState.inputs.Count);
 
             IEnumerator<InputAction> iaIterator = inputActions.GetEnumerator();
             int actionMapCount = 0;
@@ -74,9 +76,18 @@ namespace Nutmeg.Editor.Utility.InputSystem
             for (int i = 0; i < iisToRemove.Count; i++)
                 inputState.inputIgnores.Remove(iisToRemove[i]);
         }
+        
+        public void OnDisable()
+        {
+            inputState.Deserialize();
+        }
+
+
 
         public override void OnInspectorGUI()
         {
+            // base.OnInspectorGUI();
+            
             IEnumerator<InputAction> iaIterator = inputActions.GetEnumerator();
             int actionMapIndex = -1;
             int inputActionIndex = 0;

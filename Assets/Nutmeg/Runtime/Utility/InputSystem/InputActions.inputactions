@@ -913,6 +913,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OpenBaseBuildingMode",
+                    "type": "Button",
+                    "id": "e8afb648-1bb1-4903-a575-27a7674df59a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -946,6 +955,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "RotateCounterclockwise",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "66123edb-72ed-4a79-ac88-58e7b8439046",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenBaseBuildingMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

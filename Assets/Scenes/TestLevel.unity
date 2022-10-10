@@ -11475,7 +11475,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1995653999}
   - component: {fileID: 1995654000}
-  - component: {fileID: 1995654001}
   - component: {fileID: 1995654002}
   m_Layer: 0
   m_Name: BaseManager
@@ -11511,6 +11510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c36d884d01c65e43a8e0204bc9c58d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseBuildingInput: {fileID: 11400000, guid: b4ff212182543444492fbe1c44b6155a, type: 2}
   baseFlatteningMap: {fileID: 2800000, guid: 699243633679d11479c69ba2415cd7be, type: 3}
   debugToPlace: 0
   baseY: 0
@@ -11521,19 +11521,6 @@ MonoBehaviour:
   validMaterialColor: {r: 0, g: 1, b: 0.07017541, a: 1}
   placeables:
   - {fileID: 1170082105736364, guid: 4b900d05903a60f44a0fde047647d1d0, type: 3}
---- !u!114 &1995654001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1995653998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2692b407756027643b850462244c09df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eventChannel: {fileID: 11400000, guid: d2f972b38501f3740842f1b702bdd2f6, type: 2}
 --- !u!114 &1995654002
 MonoBehaviour:
   m_ObjectHideFlags: 0

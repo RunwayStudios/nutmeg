@@ -16,6 +16,8 @@ namespace Nutmeg.Runtime.Gameplay.Base
 
         private InputActions input;
 
+        [SerializeField] private InputState baseBuildingInput;
+        
         [SerializeField] [Tooltip("")] private Texture2D baseFlatteningMap;
 
         [SerializeField] [Tooltip("")] private int debugToPlace;
@@ -57,7 +59,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
             input.BaseBuilding.RotateClockwise.canceled += StopRotatingPlaceableClockwise;
             input.BaseBuilding.RotateCounterclockwise.performed += StartRotatingPlaceableCounterclockwise;
             input.BaseBuilding.RotateCounterclockwise.canceled += StopRotatingPlaceableCounterclockwise;
-            input.Player.Tab.performed += SwapBuildingMode;
+            input.BaseBuilding.OpenBaseBuildingMode.performed += SwapBuildingMode;
         }
 
         public override void OnDestroy()
@@ -69,7 +71,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
             input.BaseBuilding.RotateClockwise.canceled -= StopRotatingPlaceableClockwise;
             input.BaseBuilding.RotateCounterclockwise.performed -= StartRotatingPlaceableCounterclockwise;
             input.BaseBuilding.RotateCounterclockwise.canceled -= StopRotatingPlaceableCounterclockwise;
-            input.Player.Tab.performed -= SwapBuildingMode;
+            input.BaseBuilding.OpenBaseBuildingMode.performed -= SwapBuildingMode;
         }
 
         // Update is called once per frame

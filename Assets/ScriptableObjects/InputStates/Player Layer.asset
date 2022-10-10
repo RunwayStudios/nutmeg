@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 053e65a8284baac46aafee1451a91191, type: 3}
-  m_Name: Test Input State
+  m_Name: Player Layer
   m_EditorClassIdentifier: 
   serializedGuids:
   - 03ac520e-bb5a-4287-acff-2e3318141d98
@@ -35,5 +35,5 @@ MonoBehaviour:
   - 50e79581-60ac-4cb0-8eb7-e7e00d739052
   - 0a545ac0-d7ba-433f-8658-e65a81a17afa
   - e8afb648-1bb1-4903-a575-27a7674df59a
-  serializedInputs: 01010101010101010000000000000000000001010101
-  serializedIgnores: 01010101010101010101010101010101010100000000
+  serializedInputs: 01010101010101010000000000000000000000000000
+  serializedIgnores: 00000000000000000101010101010101010101010101

@@ -8,22 +8,11 @@ namespace Nutmeg.Runtime.UI
 {
     public class UIManager : MonoBehaviour
     {
-        private InputActions input;
     
         // Start is called before the first frame update
         void Start()
         {
-            input = InputManager.Input;
-        
-            IEnumerator<InputAction> inputActions = input.GetEnumerator();
-
-            while (inputActions.MoveNext())
-            {
-                Debug.Log(inputActions.Current.id);
-                // inputActions.Current.Disable();
-            }
-        
-            inputActions.Dispose();
+            Debug.Log("stink");
         }
 
         // Update is called once per frame
