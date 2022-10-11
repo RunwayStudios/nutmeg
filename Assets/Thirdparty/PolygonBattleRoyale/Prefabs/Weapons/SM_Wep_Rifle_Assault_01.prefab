@@ -374,11 +374,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19400855fe9649c7985c2018f8476907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerNetworkObject: {fileID: 0}
   stats: {fileID: 11400000, guid: 93da250603cd2184ba196a571a9595c2, type: 2}
   hitComponent: {fileID: 0}
   ammunitionComponent: {fileID: 0}
-  bulletComponent: {fileID: 0}
+  poolComponent: {fileID: 0}
   originComponent: {fileID: 0}
+  damageOverrideComponent: {fileID: 0}
   preset: 2
 --- !u!114 &6567255325812252524
 MonoBehaviour:
@@ -432,7 +434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a235c269e746e199388ebb33c20238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 7655137983007208036, guid: bc80d15a7b9a94148b7db359d766bbb1, type: 3}
+  prefab: {fileID: 7655137983007208036, guid: bc80d15a7b9a94148b7db359d766bbb1, type: 3}
   maxPoolSize: 30
   defaultPoolSize: 10
 --- !u!1 &1764537760694094

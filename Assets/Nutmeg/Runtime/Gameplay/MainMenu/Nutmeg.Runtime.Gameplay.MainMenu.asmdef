@@ -1,8 +1,9 @@
 {
-    "name": "Nutmeg.Runtime.Gameplay.Items",
+    "name": "Nutmeg.Runtime.Gameplay.MainMenu",
     "rootNamespace": "",
     "references": [
-        "GUID:1491147abca9d7d4bb7105af628b223e"
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:c70df01c879e50f42abfbf212a933d0f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

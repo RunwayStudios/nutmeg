@@ -266,8 +266,8 @@ GameObject:
   - component: {fileID: 686260977}
   - component: {fileID: 686260976}
   - component: {fileID: 686260974}
-  - component: {fileID: 686260973}
-  - component: {fileID: 3234789594379172907}
+  - component: {fileID: -9030418030531511949}
+  - component: {fileID: -7924349720144604029}
   m_Layer: 0
   m_Name: SM_Wep_RPG_01
   m_TagString: Untagged
@@ -371,6 +371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19400855fe9649c7985c2018f8476907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerNetworkObject: {fileID: 0}
   stats: {fileID: 11400000, guid: f379e58380f7b4c48949be9b1961ed39, type: 2}
   hitComponent: {fileID: 0}
   ammunitionComponent: {fileID: 0}
@@ -418,7 +419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a235c269e746e199388ebb33c20238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  prefab: {fileID: 1634727942366104, guid: 109d2cf8b02cb1b498b03bb4b6ee117d, type: 3}
   maxPoolSize: 15
   defaultPoolSize: 10
 --- !u!114 &686260974
@@ -433,7 +434,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dcf2a4e806e4e44b3fb093c9715684f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &686260973
+--- !u!114 &-9030418030531511949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752514604370940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fbe8f8d143e43859b2f59de5eedfefa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 250
+  onImpact:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &-7924349720144604029
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -449,27 +466,6 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &3234789594379172907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1752514604370940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c500f3abd5084fdc920889a9796c29b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  modules: []
-  damageFallOff:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  minActivation: 0
-  maxActivation: 0
 --- !u!1 &1798121333268980
 GameObject:
   m_ObjectHideFlags: 0

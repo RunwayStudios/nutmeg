@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace Nutmeg.Runtime.Gameplay.Player
 {
-    public class CameraController : NetworkBehaviour
+    public class PlayerCameraController : NetworkBehaviour
     {
         [SerializeField] private float scrollSpeed;
         [SerializeField] private Vector3 dollyOffset;

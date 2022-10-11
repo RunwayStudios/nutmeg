@@ -1,5 +1,6 @@
 using System;
 using IngameDebugConsole;
+using Nutmeg.Runtime.Gameplay.Player;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace Nutmeg.Runtime.Core.Networking
 {
     public class NutmegNetworkManager : NetworkManager
     {
+        
         private void Start()
         {
             DebugLogConsole.AddCommand("Networking.StartHost", "Start as host", StartHost);

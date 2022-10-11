@@ -14,7 +14,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
 
             root.poolComponent.releaseAction = obj => obj.GetComponent<Weapon>().Use();
         }
-
+        
         public override bool Get(out object data)
         {
             data = default;

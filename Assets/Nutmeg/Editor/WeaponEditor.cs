@@ -34,7 +34,7 @@ public class WeaponEditor : Editor
             WeaponPreset.ExplosionObject,
             new[]
             {
-                typeof(WeaponExplosionComponent), typeof(WeaponOriginComponent)
+                typeof(WeaponExplosionComponent), typeof(WeaponOriginComponent),        
             }
         }
     };

@@ -10,16 +10,9 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
     {
         public Action<DamageableModule[]> onHit;
 
-        protected Vector3 Origin
-        {
-            get
-            {
-                root.originComponent.Get(out object t);
-                return ((Transform) t).position;
-            }
-        }
+        protected Vector3 Origin => root.originComponent.Get<Vector3>();
 
-        protected Vector3 TargetPosition
+        protected virtual Vector3 TargetPosition
         {
             get
             {

@@ -19,10 +19,10 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
         public override bool Get(out object data)
         {
             bool success = HitScan(out var r);
-            data =  new[] { r };
+            data = new[] {r};
             return success;
         }
-        
+
         protected virtual bool HitScan(out DamageableModule hit)
         {
             Debug.DrawRay(Origin, OffsetDirection * root.stats.range, Color.red,
@@ -52,6 +52,8 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
             root.poolComponent.Get(out var b);
             Projectile projectile = ((GameObject) b).GetComponent<Projectile>();
             projectile.Initialize(origin, target);
+
+            Debug.Log(root.playerNetworkObject.IsLocalPlayer);
 
             if (root.playerNetworkObject.IsLocalPlayer)
                 SpawnBulletServerRpc(origin, target);

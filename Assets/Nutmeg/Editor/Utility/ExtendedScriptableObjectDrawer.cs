@@ -119,7 +119,7 @@ public class ExtendedScriptableObjectDrawer : PropertyDrawer {
 			}
 		} else {
 			if(GUI.Button(buttonRect, "Create")) {
-				string selectedAssetPath = "Assets";
+				string selectedAssetPath = "Assets/ScriptableObjects";
 				if(property.serializedObject.targetObject is MonoBehaviour) {
 					MonoScript ms = MonoScript.FromMonoBehaviour((MonoBehaviour)property.serializedObject.targetObject);
 					selectedAssetPath = System.IO.Path.GetDirectoryName(AssetDatabase.GetAssetPath( ms ));

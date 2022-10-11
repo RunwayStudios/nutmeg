@@ -18,10 +18,8 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
 
         [HideInInspector] public WeaponPreset preset;
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
-            
             ammunitionComponent = TryGetComponent(typeof(WeaponAmmunitionComponent), out var wac)
                 ? (WeaponComponent) wac
                 : null;
@@ -41,10 +39,9 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
             UpdateFireRate();
         }
 
-        //TODO should be async because of delayed projectiles
         public override void Use()
         {
-            if (fireRateCooldown > 0f || ammunitionComponent == null || !ammunitionComponent.Get(out object _))
+            if (fireRateCooldown > 0f || ammunitionComponent != null && !ammunitionComponent.Get(out object _))
                 return;
 
             if (hitComponent.Get(out var dms))

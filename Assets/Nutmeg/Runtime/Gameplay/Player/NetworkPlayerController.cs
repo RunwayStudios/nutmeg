@@ -17,7 +17,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
         [SerializeField] private Item weapon;
 
         public static NetworkPlayerController Main { get; private set; }
-        
+
         private InputActions input;
         private Action perFrameActions;
 
@@ -26,14 +26,14 @@ namespace Nutmeg.Runtime.Gameplay.Player
         private Vector2 rawMoveVector;
 
         private bool movePlayer;
-        
+
         public bool IsMoving { get; private set; }
 
         private void Start()
         {
             if (!IsLocalPlayer) return;
             Main = this;
-            
+
             cc = GetComponent<CharacterController>();
 
             //TODO ???
@@ -103,9 +103,9 @@ namespace Nutmeg.Runtime.Gameplay.Player
         private void PrimaryAction()
         {
             //Use Item
+            weapon.playerNetworkObject = GetComponent<NetworkObject>();
+            weapon.Use();
 
-              weapon.Use();
-            
             if (IsLocalPlayer)
             {
                 //PrimaryActionServerRpc(NetworkManager.Singleton.LocalClientId);   
@@ -117,10 +117,10 @@ namespace Nutmeg.Runtime.Gameplay.Player
         {
             List<ulong> ids = NetworkManager.Singleton.ConnectedClientsIds.ToList();
             ids.Remove(id);
-            
+
             PrimaryActionClientRpc(new ClientRpcParams {Send = new ClientRpcSendParams {TargetClientIds = ids}});
-        } 
-        
+        }
+
         [ClientRpc]
         private void PrimaryActionClientRpc(ClientRpcParams param) => PrimaryAction();
     }

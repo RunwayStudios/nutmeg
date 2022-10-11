@@ -24,6 +24,8 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.Misc
                 return;
             transform.position = Vector3.Lerp(origin, target,
                 elapsedTime += Time.deltaTime / (Vector3.Distance(origin, target) / speed));
+            
+            transform.LookAt(target);
 
             if (transform.position == target)
                 ReleaseBullet();

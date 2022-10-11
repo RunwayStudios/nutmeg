@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using JetBrains.Annotations;
-using Nutmeg.Runtime.Gameplay.Player;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,10 +9,11 @@ namespace Nutmeg.Runtime.Gameplay.Items
     public abstract class Item : MonoBehaviour
     {
         public NetworkObject playerNetworkObject;
-        
-        protected virtual void Start()
+
+        private void Awake()
         {
-            playerNetworkObject = NetworkPlayerController.Main.GetComponent<NetworkObject>();
+            if(TryGetComponent(typeof(NetworkObject), out var n))
+                Destroy(n);
         }
 
         public abstract void Use();
