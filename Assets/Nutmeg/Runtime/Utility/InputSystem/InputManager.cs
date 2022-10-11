@@ -8,8 +8,9 @@ namespace Nutmeg.Runtime.Utility.InputSystem
     public class InputManager : MonoBehaviour
     {
         public static InputActions Input { get; private set; }
-        
-        
+        public static InputManager Main { get; private set; }
+
+
         [SerializeField] private InputEventChannel eventChannel;
 
         [SerializeField] private List<InputState> inputLayers;
@@ -18,6 +19,7 @@ namespace Nutmeg.Runtime.Utility.InputSystem
 
         private void OnEnable()
         {
+            Main = this;
             Input = new InputActions();
 
             SetBaseLayer(initialBaseLayer);
@@ -45,7 +47,7 @@ namespace Nutmeg.Runtime.Utility.InputSystem
                 inputLayers.Add(initialBaseLayer);
             else
                 inputLayers[0] = initialBaseLayer;
-            
+
             ApplyInputLayers();
         }
 
@@ -97,7 +99,12 @@ namespace Nutmeg.Runtime.Utility.InputSystem
 
         public void RemoveLayer(InputState target)
         {
-            inputLayers.Remove(target);
+            while (inputLayers.Contains(target))
+            {
+                inputLayers.Remove(target);
+            }
+
+            ApplyInputLayers();
         }
 
         private void ApplyInputLayers()
@@ -129,7 +136,7 @@ namespace Nutmeg.Runtime.Utility.InputSystem
                 // return after finding the last (only relevant) specification
                 return;
             }
-            
+
             // if no layer specifies a value, we default to disable
             inputAction.Disable();
         }

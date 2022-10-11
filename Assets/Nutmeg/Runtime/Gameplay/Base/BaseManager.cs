@@ -105,8 +105,9 @@ namespace Nutmeg.Runtime.Gameplay.Base
                 return;
 
             // todo hendl
-            input.Player.Primary.Disable();
-            input.BaseBuilding.Enable();
+            InputManager.Main.AddLayer(baseBuildingInput);
+            // input.Player.Primary.Disable();
+            // input.BaseBuilding.Enable();
 
             inBuildingMode = true;
         }
@@ -141,8 +142,9 @@ namespace Nutmeg.Runtime.Gameplay.Base
             if (placingObject)
                 CancelPlacingPlaceable();
 
-            input.Player.Primary.Enable();
-            input.BaseBuilding.Disable();
+            InputManager.Main.RemoveLayer(baseBuildingInput);
+            // input.Player.Primary.Enable();
+            // input.BaseBuilding.Disable();
 
             inBuildingMode = false;
         }
