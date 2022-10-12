@@ -796,6 +796,7 @@ GameObject:
   - component: {fileID: 1173289345764857417}
   - component: {fileID: -1108691985824748297}
   - component: {fileID: -4797206737992591843}
+  - component: {fileID: 1896998301169958182}
   m_Layer: 0
   m_Name: Zombie_Range_1
   m_TagString: Untagged
@@ -1005,6 +1006,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6945734945769535206}
+        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Zombies.Zombie, Nutmeg.Runtime.Gameplay.Zombies
+        m_MethodName: SpawnAttackEffect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnStoppedAttacking:
     m_PersistentCalls:
       m_Calls:
@@ -1077,6 +1090,19 @@ MonoBehaviour:
   ScaleThreshold: 0.01
   InLocalSpace: 0
   Interpolate: 1
+--- !u!114 &1896998301169958182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0d52c1c48db629478d7ca1eff1728ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 7655137983007208036, guid: 65b6afe601689a2459b9d4aa58250d0e, type: 3}
 --- !u!1 &1423411692011380
 GameObject:
   m_ObjectHideFlags: 0

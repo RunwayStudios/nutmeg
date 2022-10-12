@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using Nutmeg.Runtime.Utility.InputSystem;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Nutmeg.Runtime.UI
 {

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Nutmeg.Runtime.Gameplay.Combat;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Gameplay.Money;
+using Nutmeg.Runtime.Utility.Effects;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,7 +17,6 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         [SerializeField] private float decayDisplacement = -1;
         private bool decaying;
         private float decayStart;
-        private float decayingOriginalY;
 
         [Space] [SerializeField] private List<GameObject> skins = new List<GameObject>();
 
@@ -77,7 +77,6 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         {
             decaying = true;
             decayStart = Time.time;
-            decayingOriginalY = transform.position.y;
         }
 
         private void SetAnimationState(string parameter, bool value = true)
@@ -102,12 +101,27 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         {
             if (!GetComponent<CombatEntity>().TryGetModule(typeof(RadiusDetectorModule), out CombatModule module))
                 return;
-            
+
             CombatEntity target = ((DetectorModule)module).MostRecentTarget;
-            if (!target) 
+            if (!target)
                 return;
-            
+
             transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
+        }
+
+        public void SpawnAttackEffect()
+        {
+            if (!GetComponent<CombatEntity>().TryGetModule(typeof(RadiusDetectorModule), out CombatModule module))
+                return;
+
+            CombatEntity targetEntity = ((DetectorModule)module).MostRecentTarget;
+            if (!targetEntity)
+                return;
+
+            Vector3 target = transform.position;
+            target.y += 1.5f;
+            Vector3 origin = targetEntity.transform.position;
+            GetComponent<AttackEffectSpawner>().Spawn(target, origin);
         }
 
         public void OnStopAttacking()
