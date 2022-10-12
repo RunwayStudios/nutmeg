@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Utility.Effects.AttackEffects
@@ -21,12 +22,13 @@ namespace Nutmeg.Runtime.Utility.Effects.AttackEffects
         }
         
 
-        public override void Initialize(Vector3 origin, Vector3 target, AttackEffectSpawner spawner)
+        public override void Initialize(Vector3 origin, Vector3 target, Action<GameObject> FinishedAction)
         {
-            base.Initialize(origin, target, spawner);
+            transform.position = origin;
+            
+            base.Initialize(origin, target, FinishedAction);
             
             expectedLifeTime = Vector3.Distance(origin, target) / speed;
-            transform.position = origin;
             startTime = Time.time;
         }
     }

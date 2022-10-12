@@ -18,7 +18,8 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         private bool decaying;
         private float decayStart;
 
-        [Space] [SerializeField] private List<GameObject> skins = new List<GameObject>();
+        [Space] [SerializeField] public Transform bulletSource;
+        [SerializeField] private List<GameObject> skins = new List<GameObject>();
 
         private NavMeshAgent navMeshAgent;
         private Animator animator;
@@ -107,21 +108,6 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
                 return;
 
             transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
-        }
-
-        public void SpawnAttackEffect()
-        {
-            if (!GetComponent<CombatEntity>().TryGetModule(typeof(RadiusDetectorModule), out CombatModule module))
-                return;
-
-            CombatEntity targetEntity = ((DetectorModule)module).MostRecentTarget;
-            if (!targetEntity)
-                return;
-
-            Vector3 target = transform.position;
-            target.y += 1.5f;
-            Vector3 origin = targetEntity.transform.position;
-            GetComponent<AttackEffectSpawner>().Spawn(target, origin);
         }
 
         public void OnStopAttacking()

@@ -24,7 +24,7 @@ namespace Nutmeg.Runtime.Utility.Effects
         {
             GameObject go = GoPoolingManager.Main.Get(prefab);
             AttackEffect attackEffect = go.GetComponent<AttackEffect>();
-            attackEffect.Initialize(origin, target, this);
+            attackEffect.Initialize(origin, target, Finished);
         }
 
         public void Finished(GameObject go)

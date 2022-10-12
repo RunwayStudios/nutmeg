@@ -8,20 +8,20 @@ namespace Nutmeg.Runtime.Utility.Effects
         protected Vector3 origin;
         protected Vector3 target;
 
-        protected AttackEffectSpawner spawner;
+        protected Action<GameObject> FinishedAction;
 
 
         protected virtual void Finished()
         {
             gameObject.SetActive(false);
-            spawner.Finished(gameObject);
+            FinishedAction(gameObject);
         }
 
-        public virtual void Initialize(Vector3 origin, Vector3 target, AttackEffectSpawner spawner)
+        public virtual void Initialize(Vector3 origin, Vector3 target, Action<GameObject> FinishedAction)
         {
             this.origin = origin;
             this.target = target;
-            this.spawner = spawner;
+            this.FinishedAction = FinishedAction;
             gameObject.SetActive(true);
         }
     }
