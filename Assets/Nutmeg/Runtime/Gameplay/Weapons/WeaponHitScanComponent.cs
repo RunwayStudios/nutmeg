@@ -47,6 +47,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
             return false;
         }
 
+        //TODO use other pooling mehtode
         private void SpawnBullet(Vector3 origin, Vector3 target)
         {
             root.poolComponent.Get(out var b);

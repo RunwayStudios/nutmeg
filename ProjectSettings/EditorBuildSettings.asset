@@ -8,5 +8,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/dave.unity
     guid: e931de54a05d6d4499085d53c23b3093
+  - enabled: 1
+    path: Assets/Scenes/MainMenuTabs.unity
+    guid: 5a08226cadb81ee41ad10c47fdd82f82
+  - enabled: 1
+    path: Assets/Scenes/MainMenuEnvironment.unity
+    guid: 1d3790ffd16c0ba4dab4bfbf95d1098c
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 6031e013fc54ef2429f6f2dbc6bd5381, type: 2}

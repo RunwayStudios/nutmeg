@@ -8,6 +8,7 @@ namespace Nutmeg.Runtime.Core.Networking
 {
     public class NutmegNetworkManager : NetworkManager
     {
+        public int maxConnections;
         
         private void Start()
         {

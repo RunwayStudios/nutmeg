@@ -17,14 +17,20 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.Misc
         private Action<GameObject> releaseAction;
 
         public UnityEvent onImpact;
-        
+
+        private float distance;
+
+        private void Start()
+        {
+            distance = Vector3.Distance(origin, target);
+        }
+
         private void Update()
         {
-            if (locked)
-                return;
-            transform.position = Vector3.Lerp(origin, target,
-                elapsedTime += Time.deltaTime / (Vector3.Distance(origin, target) / speed));
-            
+            //if (locked)
+            //    return;
+            transform.position = Vector3.Lerp(origin, target, elapsedTime += Time.deltaTime / distance / speed);
+
             transform.LookAt(target);
 
             if (transform.position == target)
@@ -37,7 +43,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.Misc
         {
             onImpact?.Invoke();
             releaseAction.Invoke(gameObject);
-            
+
             locked = true;
             elapsedTime = 0f;
         }
