@@ -120,9 +120,9 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
         public void OnDeath()
         {
+            SetAnimationState("die");
             SetAnimationState("attack", false);
             SetAnimationState("walk", false);
-            SetAnimationState("die");
 
             Collider[] colliders = GetComponentsInChildren<Collider>();
             foreach (Collider c in colliders)
