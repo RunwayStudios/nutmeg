@@ -11565,7 +11565,7 @@ MonoBehaviour:
   noMoneyMaterialColor: {r: 1, g: 0.8920369, b: 0, a: 0}
   validMaterialColor: {r: 0, g: 1, b: 0.07017541, a: 1}
   placeables:
-  - {fileID: 1170082105736364, guid: 4b900d05903a60f44a0fde047647d1d0, type: 3}
+  - {fileID: 1170082105736364, guid: 2a51879f53cc10548be81571d3a99b1b, type: 3}
 --- !u!114 &1995654002
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,8 +8,8 @@ namespace Nutmeg.Runtime.Gameplay.Base.NPCBehaviours
     public class NpcSniperBehaviour : MonoBehaviour
     {
         [SerializeField] private GameObject placeable;
-
-        [SerializeField] private Transform AttackEffectOrigin;
+        [SerializeField] private Transform weapon;
+        [SerializeField] private Transform attackEffectOrigin;
         
         // Start is called before the first frame update
         void Start()
@@ -30,7 +30,9 @@ namespace Nutmeg.Runtime.Gameplay.Base.NPCBehaviours
             if (!target)
                 return;
 
-            transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
+            Vector3 targetPos = target.transform.position;
+            transform.LookAt(new Vector3(targetPos.x, transform.position.y, targetPos.z));
+            weapon.LookAt(targetPos);
         }
 
         public void SpawnAttackEffect()
@@ -42,7 +44,7 @@ namespace Nutmeg.Runtime.Gameplay.Base.NPCBehaviours
             if (!target)
                 return;
 
-            GetComponent<AttackEffectSpawner>().Spawn(AttackEffectOrigin.position, target.transform.position);
+            GetComponent<AttackEffectSpawner>().Spawn(attackEffectOrigin.position, target.transform.position);
         }
     }
 }

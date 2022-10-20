@@ -36,7 +36,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
             OnStartPlacing.Invoke();
 
 
-            prevMaterial = GetComponent<MeshRenderer>().material;
+            prevMaterial = GetComponentInChildren<MeshRenderer>().material;
 
             placingMaterial = BaseManager.Main.transparentDefaultMaterial;
             placingMaterial.mainTexture = prevMaterial.mainTexture;
