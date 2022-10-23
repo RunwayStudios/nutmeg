@@ -1,4 +1,5 @@
 using System;
+using Nutmeg.Runtime.Gameplay.PlayerCharacter;
 using Steamworks.Data;
 using UnityEngine;
 
@@ -7,22 +8,14 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.CharacterSelection
     public class MainMenuCharacterSelectionManager : MonoBehaviour
     {
         [SerializeField] private Transform spawnLocation;
-        [SerializeField] private PlayerCharacter.PlayerCharacter[] characters;
 
         public static Action<PlayerCharacter.PlayerCharacter> onPlayerCharacterSelected;
         public static Action<PlayerCharacter.PlayerCharacter> onNewPlayerCharacterShown;
         public static MainMenuCharacterSelectionManager Main { get; private set; }
 
-        private PlayerCharacter.PlayerCharacter currentPlayerCharacter;
         private GameObject currentPlayerCharacterGameObject;
 
-        public int characterIndex;
-
-        private int CharacterIndex
-        {
-            set => characterIndex = value > characters.Length - 1 ? 0 : value < 0 ? characters.Length - 1 : value;
-            get => characterIndex;
-        }
+        
 
         private void Start()
         {
@@ -39,30 +32,19 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.CharacterSelection
         private void OnMenuTabEnableStarted(MenuTabTag tag)
         {
             if (tag == MenuTabTag.CharacterSelection)
-                ShowPlayerCharacter(characters[CharacterIndex]);
+                ShowPlayerCharacter(PlayerCharacterManager.Main.GetPlayerCharacter(PlayerCharacterManager.Main.CharacterIndex));
         }
-        
+
         public PlayerCharacter.PlayerCharacter GetNextPlayerCharacter()
         {
-            CharacterIndex++;
-            return characters[CharacterIndex];
+            PlayerCharacterManager.Main.CharacterIndex++;
+            return PlayerCharacterManager.Main.GetPlayerCharacter(PlayerCharacterManager.Main.CharacterIndex);
         }
 
         public PlayerCharacter.PlayerCharacter GetPreviousPlayerCharacter()
         {
-            CharacterIndex--;
-            return characters[CharacterIndex];
-        }
-
-        public bool TryGetPlayerCharacter(int index, out PlayerCharacter.PlayerCharacter character)
-        {
-            character = characters[0];
-            
-            if(index < 0 || index > characters.Length - 1)
-                return false;
-
-            character = characters[index];
-            return true;
+            PlayerCharacterManager.Main.CharacterIndex--;
+            return PlayerCharacterManager.Main.GetPlayerCharacter(PlayerCharacterManager.Main.CharacterIndex);
         }
 
         public void ShowNextPlayerCharacter() => ShowPlayerCharacter(GetNextPlayerCharacter());
@@ -76,10 +58,10 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.CharacterSelection
 
             onNewPlayerCharacterShown?.Invoke(character);
             currentPlayerCharacterGameObject = Instantiate(character.prefab, spawnLocation);
-            currentPlayerCharacter = character;
+            PlayerCharacterManager.Main.SetCurrentPlayerCharacter(character);
         }
 
-        public void SelectCurrentPlayerCharacter() => SelectPlayerCharacter(currentPlayerCharacter);
+        public void SelectCurrentPlayerCharacter() => SelectPlayerCharacter(PlayerCharacterManager.Main.CurrentPlayerCharacter);
 
         public void SelectPlayerCharacter(PlayerCharacter.PlayerCharacter character)
         {

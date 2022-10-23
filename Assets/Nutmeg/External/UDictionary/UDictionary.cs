@@ -1,15 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+
+#if  UNITY_EDITOR
 using UnityEditor;
 using UnityEditorInternal;
-using UnityEngine;
+#endif
 
 namespace Nutmeg.External.UDictionary
 {
     [Serializable]
     public class UDictionary
     {
+#if UNITY_EDITOR
         public class SplitAttribute : PropertyAttribute
         {
             public float Key { get; }
@@ -22,7 +26,6 @@ namespace Nutmeg.External.UDictionary
             }
         }
 
-#if UNITY_EDITOR
         [CustomPropertyDrawer(typeof(SplitAttribute), true)]
         [CustomPropertyDrawer(typeof(UDictionary), true)]
         public class Drawer : PropertyDrawer

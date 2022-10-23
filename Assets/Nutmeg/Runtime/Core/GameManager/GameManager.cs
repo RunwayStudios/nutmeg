@@ -12,8 +12,6 @@ namespace Nutmeg.Runtime.Core.GameManager
 
         public static Action<GameState, GameState> onGameStateChange;
 
-        public static PlayerCharacter selectedCharacter; 
-        
         private void Start()
         {
             Main = this;

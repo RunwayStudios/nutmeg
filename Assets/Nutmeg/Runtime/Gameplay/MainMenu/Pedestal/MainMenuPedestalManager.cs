@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
-using Nutmeg.Runtime.Core.GameManager;
+using System.Linq;
 using Nutmeg.Runtime.Core.Networking.Steam;
 using Nutmeg.Runtime.Gameplay.MainMenu.CharacterSelection;
-using Steamworks;
+using Nutmeg.Runtime.Gameplay.PlayerCharacter;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -19,12 +18,35 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.Pedestal
 
         public static MainMenuPedestalManager Main { get; private set; }
 
-        private void Start()
+        private void Awake()
         {
             Main = this;
-            
+
             MainMenuCharacterSelectionManager.onPlayerCharacterSelected += OnPlayerCharacterSelected;
-            SteamManager.onSteamLobbyEntered += OnSteamLobbyEntered;
+            NetworkManager.OnClientConnectedCallback += NetworkManagerOnClientConnectedCallback;
+        }
+
+        private void NetworkManagerOnClientConnectedCallback(ulong id)
+        {
+            /*if (IsServer)
+            {
+                foreach (var VARIABLE in pedestals)
+                {
+                    Debug.Log(VARIABLE.Key + " " + VARIABLE.Value);
+                }
+                
+                /*RefreshClientClientRpc(
+                    pedestals.Keys.ToArray(),
+                    pedestals.Values
+                        .Select(p => PlayerCharacterManager.Main.GetPlayerCharacterIndex(p.character))
+                        .ToArray(),
+                    new ClientRpcParams {Send = new ClientRpcSendParams {TargetClientIds = new List<ulong> {id}}}
+                );
+                AddPedestalClientRpc(id);
+            }
+
+            if (NetworkManager.LocalClientId == id)
+                UpdatePedestalServerRpc(id, PlayerCharacterManager.Main.CharacterIndex);*/
         }
 
         public override void OnDestroy()
@@ -32,39 +54,55 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.Pedestal
             base.OnDestroy();
             MainMenuCharacterSelectionManager.onPlayerCharacterSelected -= OnPlayerCharacterSelected;
         }
-        
-        private void OnSteamLobbyEntered()
-        {
-        }
 
         private void OnPlayerCharacterSelected(PlayerCharacter.PlayerCharacter character)
         {
+            //Debug.Log(PlayerCharacterManager.Main.in);
             UpdatePedestal(SteamManager.Id, character);
         }
 
-        [ServerRpc]
-        private void AddPedestalServerRpc(ulong id, int characterIndex) => AddPedestalClientRpc(id, characterIndex);
+        [ClientRpc]
+        private void AddPedestalClientRpc(ulong id)
+        {
+            AddPedestal(id);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void UpdatePedestalServerRpc(ulong id, int characterIndex) =>
+            UpdatePedestalClientRpc(id, characterIndex);
 
         [ClientRpc]
-        private void AddPedestalClientRpc(ulong id, int characterIndex)
+        private void RefreshClientClientRpc(ulong[] ids, int[] characterIndexes, ClientRpcParams par)
         {
-            MainMenuCharacterSelectionManager.Main.TryGetPlayerCharacter(characterIndex, out var c);
-            AddPedestal(id, c);
         }
-        
+
+        [ClientRpc]
+        private void UpdatePedestalClientRpc(ulong id, int characterIndex)
+        {
+            if (!PlayerCharacterManager.Main.TryGetPlayerCharacter(characterIndex, out var c))
+                return;
+
+            UpdatePedestal(id, c);
+        }
+
         public void UpdatePedestal(ulong id, PlayerCharacter.PlayerCharacter character)
         {
             pedestals[id].UpdatePlayerCharacter(character);
+
+            if (IsClient)
+                UpdatePedestalClientRpc(id, PlayerCharacterManager.Main.GetPlayerCharacterIndex(character));
         }
 
-        public void AddPedestal(ulong id, PlayerCharacter.PlayerCharacter character)
+        public void AddPedestal(ulong id, PlayerCharacter.PlayerCharacter character = null)
         {
-            if(pedestals.ContainsKey(id))
+            if (pedestals.ContainsKey(id))
                 return;
-            
+
             MainMenuPedestal pedestal =
-                Instantiate(pedestalPrefab, pedestalPositions[pedestalPositionIndex++]).GetComponent<MainMenuPedestal>();
+                Instantiate(pedestalPrefab, pedestalPositions[pedestalPositionIndex++])
+                    .GetComponent<MainMenuPedestal>();
             pedestal.Initialize(character);
+            pedestal.gameObject.name = "Pedestal (" + id + ")";
             pedestals.Add(id, pedestal);
         }
 

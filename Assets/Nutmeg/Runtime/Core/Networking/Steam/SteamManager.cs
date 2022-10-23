@@ -46,8 +46,6 @@ namespace Nutmeg.Runtime.Core.Networking.Steam
             DebugLogConsole.AddCommand("Steam.CreateLobby", "Create a new steam lobby", CreateSteamLobby);
         }
 
-        
-
         private void OnDestroy()
         {
             SteamMatchmaking.OnLobbyCreated -= SteamMatchmakingOnLobbyCreated;
@@ -110,7 +108,11 @@ namespace Nutmeg.Runtime.Core.Networking.Steam
             onLobbyMemberDataChanged?.Invoke(friend);
         }
 
-        private void SteamMatchmakingOnLobbyMemberJoined(Lobby lobby, Friend friend) => onFriendJoinedSteamLobby?.Invoke(friend);
+        private void SteamMatchmakingOnLobbyMemberJoined(Lobby lobby, Friend friend)
+        {
+            Debug.Log("Friend joined lobby " + friend.Id);
+            onFriendJoinedSteamLobby?.Invoke(friend);
+        }
 
         private void SteamMatchmakingOnLobbyMemberLeave(Lobby lobby, Friend friend)
         {
@@ -143,13 +145,13 @@ namespace Nutmeg.Runtime.Core.Networking.Steam
             Debug.Log("Entered new Steam lobby " + lobby.Id);
             transport.targetSteamId = lobby.Owner.Id;
 
-            onSteamLobbyEntered?.Invoke();
             if (!NetworkManager.Singleton.IsHost)
             {
                 NetworkManager.Singleton.StartClient();
                 lobby.SetMemberData(SteamDataKeys.INTERNAL_NETWORK_ID,
                     NetworkManager.Singleton.LocalClientId.ToString());
             }
+            onSteamLobbyEntered?.Invoke();
         }
 
         private void SteamFriendsOnGameLobbyJoinRequested(Lobby lobby, SteamId steamId)
