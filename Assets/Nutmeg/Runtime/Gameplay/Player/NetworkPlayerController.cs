@@ -16,6 +16,8 @@ namespace Nutmeg.Runtime.Gameplay.Player
         [SerializeField] private Transform playerBody;
         [SerializeField] private Item weapon;
 
+        public static NetworkPlayerController Main { get; private set; }
+
         private InputActions input;
         private Action perFrameActions;
 
@@ -30,8 +32,11 @@ namespace Nutmeg.Runtime.Gameplay.Player
         private void Start()
         {
             if (!IsLocalPlayer) return;
+            Main = this;
+
             cc = GetComponent<CharacterController>();
 
+            //TODO ???
             Debug.developerConsoleVisible = true;
 
             perFrameActions += RotatePlayer;
@@ -83,7 +88,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
             //Destroy(gameObject);
 
-            cc.Move((Vector3.left * rawMoveVector.x + Vector3.back * rawMoveVector.y) * moveSpeed *
+            cc.Move((Vector3.left * rawMoveVector.x + Vector3.back * rawMoveVector.y + Vector3.down * .4f) * moveSpeed *
                     Time.deltaTime);
             //MovePlayerClientRpc((Vector3.left * rawMoveVector.x + Vector3.back * rawMoveVector.y) * moveSpeed *
             //      Time.deltaTime);
@@ -98,9 +103,9 @@ namespace Nutmeg.Runtime.Gameplay.Player
         private void PrimaryAction()
         {
             //Use Item
+            weapon.playerNetworkObject = GetComponent<NetworkObject>();
+            weapon.Use();
 
-              weapon.Use();
-            
             if (IsLocalPlayer)
             {
                 //PrimaryActionServerRpc(NetworkManager.Singleton.LocalClientId);   
@@ -112,10 +117,10 @@ namespace Nutmeg.Runtime.Gameplay.Player
         {
             List<ulong> ids = NetworkManager.Singleton.ConnectedClientsIds.ToList();
             ids.Remove(id);
-            
+
             PrimaryActionClientRpc(new ClientRpcParams {Send = new ClientRpcSendParams {TargetClientIds = ids}});
-        } 
-        
+        }
+
         [ClientRpc]
         private void PrimaryActionClientRpc(ClientRpcParams param) => PrimaryAction();
     }

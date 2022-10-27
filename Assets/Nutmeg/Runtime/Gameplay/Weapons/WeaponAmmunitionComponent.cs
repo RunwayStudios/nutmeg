@@ -27,7 +27,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
             if (currentAmmunition == 0)
                 StartCoroutine(Reload());
 
-            return currentAmmunition > 0;
+            return true;
         }
 
         private IEnumerator Reload()

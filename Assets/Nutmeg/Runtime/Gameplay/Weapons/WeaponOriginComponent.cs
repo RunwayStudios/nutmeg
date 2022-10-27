@@ -16,7 +16,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
         {
             data = originType switch
             {
-                OriginType.Single => singleOrigin,
+                OriginType.Single => singleOrigin.position,
                 OriginType.Multiple => GetNextOrigin(),
                 _ => transform.position
             };
@@ -26,7 +26,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
 
         public void ResetOriginIndex() => originIndex = 0;
  
-        private Transform GetNextOrigin()
+        private Vector3 GetNextOrigin()
         {
             var nextOrigin = multipleOriginsType switch
             {
@@ -36,12 +36,12 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
             return nextOrigin;
         }
 
-        private Transform GetNextLinearOrigin()
+        private Vector3 GetNextLinearOrigin()
         {
             if(originIndex++ >= multipleOrigins.Length)
                 ResetOriginIndex();
             
-            return multipleOrigins[originIndex];
+            return multipleOrigins[originIndex].position;
         }   
     }
     

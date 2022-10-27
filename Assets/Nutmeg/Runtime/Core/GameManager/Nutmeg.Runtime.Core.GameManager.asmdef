@@ -1,0 +1,16 @@
+{
+    "name": "Nutmeg.Runtime.Core.GameManager",
+    "rootNamespace": "",
+    "references": [
+        "GUID:64aba1ac6e7c5cf4a864c2db3cb50eba"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

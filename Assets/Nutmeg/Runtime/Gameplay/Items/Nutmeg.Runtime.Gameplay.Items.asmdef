@@ -2,7 +2,7 @@
     "name": "Nutmeg.Runtime.Gameplay.Items",
     "rootNamespace": "",
     "references": [
-        "GUID:30817c1a0e6d646d99c048fc403f5979"
+        "GUID:1491147abca9d7d4bb7105af628b223e"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

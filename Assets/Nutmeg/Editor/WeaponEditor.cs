@@ -19,10 +19,24 @@ public class WeaponEditor : Editor
             new[]
             {
                 typeof(WeaponHitScanComponent), typeof(WeaponAmmunitionComponent), typeof(WeaponOriginComponent),
-                typeof(WeaponBulletComponent)
+                typeof(WeaponPoolComponent)
             }
         },
-        {WeaponPreset.RocketLauncher, new[] {typeof(WeaponAmmunitionComponent)}}
+        {
+            WeaponPreset.RocketLauncher,
+            new[]
+            {
+                typeof(WeaponProjectileComponent), typeof(WeaponAmmunitionComponent), typeof(WeaponOriginComponent),
+                typeof(WeaponPoolComponent)
+            }
+        },
+        {
+            WeaponPreset.ExplosionObject,
+            new[]
+            {
+                typeof(WeaponExplosionComponent), typeof(WeaponOriginComponent),        
+            }
+        }
     };
 
     private void OnEnable()
