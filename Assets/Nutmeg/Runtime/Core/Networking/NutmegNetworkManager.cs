@@ -25,6 +25,45 @@ namespace Nutmeg.Runtime.Core.Networking
             DebugLogConsole.AddCommand("Networking.Disconnect", "Disconnect from the server",
                 () => DisconnectClient(LocalClientId));
             DebugLogConsole.AddCommand("Networking.Shutdown", "Shutdown Server", () => Shutdown());
+            
+            base.OnServerStarted += OnServerStarted;
+        }
+
+        private void OnServerStarted()
+        {
+            SceneManager.OnSceneEvent += SceneManagerOnSceneEvent;
+            SceneManager.OnSynchronize += SceneManagerOnSynchronize;
+        }
+
+        private void SceneManagerOnSynchronize(ulong clientid)
+        {
+        }
+
+        private void SceneManagerOnSceneEvent(SceneEvent sceneEvent)
+        {
+            switch (sceneEvent.SceneEventType)
+            {
+                case SceneEventType.Load:
+                    break;
+                case SceneEventType.Unload:
+                    break;
+                case SceneEventType.Synchronize:
+                    break;
+                case SceneEventType.ReSynchronize:
+                    break;
+                case SceneEventType.LoadEventCompleted:
+                    break;
+                case SceneEventType.UnloadEventCompleted:
+                    break;
+                case SceneEventType.LoadComplete:
+                    break;
+                case SceneEventType.UnloadComplete:
+                    break;
+                case SceneEventType.SynchronizeComplete:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

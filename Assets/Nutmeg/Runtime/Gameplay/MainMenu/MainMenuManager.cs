@@ -6,6 +6,7 @@ using Nutmeg.Runtime.Core.GameManager;
 using Nutmeg.Runtime.Core.Networking.Steam;
 using Nutmeg.Runtime.Gameplay.MainMenu.Pedestal;
 using Nutmeg.Runtime.Gameplay.PlayerCharacter;
+using Unity.Netcode;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -23,11 +24,13 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu
         public static MainMenuManager Main { get; private set; }
 
         private MenuTabTag currentMenuTabTag;
+
         private void Start()
         {
             Main = this;
 
-            MainMenuPedestalManager.Main.AddPedestal(SteamManager.Id, PlayerCharacterManager.Main.CurrentPlayerCharacter);
+            MainMenuPedestalManager.Main.AddPedestal(NetworkManager.Singleton.LocalClientId,
+                PlayerCharacterManager.Main.CurrentPlayerCharacter);
         }
 
         public void ChangeMenuTab(MenuTabTag tag)
@@ -44,23 +47,23 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu
         private IEnumerator EnableMenuTab(MenuTabTag tag)
         {
             MenuTab tab = menuTabs[tag];
-            
+
             tab.vCamera.enabled = true;
             if (tag != MenuTabTag.Default)
                 tab.GameObject.SetActive(true);
             yield return null;
-            
+
             onMenuTabEnableStarted?.Invoke(tag);
             while (mainCameraBrain.IsBlending)
                 yield return null;
-            
+
             onMenuTabEnableFinished?.Invoke(tag);
         }
 
         private IEnumerator DisableMenuTab(MenuTabTag tag)
         {
             onMenuTabDisableStarted?.Invoke(tag);
-            
+
             MenuTab tab = menuTabs[tag];
             tab.vCamera.enabled = false;
 
@@ -70,7 +73,7 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu
             yield return null;
             while (mainCameraBrain.IsBlending)
                 yield return null;
-            
+
             tab.GameObject.SetActive(false);
             onMenuTabDisableFinished?.Invoke(tag);
         }
@@ -104,7 +107,7 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu
         Settings,
         CharacterSelection
     }
-    
+
     public enum MenuTabDirection
     {
         Forward,

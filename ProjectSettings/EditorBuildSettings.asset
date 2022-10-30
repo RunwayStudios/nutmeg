@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Core.unity
     guid: 229ce6f0cfa022443874e20dd844f4ca
   - enabled: 1
+    path: Assets/Scenes/test.unity
+    guid: d0600b4e731f87248bc4a719c1c50dfc
+  - enabled: 1
     path: Assets/Scenes/dave.unity
     guid: e931de54a05d6d4499085d53c23b3093
   - enabled: 1

@@ -28,7 +28,7 @@ namespace Nutmeg.Runtime.Gameplay.PlayerCharacter
 
         private PlayerCharacter internalCurrentPlayerCharacter;
         
-        private void Start()
+        private void Awake()
         {
             Main = this;
         }
@@ -39,7 +39,7 @@ namespace Nutmeg.Runtime.Gameplay.PlayerCharacter
 
             if (index < 0 || index > characters.Length - 1)
                 return false;
-            characterIndex = index;
+            
             character = characters[index];
             return true;
         }

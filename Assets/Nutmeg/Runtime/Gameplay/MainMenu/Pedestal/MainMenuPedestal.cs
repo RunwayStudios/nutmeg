@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.MainMenu.Pedestal
@@ -17,7 +18,9 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.Pedestal
             if (character != null)
                SpawnPlayerCharacter(character);
         }
-        
+
+        public void Remove() => Destroy(gameObject);
+
         public void UpdatePlayerCharacter(PlayerCharacter.PlayerCharacter character)
         {
             if(characterGameObject != null)
