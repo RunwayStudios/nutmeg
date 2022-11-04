@@ -52,7 +52,15 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         {
             if (target.TryGetModule(typeof(DamageableModule), out CombatModule module))
             {
-                ((DamageableModule)module).Damage(attackDamage, DamageType.Default);
+                ((DamageableModule)module).Damage(attackDamage);
+            }
+        }
+        
+        protected virtual void Attack(CombatEntity target, Vector3 hitPos)
+        {
+            if (target.TryGetModule(typeof(DamageableModule), out CombatModule module))
+            {
+                ((DamageableModule)module).Damage(attackDamage, hitPos);
             }
         }
 

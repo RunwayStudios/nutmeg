@@ -7,44 +7,43 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
     public class DamageableModule : CombatModule
     {
         [SerializeField] private float health = 100f;
-        [SerializeField] private UnityEvent OnReceiveDamage;
+        [SerializeField] private UnityEvent<Vector3, DamageType> OnReceiveDamage;
         [SerializeField] private UnityEvent OnDeath;
         private bool dead = false;
 
 
-        public virtual void Damage(float value, DamageType type)
+        public virtual void Damage(float value, Vector3 hitPos, DamageType type = DamageType.Default)
         {
-                DamageServerRpc(value, type);
+            DamageServerRpc(value, hitPos, type);
+        }
+        
+        public virtual void Damage(float value, DamageType type = DamageType.Default)
+        {
+            DamageServerRpc(value, Entity.transform.position, type);
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void DamageServerRpc(float value, DamageType type)
+        private void DamageServerRpc(float value, Vector3 hitPos, DamageType type)
         {
             if (dead)
                 return;
 
             health -= value;
 
-            DamageClientRpc();
+            dead = health <= 0f;
+            DamageClientRpc(dead, hitPos, type);
+        }
 
-            if (health <= 0f)
+        [ClientRpc]
+        private void DamageClientRpc(bool death, Vector3 hitPos, DamageType type)
+        {
+            OnReceiveDamage.Invoke(hitPos, type);
+
+            if (death)
             {
-                dead = true;
-                DeathClientRpc();
+                Entity.OnDeath();
+                OnDeath.Invoke();
             }
-        }
-
-        [ClientRpc]
-        private void DamageClientRpc()
-        {
-            OnReceiveDamage.Invoke();
-        }
-
-        [ClientRpc]
-        private void DeathClientRpc()
-        {
-            Entity.OnDeath();
-            OnDeath.Invoke();
         }
     }
 

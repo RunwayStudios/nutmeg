@@ -27,7 +27,7 @@ namespace Nutmeg.Runtime.Utility.Effects
             attackEffect.Initialize(origin, target, Finished);
         }
 
-        public void Finished(GameObject go)
+        private void Finished(GameObject go)
         {
             GoPoolingManager.Main.Return(go, prefab);
         }

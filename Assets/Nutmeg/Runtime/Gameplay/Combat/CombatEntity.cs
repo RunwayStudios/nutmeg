@@ -10,7 +10,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat
         [SerializeField] private CombatModule[] modules;
 
 
-        // Start is called before the first frame update
+        
         void Start()
         {
             CombatEntityManager.Main.AddCombatEntity(this, group);
@@ -21,7 +21,6 @@ namespace Nutmeg.Runtime.Gameplay.Combat
             }
         }
 
-        // Update is called once per frame
         void Update()
         {
             for (int i = 0; i < modules.Length; i++)

@@ -42,7 +42,7 @@ namespace Nutmeg.Runtime.Gameplay.Weapons.Misc
         protected virtual void ReleaseBullet()
         {
             onImpact?.Invoke();
-            releaseAction.Invoke(gameObject);
+            // releaseAction.Invoke(gameObject);
 
             locked = true;
             elapsedTime = 0f;

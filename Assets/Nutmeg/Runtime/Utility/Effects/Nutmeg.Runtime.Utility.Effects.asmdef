@@ -2,7 +2,8 @@
     "name": "Nutmeg.Runtime.Utility.Effects",
     "rootNamespace": "",
     "references": [
-        "GUID:927848c27d7899d4380889079f1c1efe"
+        "GUID:927848c27d7899d4380889079f1c1efe",
+        "GUID:fda93277e0c25ef419be130d5cda021c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
