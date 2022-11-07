@@ -24,7 +24,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
             for (int j = 0; j < targetGroups.Length; j++)
             {
                 // only one prioritised group - if we're switching groups but already found a priority target we can skip the others
-                if (foundPrioritised)
+                if (foundPrioritised && setPriority)
                     continue;
 
                 if (!CombatEntityManager.Main.activeGroups.TryGetValue(targetGroups[j], out var targets))
@@ -36,7 +36,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
                         transform.position.z - targets[i].Transform.position.z).magnitude;
 
                     if (distance > fromRadius && distance < toRadius &&
-                        distance < lowestDistance || (targetGroups[j] == priorityTarget && !foundPrioritised))
+                        (distance < lowestDistance || (targetGroups[j] == priorityTarget && !foundPrioritised)))
                     {
                         lowestDistance = distance;
                         found = true;

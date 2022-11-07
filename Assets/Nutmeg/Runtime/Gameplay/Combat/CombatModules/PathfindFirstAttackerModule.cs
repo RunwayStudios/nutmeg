@@ -37,11 +37,8 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
                 else
                 {
                     if (agent.destination != target.transform.position)
-                    {
                         agent.SetDestination(target.transform.position);
-                        Debug.Log("set dest");
-                    }
-                    
+
                     if (attacking)
                     {
                         attacking = false;
