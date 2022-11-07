@@ -792,8 +792,8 @@ GameObject:
   - component: {fileID: -7093906615665926990}
   - component: {fileID: 8915665403689979125}
   - component: {fileID: -1906954859103034792}
-  - component: {fileID: -8811456984326720547}
   - component: {fileID: 1173289345764857417}
+  - component: {fileID: -7523771953284000605}
   - component: {fileID: 6198889913382425259}
   - component: {fileID: 4742128199620809915}
   - component: {fileID: -1108691985824748297}
@@ -914,8 +914,8 @@ MonoBehaviour:
   group: 0
   modules:
   - {fileID: -1906954859103034792}
-  - {fileID: -8811456984326720547}
   - {fileID: 1173289345764857417}
+  - {fileID: -7523771953284000605}
 --- !u!114 &-1906954859103034792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -960,7 +960,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &-8811456984326720547
+--- !u!114 &1173289345764857417
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -969,18 +969,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 1418193975600942}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25adc742abc296f4f92281fb4d20fff9, type: 3}
+  m_Script: {fileID: 11500000, guid: 6752db7822782a242aa5472d5163203b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetGroups: 0200000001000000
+  setPriority: 1
+  priorityTarget: 2
+  fromRadius: 0.5
+  toRadius: 20
+--- !u!114 &-7523771953284000605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dff7aa9ea23f464cb0584200bde6427, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   detector: {fileID: 1173289345764857417}
-  attackDamage: 10
-  attackInterval: 2
+  attackDamage: 5
+  attackInterval: 5
   OnStartAttacking:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6945734945769535206}
-        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Combat.Zombies.Zombie,
-          Nutmeg.Runtime.Gameplay.Zombies
+        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Zombies.Zombie, Nutmeg.Runtime.Gameplay.Zombies
         m_MethodName: OnStartAttacking
         m_Mode: 1
         m_Arguments:
@@ -1036,21 +1052,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1173289345764857417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1418193975600942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6752db7822782a242aa5472d5163203b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetGroup: 1
-  fromRadius: 0.5
-  toRadius: 10
+  attackDistance: 10
+  agent: {fileID: -7093906615665926990}
 --- !u!114 &6198889913382425259
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -72,6 +72,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat
     public enum CombatGroup
     {
         Zombie,
-        Building
+        Building,
+        Player
     }
 }

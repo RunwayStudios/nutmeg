@@ -5,48 +5,65 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
 {
     public class RadiusDetectorModule : DetectorModule
     {
-        [SerializeField] private CombatGroup targetGroup;
-        [SerializeField] private float fromRadius = 1f;
+        [SerializeField] private CombatGroup[] targetGroups;
+        [SerializeField] private bool setPriority = false;
+        [SerializeField] private CombatGroup priorityTarget;
+        [Space] [SerializeField] private float fromRadius = 1f;
         [SerializeField] private float toRadius = 5f;
+
+        private float lastFoundDistance;
 
 
         public override bool TryGetTarget(out CombatEntity target)
         {
             target = null;
-            if (!CombatEntityManager.Main.activeGroups.TryGetValue(targetGroup, out var targets))
-                return false;
-
-            float lowestDistance = float.MaxValue;
             bool found = false;
-            int closestIndex = 0;
-            for (int i = 0; i < targets.Count; i++)
+            bool foundPrioritised = !setPriority;
+            float lowestDistance = float.MaxValue;
+
+            for (int j = 0; j < targetGroups.Length; j++)
             {
-                float distance = new Vector2(transform.position.x - targets[i].Transform.position.x, transform.position.z - targets[i].Transform.position.z).magnitude;
-                if (distance > fromRadius && distance < toRadius && distance < lowestDistance)
+                // only one prioritised group - if we're switching groups but already found a priority target we can skip the others
+                if (foundPrioritised)
+                    continue;
+
+                if (!CombatEntityManager.Main.activeGroups.TryGetValue(targetGroups[j], out var targets))
+                    continue;
+
+                for (int i = 0; i < targets.Count; i++)
                 {
-                    lowestDistance = distance;
-                    closestIndex = i;
-                    found = true;
+                    float distance = new Vector2(transform.position.x - targets[i].Transform.position.x,
+                        transform.position.z - targets[i].Transform.position.z).magnitude;
+
+                    if (distance > fromRadius && distance < toRadius &&
+                        distance < lowestDistance || (targetGroups[j] == priorityTarget && !foundPrioritised))
+                    {
+                        lowestDistance = distance;
+                        found = true;
+                        foundPrioritised = !setPriority || targetGroups[j] == priorityTarget;
+                        target = targets[i].Entity;
+
+                        mostRecentTarget = target;
+                        lastFoundDistance = lowestDistance;
+                    }
                 }
             }
 
-            if (found)
-            {
-                target = targets[closestIndex].Entity;
-                mostRecentTarget = target;
-            }
-            
             return found;
         }
+        
+        public float LastFoundDistance => lastFoundDistance;
+        
+        
 
         private void OnDrawGizmosSelected()
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             Handles.color = new Color(0f, 0.5f, 0.5f);
             Handles.DrawWireDisc(transform.position, Vector3.up, fromRadius);
             Handles.color = Color.cyan;
             Handles.DrawWireDisc(transform.position, Vector3.up, toRadius);
-            #endif
+#endif
         }
     }
 }

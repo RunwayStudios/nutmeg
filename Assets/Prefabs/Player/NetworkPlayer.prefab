@@ -204,6 +204,8 @@ GameObject:
   - component: {fileID: 6661202302193707922}
   - component: {fileID: 6661202302193707919}
   - component: {fileID: 3075150635452975911}
+  - component: {fileID: 4699992570304229035}
+  - component: {fileID: -4107377884660372676}
   m_Layer: 0
   m_Name: NetworkPlayer
   m_TagString: Untagged
@@ -303,6 +305,40 @@ MonoBehaviour:
   ScaleThreshold: 0.01
   InLocalSpace: 0
   Interpolate: 1
+--- !u!114 &4699992570304229035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6661202302193707924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8397bfe99f16a0a4cb498d2275959ee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  group: 2
+  modules:
+  - {fileID: -4107377884660372676}
+--- !u!114 &-4107377884660372676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6661202302193707924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bba79797453b746b67814214d1408a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  OnReceiveDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7856746569038481011
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,6 +592,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 515621356183912111}
     m_Modifications:
+    - target: {fileID: -7924349720144604029, guid: 118c44d3f9a3bcf49a971bc47fc1a5e2, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
+      objectReference: {fileID: 0}
     - target: {fileID: 1752514604370940, guid: 118c44d3f9a3bcf49a971bc47fc1a5e2, type: 3}
       propertyPath: m_Name
       value: SM_Wep_RPG_01

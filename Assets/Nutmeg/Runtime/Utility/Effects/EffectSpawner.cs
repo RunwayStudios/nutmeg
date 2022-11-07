@@ -16,6 +16,7 @@ namespace Nutmeg.Runtime.Utility.Effects
             {
                 GameObject go = GoPoolingManager.Main.Get(effectPrefab);
                 go.transform.position = effectPosition.position;
+                go.transform.rotation = effectPosition.rotation;
                 go.transform.SetParent(effectParent);
                 go.GetComponent<ParticleEffect>().Initialize(Finished);
             }
@@ -23,6 +24,7 @@ namespace Nutmeg.Runtime.Utility.Effects
             {
                 GameObject go = GoPoolingManager.Main.Get(effectPrefab);
                 go.transform.position = effectPosition.position;
+                go.transform.rotation = effectPosition.rotation;
                 go.GetComponent<ParticleEffect>().Initialize(Finished);
             }
         }
@@ -31,6 +33,7 @@ namespace Nutmeg.Runtime.Utility.Effects
         {
             GameObject go = GoPoolingManager.Main.Get(effectPrefab);
             go.transform.position = pos;
+            go.transform.rotation = effectPosition.rotation;
             go.GetComponent<ParticleEffect>().Initialize(Finished);
         }
 
@@ -38,6 +41,7 @@ namespace Nutmeg.Runtime.Utility.Effects
         {
             GameObject go = GoPoolingManager.Main.Get(effectPrefab);
             go.transform.position = parent.position;
+            go.transform.rotation = effectPosition.rotation;
             go.transform.SetParent(parent);
             go.GetComponent<ParticleEffect>().Initialize(Finished);
         }
@@ -46,6 +50,7 @@ namespace Nutmeg.Runtime.Utility.Effects
         {
             GameObject go = GoPoolingManager.Main.Get(effectPrefab);
             go.transform.position = pos;
+            go.transform.rotation = effectPosition.rotation;
             go.transform.SetParent(parent);
             go.GetComponent<ParticleEffect>().Initialize(Finished);
         }
