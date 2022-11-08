@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   price: 100
+  displayName: Sniper
   boundsCenter: {fileID: 7315758353450531877}
   boundsHalfExtends: {x: 1.15, y: 2.54, z: 1.12}
   OnStartPlacing:

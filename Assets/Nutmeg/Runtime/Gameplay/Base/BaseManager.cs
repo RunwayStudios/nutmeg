@@ -2,22 +2,27 @@ using System.Collections.Generic;
 using System.Linq;
 using Nutmeg.Runtime.Gameplay.LevelTerrain;
 using Nutmeg.Runtime.Gameplay.Money;
+using Nutmeg.Runtime.UI;
 using Nutmeg.Runtime.Utility.InputSystem;
 using Nutmeg.Runtime.Utility.MouseController;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Nutmeg.Runtime.Gameplay.Base
 {
     public class BaseManager : NetworkBehaviour
     {
-        public static BaseManager Main;
+        public static BaseManager Main { private set; get; }
 
         private InputActions input;
 
         [SerializeField] private InputState baseBuildingInput;
-        
+
+        [SerializeField] private GameObject UIListGo;
+        [SerializeField] private ScrollableList UIList;
+
         [SerializeField] [Tooltip("")] private Texture2D baseFlatteningMap;
 
         [SerializeField] [Tooltip("")] private int debugToPlace;
@@ -45,12 +50,15 @@ namespace Nutmeg.Runtime.Gameplay.Base
         [SerializeField] private GameObject[] placeables;
 
 
+        [SerializeField] private UnityEvent OnEnterBuildingMode;
+        [SerializeField] private UnityEvent OnExitBuildingMode;
+
+
         private void Awake()
         {
             Main = this;
         }
 
-        // Start is called before the first frame update
         void Start()
         {
             input = InputManager.Input;
@@ -65,7 +73,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
         public override void OnDestroy()
         {
             base.OnDestroy();
-            
+
             input.BaseBuilding.PlaceObject.performed -= PlacePlaceable;
             input.BaseBuilding.RotateClockwise.performed -= StartRotatingPlaceableClockwise;
             input.BaseBuilding.RotateClockwise.canceled -= StopRotatingPlaceableClockwise;
@@ -91,7 +99,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
             if (!inBuildingMode)
             {
                 EnterBuildingMode();
-                StartPlacingObject(debugToPlace);
+                // StartPlacingObject(debugToPlace);
             }
             else
             {
@@ -104,15 +112,19 @@ namespace Nutmeg.Runtime.Gameplay.Base
             if (inBuildingMode)
                 return;
 
-            // todo hendl
+            OnEnterBuildingMode.Invoke();
             InputManager.Main.AddLayer(baseBuildingInput);
-            // input.Player.Primary.Disable();
-            // input.BaseBuilding.Enable();
 
+            for (int i = 0; i < placeables.Length; i++)
+            {
+                Placeable placeable = placeables[i].GetComponent<Placeable>();
+                UIList.AddElement().GetComponent<PlaceablesShopListItem>().Initialize(i, placeable.Price, placeable.DisplayName);
+            }
+            
             inBuildingMode = true;
         }
 
-        private void StartPlacingObject(int index)
+        public void StartPlacingObject(int index)
         {
             if (placingObject)
                 return;
@@ -142,9 +154,10 @@ namespace Nutmeg.Runtime.Gameplay.Base
             if (placingObject)
                 CancelPlacingPlaceable();
 
+            OnExitBuildingMode.Invoke();
             InputManager.Main.RemoveLayer(baseBuildingInput);
-            // input.Player.Primary.Enable();
-            // input.BaseBuilding.Disable();
+            
+            UIList.ClearList();
 
             inBuildingMode = false;
         }
@@ -175,7 +188,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
             placeable.CheckIntersecting();
             placeable.UpdatePurchasable();
 
-            if (!placeable.IsCurrentPositionValid() || !MoneyManager.Main.SubtractBalance(placeable.price))
+            if (!placeable.IsCurrentPositionValid() || !MoneyManager.Main.SubtractBalance(placeable.Price))
             {
                 DestroyImmediate(go);
                 Debug.Log("illegal placeable attempt");
@@ -187,7 +200,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
             placed.Add(placeable);
             LevelGenerator.Main.UpdateNavMesh();
 
-            PlacedPlaceableClientRpc(no.NetworkObjectId);
+            // PlacedPlaceableClientRpc(no.NetworkObjectId);
         }
 
         [ClientRpc]
@@ -195,7 +208,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
         {
             if (IsHost)
                 return;
-            
+
             // placed.Add(placeable);
 
             // todo only do if client side pathfinding

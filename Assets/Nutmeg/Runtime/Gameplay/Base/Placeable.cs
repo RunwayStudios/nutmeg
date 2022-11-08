@@ -1,3 +1,4 @@
+using System;
 using Nutmeg.Runtime.Gameplay.Combat;
 using Nutmeg.Runtime.Gameplay.LevelTerrain;
 using Nutmeg.Runtime.Gameplay.Money;
@@ -9,7 +10,8 @@ namespace Nutmeg.Runtime.Gameplay.Base
 {
     public class Placeable : MonoBehaviour
     {
-        [SerializeField] public int price = 0;
+        [SerializeField] private int price = 0;
+        [SerializeField] private String displayName;
         [Space] [SerializeField] private Transform boundsCenter;
         [SerializeField] private Vector3 boundsHalfExtends = Vector3.one;
 
@@ -25,7 +27,6 @@ namespace Nutmeg.Runtime.Gameplay.Base
 
         private bool intersectingOtherPlaceable = true;
         private bool baseBoundsValid = false;
-
 
         public void StartPlacing()
         {
@@ -199,8 +200,8 @@ namespace Nutmeg.Runtime.Gameplay.Base
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                // GetComponent<NetworkObject>().Despawn();
-                // DestroyImmediate(gameObject);
+                GetComponent<NetworkObject>().Despawn();
+                DestroyImmediate(gameObject);
                 LevelGenerator.Main.UpdateNavMesh();
             }
         }
@@ -212,5 +213,10 @@ namespace Nutmeg.Runtime.Gameplay.Base
             Gizmos.matrix = Matrix4x4.TRS(boundsCenter.position, boundsCenter.rotation, transform.lossyScale);
             Gizmos.DrawWireCube(Vector3.zero, boundsHalfExtends * 2);
         }
+
+
+        public int Price => price;
+
+        public string DisplayName => displayName;
     }
 }
