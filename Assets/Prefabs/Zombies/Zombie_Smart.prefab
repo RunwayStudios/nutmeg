@@ -967,7 +967,7 @@ Animator:
   m_GameObject: {fileID: 1418193975600942}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: b20a3c10714a6ac439af479e3273de65, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: be7076f942134dc4cbcfe3917811de2d, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -1003,10 +1003,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9cb4816a7f9f4546856236cca6ca36a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killReward: 0
+  killReward: 3
   decayDelay: 5
   decayDuration: 10
   decayDisplacement: -1
+  bulletSource: {fileID: 0}
   skins:
   - {fileID: 1177339439069308}
   - {fileID: 1748665293149880}
@@ -1021,8 +1022,8 @@ NavMeshAgent:
   m_GameObject: {fileID: 1418193975600942}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.25
-  m_Speed: 3.5
+  m_Radius: 0.35
+  m_Speed: 0.9
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -1094,7 +1095,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295363f08482cbe4dbcaf9eada779cf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetGroup: 1
+  targetGroups: 0100000002000000
   obstacleDetectorCenter: {fileID: 8410188297336685459}
   obstacleDetectorHalfExtends: {x: 0.19, y: 0.85, z: 0.3}
 --- !u!114 &3870538267931740748

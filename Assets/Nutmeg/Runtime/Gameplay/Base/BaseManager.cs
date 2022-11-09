@@ -135,6 +135,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
             if (!inBuildingMode)
                 EnterBuildingMode();
 
+            curPlacingIndex = index;
             curPlacingOriginalGo = placeables[index];
             curPlacingGo = Instantiate(curPlacingOriginalGo, placeablePos, Quaternion.Euler(Vector3.zero));
 

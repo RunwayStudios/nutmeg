@@ -869,7 +869,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9cb4816a7f9f4546856236cca6ca36a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killReward: 0
+  killReward: 5
   decayDelay: 5
   decayDuration: 10
   decayDisplacement: -1

@@ -48,6 +48,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
             }
             else if (attacking)
             {
+                agent.SetDestination(Vector3.zero);
                 attacking = false;
                 OnStoppedAttacking.Invoke();
             }

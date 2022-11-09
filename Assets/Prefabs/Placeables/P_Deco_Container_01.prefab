@@ -403,6 +403,7 @@ GameObject:
   - component: {fileID: 4632806612510722392}
   - component: {fileID: 943144260333843872}
   - component: {fileID: 8979372205958362204}
+  - component: {fileID: 1300265406904516554}
   m_Layer: 0
   m_Name: P_Deco_Container_01
   m_TagString: Placeable
@@ -505,6 +506,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b279687199ee54baee7255b4b0131b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  price: 50
+  displayName: Container
   boundsCenter: {fileID: 5537490422358728526}
   boundsHalfExtends: {x: 1.23, y: 1.33, z: 1.53}
   OnStartPlacing:
@@ -556,7 +559,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 888044353502096120}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8397bfe99f16a0a4cb498d2275959ee0, type: 3}
   m_Name: 
@@ -582,7 +585,35 @@ MonoBehaviour:
       m_Calls: []
   OnDeath:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4632806612510722392}
+        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Base.Placeable, Nutmeg.Runtime.Gameplay.Base
+        m_MethodName: OnDeath
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1300265406904516554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888044353502096120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1001 &5104827284919236150
 PrefabInstance:
   m_ObjectHideFlags: 0

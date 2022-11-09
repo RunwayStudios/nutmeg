@@ -42,8 +42,8 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
             {
                 navMeshAgent = GetComponent<NavMeshAgent>();
-                // todo set base center/hut?
-                navMeshAgent.SetDestination(new Vector3(0, 0, 0));
+                // todo set base center/hut? also in PathfindFirstAttackerModule
+                navMeshAgent.SetDestination(Vector3.zero);
             }
 
             SetAnimationState("walk");

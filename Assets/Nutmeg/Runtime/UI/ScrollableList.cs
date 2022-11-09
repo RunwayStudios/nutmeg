@@ -35,7 +35,7 @@ namespace Nutmeg.Runtime.UI
 
         public void ClearList()
         {
-            for (int i = 0; i < items.Count; i++)
+            for (int i = items.Count - 1; i >= 0; i--)
             {
                 RemoveElement(items[i]);
             }
