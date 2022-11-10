@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -51,7 +52,63 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
 
             return found;
         }
-        
+
+        public override List<CombatEntity> GetTargets()
+        {
+            List<CombatEntity> targetsOut = new List<CombatEntity>();
+
+            for (int j = 0; j < targetGroups.Length; j++)
+            {
+                if (!CombatEntityManager.Main.activeGroups.TryGetValue(targetGroups[j], out var targets))
+                    continue;
+
+                for (int i = 0; i < targets.Count; i++)
+                {
+                    float distance = new Vector2(transform.position.x - targets[i].Transform.position.x,
+                        transform.position.z - targets[i].Transform.position.z).magnitude;
+
+                    if (distance > fromRadius && distance < toRadius)
+                    {
+                        targetsOut.Add(targets[i].Entity);
+
+                        mostRecentTarget = targets[i].Entity;
+                        lastFoundDistance = distance;
+                    }
+                }
+            }
+
+            return targetsOut;
+        }
+
+        public override int GetTargetsNonAlloc(CombatEntity[] targetBuffer)
+        {
+            int targetBufferSize = targetBuffer.Length;
+            int targetBufferIndex = 0;
+
+            for (int j = 0; j < targetGroups.Length; j++)
+            {
+                if (!CombatEntityManager.Main.activeGroups.TryGetValue(targetGroups[j], out var targets))
+                    continue;
+
+                for (int i = 0; i < targets.Count && targetBufferIndex < targetBufferSize; i++)
+                {
+                    float distance = new Vector2(transform.position.x - targets[i].Transform.position.x,
+                        transform.position.z - targets[i].Transform.position.z).magnitude;
+
+                    if (distance > fromRadius && distance < toRadius)
+                    {
+                        targetBuffer[targetBufferIndex] = targets[i].Entity;
+                        targetBufferIndex++;
+                        
+                        mostRecentTarget = targets[i].Entity;
+                        lastFoundDistance = distance;
+                    }
+                }
+            }
+
+            return targetBufferIndex;
+        }
+
         public float LastFoundDistance => lastFoundDistance;
         
         

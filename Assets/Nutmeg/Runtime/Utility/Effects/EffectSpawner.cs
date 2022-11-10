@@ -1,3 +1,4 @@
+using System;
 using Nutmeg.Runtime.Utility.GameObjectPooling;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ namespace Nutmeg.Runtime.Utility.Effects
         [SerializeField] private Transform effectPosition;
         [SerializeField] private Transform effectParent;
         [SerializeField] private bool stickToParent;
+
+        [Space] [SerializeField] private bool testEffect;
 
         public void SpawnEffect()
         {
@@ -45,7 +48,7 @@ namespace Nutmeg.Runtime.Utility.Effects
             go.transform.SetParent(parent);
             go.GetComponent<ParticleEffect>().Initialize(Finished);
         }
-        
+
         public void SpawnEffect(Vector3 pos, Transform parent)
         {
             GameObject go = GoPoolingManager.Main.Get(effectPrefab);
@@ -54,10 +57,20 @@ namespace Nutmeg.Runtime.Utility.Effects
             go.transform.SetParent(parent);
             go.GetComponent<ParticleEffect>().Initialize(Finished);
         }
-        
+
         private void Finished(GameObject go)
         {
             GoPoolingManager.Main.Return(go, effectPrefab);
+        }
+
+        
+        private void OnValidate()
+        {
+            if (testEffect)
+            {
+                testEffect = false;
+                SpawnEffect();
+            }
         }
     }
 }

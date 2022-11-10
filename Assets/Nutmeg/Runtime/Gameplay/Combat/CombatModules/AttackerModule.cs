@@ -8,6 +8,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         [SerializeField] protected DetectorModule detector;
 
         [Space] [SerializeField] protected float attackDamage = 5f;
+        [SerializeField] protected bool autoAttack = true;
         [SerializeField] private float attackInterval = 5f;
         private float lastAttackTry;
         protected bool attacking = false;
@@ -22,8 +23,21 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
 
         public override void UpdateModule()
         {
-            if (!ShouldTryAttack()) return;
+            if (ShouldTryAttack()) 
+                TryAttack();
+        }
 
+
+        protected virtual void Attack(CombatEntity target)
+        {
+            if (target.TryGetModule(typeof(DamageableModule), out CombatModule module))
+            {
+                ((DamageableModule)module).Damage(attackDamage);
+            }
+        }
+        
+        public virtual void TryAttack()
+        {
             if (detector.TryGetTarget(out CombatEntity target))
             {
                 if (!attacking)
@@ -47,18 +61,9 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
             }
         }
 
-
-        protected virtual void Attack(CombatEntity target)
-        {
-            if (target.TryGetModule(typeof(DamageableModule), out CombatModule module))
-            {
-                ((DamageableModule)module).Damage(attackDamage);
-            }
-        }
-
         protected virtual bool ShouldTryAttack()
         {
-            if (lastAttackTry + attackInterval > Time.time)
+            if (!autoAttack || lastAttackTry + attackInterval > Time.time)
                 return false;
 
             lastAttackTry = Time.time;

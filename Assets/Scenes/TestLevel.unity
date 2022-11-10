@@ -12465,6 +12465,8 @@ MonoBehaviour:
   placeables:
   - {fileID: 1170082105736364, guid: 2a51879f53cc10548be81571d3a99b1b, type: 3}
   - {fileID: 888044353502096120, guid: 67b0a4dcb88939740b684397b7d18c9f, type: 3}
+  - {fileID: 1590421105922564580, guid: 87f01b5d1f6cfde42910bd64a89d945a, type: 3}
+  - {fileID: 1590421105922564580, guid: 93de7ccfd6b04d74eb426dc0af97c4b9, type: 3}
   OnEnterBuildingMode:
     m_PersistentCalls:
       m_Calls:
@@ -13377,6 +13379,10 @@ PrefabInstance:
     - target: {fileID: 1592732725527944586, guid: 87f01b5d1f6cfde42910bd64a89d945a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6066501439675381896, guid: 87f01b5d1f6cfde42910bd64a89d945a, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 725025413
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87f01b5d1f6cfde42910bd64a89d945a, type: 3}
