@@ -1,6 +1,7 @@
 using System;
 using Nutmeg.Runtime.Utility.GameObjectPooling;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Nutmeg.Runtime.Utility.Effects
 {
@@ -12,6 +13,8 @@ namespace Nutmeg.Runtime.Utility.Effects
         [SerializeField] private bool stickToParent;
 
         [Space] [SerializeField] private bool testEffect;
+
+        [SerializeField] private UnityEvent OnFinished;
 
         public void SpawnEffect()
         {
@@ -61,6 +64,7 @@ namespace Nutmeg.Runtime.Utility.Effects
         private void Finished(GameObject go)
         {
             GoPoolingManager.Main.Return(go, effectPrefab);
+            OnFinished.Invoke();
         }
 
         

@@ -13,10 +13,12 @@ GameObject:
   - component: {fileID: 5183320507588447962}
   - component: {fileID: 3610494563262878894}
   - component: {fileID: 1411777543870730708}
-  - component: {fileID: 8184816431287099574}
   - component: {fileID: 5209376145183861999}
-  - component: {fileID: 6066501439675381896}
+  - component: {fileID: 4024789310630656546}
+  - component: {fileID: 8674726616931331878}
+  - component: {fileID: 8184816431287099574}
   - component: {fileID: 5018478695772871626}
+  - component: {fileID: 6066501439675381896}
   m_Layer: 0
   m_Name: P_Attack_Explosive_Barrel 1
   m_TagString: Untagged
@@ -38,7 +40,6 @@ Transform:
   m_Children:
   - {fileID: 290334822782073351}
   - {fileID: 1749787281055808225}
-  - {fileID: 6540018396914785683}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -67,8 +68,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b279687199ee54baee7255b4b0131b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  price: 25
-  displayName: Explosive Barrel
+  price: 50
+  displayName: Proximity Explosive Barrel
   boundsCenter: {fileID: 2522488364332519739}
   boundsHalfExtends: {x: 0.39, y: 0.46, z: 0.39}
   OnStartPlacing:
@@ -128,8 +129,10 @@ MonoBehaviour:
   group: 1
   modules:
   - {fileID: 1411777543870730708}
-  - {fileID: 8184816431287099574}
   - {fileID: 5209376145183861999}
+  - {fileID: 4024789310630656546}
+  - {fileID: 8674726616931331878}
+  - {fileID: 8184816431287099574}
 --- !u!114 &1411777543870730708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,48 +188,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
---- !u!114 &8184816431287099574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1590421105922564580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbb2f89c74c4d064fb9f018d8488d8b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detector: {fileID: 5209376145183861999}
-  attackDamage: 110
-  autoAttack: 1
-  attackInterval: 5
-  OnStartAttacking:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStartedAttacking:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1411777543870730708}
-        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Combat.CombatModules.DamageableModule,
-          Nutmeg.Runtime.Gameplay.Combat
-        m_MethodName: Damage
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 100
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnAttack:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStoppedAttacking:
-    m_PersistentCalls:
-      m_Calls: []
-  targetsBufferSize: 20
 --- !u!114 &5209376145183861999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,8 +204,8 @@ MonoBehaviour:
   setPriority: 0
   priorityTarget: 0
   fromRadius: 0
-  toRadius: 5
---- !u!114 &6066501439675381896
+  toRadius: 3
+--- !u!114 &4024789310630656546
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -253,13 +214,97 @@ MonoBehaviour:
   m_GameObject: {fileID: 1590421105922564580}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Script: {fileID: 11500000, guid: 25adc742abc296f4f92281fb4d20fff9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
+  detector: {fileID: 5209376145183861999}
+  attackDamage: 0
+  autoAttack: 1
+  attackInterval: 1
+  OnStartAttacking:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStartedAttacking:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8184816431287099574}
+        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Combat.CombatModules.AreaAttackerModule,
+          Nutmeg.Runtime.Gameplay.Combat
+        m_MethodName: TryAttack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1411777543870730708}
+        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Combat.CombatModules.DamageableModule,
+          Nutmeg.Runtime.Gameplay.Combat
+        m_MethodName: Damage
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 110
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStoppedAttacking:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &8674726616931331878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590421105922564580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6752db7822782a242aa5472d5163203b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetGroups: 00000000
+  setPriority: 0
+  priorityTarget: 0
+  fromRadius: 0
+  toRadius: 5
+--- !u!114 &8184816431287099574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590421105922564580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb2f89c74c4d064fb9f018d8488d8b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detector: {fileID: 8674726616931331878}
+  attackDamage: 110
+  autoAttack: 0
+  attackInterval: 1
+  OnStartAttacking:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStartedAttacking:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStoppedAttacking:
+    m_PersistentCalls:
+      m_Calls: []
+  targetsBufferSize: 20
 --- !u!114 &5018478695772871626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,6 +322,37 @@ MonoBehaviour:
   effectParent: {fileID: 0}
   stickToParent: 0
   testEffect: 0
+  OnFinished:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5183320507588447962}
+        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Base.Placeable, Nutmeg.Runtime.Gameplay.Base
+        m_MethodName: OnDeath
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6066501439675381896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590421105922564580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &2873912803465017080
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,7 +382,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6540018396914785683}
+  - {fileID: 8863409374124826560}
   m_Father: {fileID: 1592732725527944586}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -351,6 +429,89 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6168398873734602502
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8863409374124826560}
+  - component: {fileID: 754470466843685442}
+  - component: {fileID: 1977167542598823446}
+  m_Layer: 0
+  m_Name: Blinking light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8863409374124826560
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6168398873734602502}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.393, z: -0.043}
+  m_LocalScale: {x: 0.18, y: 0.18, z: 0.18}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1749787281055808225}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &754470466843685442
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6168398873734602502}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1977167542598823446
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6168398873734602502}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 2dea25b9cf332e24681a3a7767ef9eb4, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -484,7 +645,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1592732725527944586}
+    m_TransformParent: {fileID: 1749787281055808225}
     m_Modifications:
     - target: {fileID: 1231430948143974, guid: e2810a4d021d63241a8ef1b151a7bb0c, type: 3}
       propertyPath: m_Name
@@ -492,7 +653,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4558706997440960, guid: e2810a4d021d63241a8ef1b151a7bb0c, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4558706997440960, guid: e2810a4d021d63241a8ef1b151a7bb0c, type: 3}
       propertyPath: m_LocalScale.x
@@ -524,15 +685,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4558706997440960, guid: e2810a4d021d63241a8ef1b151a7bb0c, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4558706997440960, guid: e2810a4d021d63241a8ef1b151a7bb0c, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4558706997440960, guid: e2810a4d021d63241a8ef1b151a7bb0c, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4558706997440960, guid: e2810a4d021d63241a8ef1b151a7bb0c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -550,7 +711,8 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 64397048526993332, guid: e2810a4d021d63241a8ef1b151a7bb0c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e2810a4d021d63241a8ef1b151a7bb0c, type: 3}
 --- !u!4 &6540018396914785683 stripped
 Transform:

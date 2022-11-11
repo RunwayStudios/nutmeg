@@ -12459,9 +12459,9 @@ MonoBehaviour:
   baseY: 0
   rotateSpeed: 90
   transparentDefaultMaterial: {fileID: 2100000, guid: a9cf5b4513c97d2418ec5700b2b5eb86, type: 2}
-  invalidMaterialColor: {r: 1, g: 0, b: 0, a: 1}
-  noMoneyMaterialColor: {r: 1, g: 0.8920369, b: 0, a: 0}
-  validMaterialColor: {r: 0, g: 1, b: 0.07017541, a: 1}
+  invalidMaterialColor: {r: 1, g: 0.27735847, b: 0.27735847, a: 1}
+  noMoneyMaterialColor: {r: 1, g: 0.8058814, b: 0.2584905, a: 1}
+  validMaterialColor: {r: 0.3150943, g: 1, b: 0.3659995, a: 1}
   placeables:
   - {fileID: 1170082105736364, guid: 2a51879f53cc10548be81571d3a99b1b, type: 3}
   - {fileID: 888044353502096120, guid: 67b0a4dcb88939740b684397b7d18c9f, type: 3}

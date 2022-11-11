@@ -27,6 +27,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
 
         private bool intersectingOtherPlaceable = true;
         private bool baseBoundsValid = false;
+        private static readonly int emissiveColor = Shader.PropertyToID("_EmissionColor");
 
         public void StartPlacing()
         {
@@ -83,7 +84,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
         private void SetMaterialColor(Color color)
         {
             if (beingPlaced)
-                placingMaterial.color = color;
+                placingMaterial.SetColor(emissiveColor, color);
         }
 
         public bool IsCurrentPositionValid()
