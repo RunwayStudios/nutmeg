@@ -24,7 +24,7 @@ namespace Nutmeg.Runtime.Core.Networking
             DebugLogConsole.AddCommand("Networking.HostServer", "Start as server", StartServer);
             DebugLogConsole.AddCommand("Networking.Disconnect", "Disconnect from the server",
                 () => DisconnectClient(LocalClientId));
-            DebugLogConsole.AddCommand("Networking.Shutdown", "Shutdown Server", () => Shutdown());
+            DebugLogConsole.AddCommand("Networking.Shutdown", "Shutdown Server / Client", () => Shutdown());
             
             base.OnServerStarted += OnServerStarted;
         }

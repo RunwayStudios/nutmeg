@@ -29,6 +29,8 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.Pedestal
             SpawnPlayerCharacter(character);
         }
 
+        public void UpdatePedestalPosition(Vector3 position) => transform.position = position;
+
         private void SpawnPlayerCharacter(PlayerCharacter.PlayerCharacter character)
         {
             this.character = character;

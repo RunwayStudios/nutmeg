@@ -28,9 +28,8 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu
         private void Start()
         {
             Main = this;
-
-            MainMenuPedestalManager.Main.AddPedestal(NetworkManager.Singleton.LocalClientId,
-                PlayerCharacterManager.Main.CurrentPlayerCharacter);
+            
+            MainMenuPedestalManager.Main.InitializeLocalPedestal();
         }
 
         public void ChangeMenuTab(MenuTabTag tag)

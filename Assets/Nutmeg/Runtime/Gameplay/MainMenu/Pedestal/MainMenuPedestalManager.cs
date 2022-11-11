@@ -29,8 +29,6 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.Pedestal
             NetworkManager.OnClientDisconnectCallback += NetworkManagerOnClientDisconnectCallback;
         }
 
-        
-
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
@@ -42,15 +40,15 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.Pedestal
             }
         }
 
+        public void InitializeLocalPedestal()
+        {
+            AddPedestal(NetworkManager.Singleton.LocalClientId, PlayerCharacterManager.Main.CurrentPlayerCharacter);
+        }
+
         private void NetworkManagerOnClientConnectedCallback(ulong id)
         {
             if (IsServer)
             {
-                foreach (var VARIABLE in pedestals)
-                {
-                    Debug.Log(VARIABLE.Key + " " + VARIABLE.Value);
-                }
-
                 RefreshClientClientRpc(
                     pedestals.Keys.ToArray(),
                     pedestals.Values
@@ -65,15 +63,26 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.Pedestal
             if (NetworkManager.LocalClientId == id)
                 UpdatePedestal(id, PlayerCharacterManager.Main.CurrentPlayerCharacter, true);
         }
-        
+
         private void NetworkManagerOnClientDisconnectCallback(ulong id)
         {
             if (IsServer)
             {
-                RemovePedestalClientRpc(id, new ClientRpcParams {Send = new ClientRpcSendParams()});
+                RemovePedestalClientRpc(id, new ClientRpcParams
+                {
+                    Send = new ClientRpcSendParams
+                    {
+                        TargetClientIds = NetworkManager.ConnectedClientsIds
+                            .Where(i => i != id).ToList()
+                    }
+                });
+                
+                RefreshPedestalPositionsClientRpc();
             }
-            
-            RemovePedestal(id);
+            else
+            {
+                ResetPedestals();
+            }
         }
 
         public override void OnDestroy()
@@ -93,8 +102,6 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.Pedestal
         {
             for (int i = 0; i < ids.Length; i++)
                 AddPedestal(ids[i], PlayerCharacterManager.Main.GetPlayerCharacter(characterIndexes[i]));
-
-            Debug.Log(pedestals.Count);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -122,8 +129,6 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.Pedestal
 
         public void UpdatePedestal(ulong id, PlayerCharacter.PlayerCharacter character, bool sync)
         {
-            Debug.Log($"update pedestal {id}");
-
             pedestals[id].UpdatePlayerCharacter(character);
 
             if (IsClient && sync)
@@ -138,8 +143,6 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.Pedestal
 
         public void AddPedestal(ulong id, PlayerCharacter.PlayerCharacter character = null)
         {
-            Debug.Log($"add pedestal {id}");
-
             if (pedestals.ContainsKey(id))
                 return;
 
@@ -157,11 +160,40 @@ namespace Nutmeg.Runtime.Gameplay.MainMenu.Pedestal
             RemovePedestal(id);
         }
 
-        public void RemovePedestal(ulong id)
+        private void RemovePedestal(ulong id)
         {
-            pedestalPositionIndex--;
             pedestals[id].Remove();
             pedestals.Remove(id);
+        }
+
+        private void ResetPedestals()
+        {
+            Debug.Log(pedestals.Count);
+            
+            foreach (KeyValuePair<ulong, MainMenuPedestal> p in pedestals) 
+                p.Value.Remove();
+            
+            pedestals = new Dictionary<ulong, MainMenuPedestal>();
+            Debug.Log(pedestals.Count);
+            InitializeLocalPedestal();
+        }
+
+        [ClientRpc]
+        private void RefreshPedestalPositionsClientRpc()
+        {
+            RefreshPedestalPositions();
+        }
+        
+        private void RefreshPedestalPositions()
+        {
+            pedestalPositionIndex = 1;
+            foreach (KeyValuePair<ulong,MainMenuPedestal> p in pedestals)
+            {
+                if (p.Key == NetworkManager.LocalClientId)
+                    continue;
+                
+                p.Value.UpdatePedestalPosition(pedestalPositions[pedestalPositionIndex++].position);
+            }
         }
     }
 }
