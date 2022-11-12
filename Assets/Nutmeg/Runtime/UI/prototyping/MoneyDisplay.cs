@@ -16,7 +16,7 @@ namespace Nutmeg.Runtime.UI
 
         public void UpdateBalance()
         {
-            text.text = MoneyManager.Main.Balance.ToString();
+            text.text = MoneyManager.Main.Balance.ToString() + "$";
         }
     }
 }

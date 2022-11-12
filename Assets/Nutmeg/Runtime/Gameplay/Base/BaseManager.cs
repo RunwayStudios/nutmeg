@@ -20,7 +20,6 @@ namespace Nutmeg.Runtime.Gameplay.Base
 
         [SerializeField] private InputState baseBuildingInput;
 
-        [SerializeField] private GameObject UIListGo;
         [SerializeField] private ScrollableList UIList;
 
         [SerializeField] [Tooltip("")] private Texture2D baseFlatteningMap;

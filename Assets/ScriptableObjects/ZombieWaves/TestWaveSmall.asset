@@ -29,7 +29,8 @@ MonoBehaviour:
         parts:
         - rid: 5
         - rid: 6
-        - rid: 8815408836156588032
+        - rid: 7133067671979687938
+        - rid: 7133067671979687936
     - rid: 5
       type: {class: WaitWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
       data:
@@ -37,15 +38,24 @@ MonoBehaviour:
     - rid: 6
       type: {class: MultiplyWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
       data:
-        numMultiplications: 5
+        numMultiplications: 3
         wavePart:
           rid: 7
     - rid: 7
       type: {class: SpawnSingleWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
       data:
-        zombiePrefab: {fileID: 1418193975600942, guid: 9bb81d7d461ad9242877886abaee53bb, type: 3}
-    - rid: 8815408836156588032
-      type: {class: SpawnGroupWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
-      data:
         zombiePrefab: {fileID: 1144529266033343354, guid: e6c37a22b3513bc4792c09756ed3de11, type: 3}
-        groupSize: 3
+    - rid: 7133067671979687936
+      type: {class: MultiplyWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
+      data:
+        numMultiplications: 1
+        wavePart:
+          rid: 7133067671979687937
+    - rid: 7133067671979687937
+      type: {class: SpawnSingleWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
+      data:
+        zombiePrefab: {fileID: 1418193975600942, guid: 9bb81d7d461ad9242877886abaee53bb, type: 3}
+    - rid: 7133067671979687938
+      type: {class: WaitWavePart, ns: , asm: Nutmeg.Runtime.Gameplay.Zombies}
+      data:
+        seconds: 2
