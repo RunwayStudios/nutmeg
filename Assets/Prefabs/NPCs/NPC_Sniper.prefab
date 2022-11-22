@@ -1009,7 +1009,7 @@ GameObject:
   - component: {fileID: 4843553746213050}
   - component: {fileID: 95831563611282832}
   - component: {fileID: 8485913592809868127}
-  - component: {fileID: 5596921678239873289}
+  - component: {fileID: 7572041115421488498}
   m_Layer: 0
   m_Name: NPC_Sniper
   m_TagString: Untagged
@@ -1068,7 +1068,8 @@ MonoBehaviour:
   placeable: {fileID: 0}
   weapon: {fileID: 4565309006794720327}
   attackEffectOrigin: {fileID: 8058177893355001430}
---- !u!114 &5596921678239873289
+  effectSpawner: {fileID: 7572041115421488498}
+--- !u!114 &7572041115421488498
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1077,10 +1078,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1436433808520516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0d52c1c48db629478d7ca1eff1728ad, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e2cc25b8641dc449917da22a81d9c0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 7655137983007208036, guid: 65b6afe601689a2459b9d4aa58250d0e, type: 3}
+  effectPrefab: {fileID: 7655137983007208036, guid: 65b6afe601689a2459b9d4aa58250d0e, type: 3}
+  effectPosition: {fileID: 0}
+  effectParent: {fileID: 0}
+  stickToParent: 0
+  validTypes: 
+  damageCap: 0
+  OnFinished:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1465425946053198
 GameObject:
   m_ObjectHideFlags: 0

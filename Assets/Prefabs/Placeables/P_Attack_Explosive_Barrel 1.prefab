@@ -219,6 +219,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detector: {fileID: 5209376145183861999}
   attackDamage: 0
+  attackDamageType: 2
+  attackSource: {fileID: 0}
   autoAttack: 1
   attackInterval: 1
   OnStartAttacking:
@@ -290,6 +292,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detector: {fileID: 8674726616931331878}
   attackDamage: 110
+  attackDamageType: 2
+  attackSource: {fileID: 0}
   autoAttack: 0
   attackInterval: 1
   OnStartAttacking:
@@ -304,7 +308,7 @@ MonoBehaviour:
   OnStoppedAttacking:
     m_PersistentCalls:
       m_Calls: []
-  targetsBufferSize: 20
+  targetsBufferSize: 50
 --- !u!114 &5018478695772871626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,7 +325,8 @@ MonoBehaviour:
   effectPosition: {fileID: 1592732725527944586}
   effectParent: {fileID: 0}
   stickToParent: 0
-  testEffect: 0
+  validTypes: 
+  damageCap: 0
   OnFinished:
     m_PersistentCalls:
       m_Calls:

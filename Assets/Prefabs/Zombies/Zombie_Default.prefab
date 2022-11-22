@@ -1455,6 +1455,8 @@ GameObject:
   - component: {fileID: 6066062097090351641}
   - component: {fileID: 4853782146285696133}
   - component: {fileID: 2559359259358476368}
+  - component: {fileID: -3086467689708996136}
+  - component: {fileID: 1917256347667031979}
   - component: {fileID: -7333130699766255940}
   - component: {fileID: 2222171531711261991}
   m_Layer: 0
@@ -1540,6 +1542,11 @@ MonoBehaviour:
   decayDuration: 10
   decayDisplacement: -1
   bulletSource: {fileID: 0}
+  damageEffects:
+  - {fileID: -3086467689708996136}
+  deathEffects:
+  - {fileID: 1917256347667031979}
+  - {fileID: -3086467689708996136}
   skins:
   - {fileID: 1144795861201128400}
   - {fileID: 1144246163657971326}
@@ -1603,14 +1610,26 @@ MonoBehaviour:
   health: 100
   OnReceiveDamage:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 884813880285531491}
+        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Zombies.Zombie, Nutmeg.Runtime.Gameplay.Zombies
+        m_MethodName: OnDamage
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnDeath:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 884813880285531491}
         m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Zombies.Zombie, Nutmeg.Runtime.Gameplay.Zombies
         m_MethodName: OnDeath
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1633,6 +1652,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detector: {fileID: 2559359259358476368}
   attackDamage: 5
+  attackDamageType: 0
+  attackSource: {fileID: 0}
+  autoAttack: 1
   attackInterval: 1
   OnStartAttacking:
     m_PersistentCalls:
@@ -1697,6 +1719,43 @@ MonoBehaviour:
   targetGroups: 0100000002000000
   obstacleDetectorCenter: {fileID: 8848264433010967649}
   obstacleDetectorHalfExtends: {x: 0.19, y: 0.85, z: 0.3}
+  colliderBufferSize: 3
+--- !u!114 &-3086467689708996136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144529266033343354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e2cc25b8641dc449917da22a81d9c0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 166404, guid: eb2176348228cb44fa2f4188132f20d0, type: 3}
+  effectPosition: {fileID: 1150545013027560072}
+  effectParent: {fileID: 0}
+  stickToParent: 0
+  validTypes: 00000000
+  damageCap: 0
+--- !u!114 &1917256347667031979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144529266033343354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a9e1d11dfabf974e9515d352e7e6461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 7824871191172182806, guid: 5f6edff1320c57a43b34c88aa4945059, type: 3}
+  effectPosition: {fileID: 0}
+  effectParent: {fileID: 0}
+  stickToParent: 0
+  validTypes: 0000000002000000
+  damageCap: 100
 --- !u!114 &-7333130699766255940
 MonoBehaviour:
   m_ObjectHideFlags: 0

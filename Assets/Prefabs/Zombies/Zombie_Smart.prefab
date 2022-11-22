@@ -928,6 +928,8 @@ GameObject:
   - component: {fileID: 6491913076638152761}
   - component: {fileID: 6909698799584520908}
   - component: {fileID: 3870538267931740748}
+  - component: {fileID: 2349471182265988013}
+  - component: {fileID: 5296444166371575410}
   - component: {fileID: 4727008092449864835}
   m_Layer: 0
   m_Name: Zombie_Smart
@@ -1098,6 +1100,7 @@ MonoBehaviour:
   targetGroups: 0100000002000000
   obstacleDetectorCenter: {fileID: 8410188297336685459}
   obstacleDetectorHalfExtends: {x: 0.19, y: 0.85, z: 0.3}
+  colliderBufferSize: 3
 --- !u!114 &3870538267931740748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1112,6 +1115,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detector: {fileID: 6909698799584520908}
   attackDamage: 5
+  attackDamageType: 0
+  autoAttack: 1
   attackInterval: 1
   OnStartAttacking:
     m_PersistentCalls:
@@ -1161,6 +1166,42 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2349471182265988013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2c282efa9f6ea04da4f40e5ef835aa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultEffectSpawner: {fileID: 5296444166371575410}
+  fireEffectSpawner: {fileID: 0}
+  explosionEffectSpawner: {fileID: 0}
+  waterEffectSpawner: {fileID: 0}
+--- !u!114 &5296444166371575410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e2cc25b8641dc449917da22a81d9c0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 166404, guid: eb2176348228cb44fa2f4188132f20d0, type: 3}
+  effectPosition: {fileID: 4688374947186396, guid: 9bb81d7d461ad9242877886abaee53bb, type: 3}
+  effectParent: {fileID: 0}
+  stickToParent: 0
+  testEffect: 0
+  OnFinished:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4727008092449864835
 MonoBehaviour:
   m_ObjectHideFlags: 0

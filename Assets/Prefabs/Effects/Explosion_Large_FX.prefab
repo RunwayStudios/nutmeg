@@ -4731,6 +4731,7 @@ GameObject:
   - component: {fileID: 992715077511814335}
   - component: {fileID: 1083130648176827875}
   - component: {fileID: 1084620574948554443}
+  - component: {fileID: -3170093272371132496}
   m_Layer: 0
   m_Name: Explosion_Large_FX
   m_TagString: Untagged
@@ -9370,6 +9371,19 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-3170093272371132496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994650181770718507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1c564573f777c244a4a3f05c57b0458, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particles: {fileID: 1083130648176827875}
 --- !u!1 &994700938162192623
 GameObject:
   m_ObjectHideFlags: 0

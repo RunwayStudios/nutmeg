@@ -19,6 +19,8 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         private float decayStart;
 
         [Space] [SerializeField] public Transform bulletSource;
+        [SerializeField] private EffectSpawner[] damageEffects;
+        [SerializeField] private EffectSpawner[] deathEffects;
         [SerializeField] private List<GameObject> skins = new List<GameObject>();
 
         private NavMeshAgent navMeshAgent;
@@ -118,6 +120,24 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
                 navMeshAgent.isStopped = false;
         }
 
+        public void OnDamage(DamageInfo info)
+        {
+            for (int i = 0; i < damageEffects.Length; i++)
+            {
+                damageEffects[i].TrySpawnEffect(info);
+            }
+        }
+        
+        public void OnDeath(DamageInfo info)
+        {
+            OnDeath();
+
+            for (int i = 0; i < deathEffects.Length; i++)
+            {
+                deathEffects[i].TrySpawnEffect(info);
+            }
+        }
+        
         public void OnDeath()
         {
             SetAnimationState("die");

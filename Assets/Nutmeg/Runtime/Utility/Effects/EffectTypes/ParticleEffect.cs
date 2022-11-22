@@ -1,14 +1,14 @@
 using System;
 using UnityEngine;
 
-namespace Nutmeg.Runtime.Utility.Effects
+namespace Nutmeg.Runtime.Utility.Effects.EffectTypes
 {
-    public class ParticleEffect : MonoBehaviour
+    public class ParticleEffect : Effect
     {
         [SerializeField] private ParticleSystem particles;
-        private Action<GameObject> finishedAction;
         
-        public void Initialize(Action<GameObject> finishedAction)
+        
+        public override void Initialize(Action<GameObject> finishedAction)
         {
             this.finishedAction = finishedAction;
             
@@ -20,12 +20,6 @@ namespace Nutmeg.Runtime.Utility.Effects
         {
             if (particles.isStopped)
                 Finished();
-        }
-
-        private void Finished()
-        {
-            gameObject.SetActive(false);
-            finishedAction(gameObject);
         }
     }
 }

@@ -1,4 +1,5 @@
-using System;
+using System.Linq;
+using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Utility.GameObjectPooling;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,16 +8,17 @@ namespace Nutmeg.Runtime.Utility.Effects
 {
     public class EffectSpawner : MonoBehaviour
     {
-        [SerializeField] private GameObject effectPrefab;
-        [SerializeField] private Transform effectPosition;
-        [SerializeField] private Transform effectParent;
-        [SerializeField] private bool stickToParent;
+        [SerializeField] protected GameObject effectPrefab;
+        [SerializeField] protected Transform effectPosition;
+        [SerializeField] protected Transform effectParent;
+        [SerializeField] protected bool stickToParent;
+        [Space] [Header("Using TrySpawnEffect()")]
+        [SerializeField] protected DamageType[] validTypes;
+        [SerializeField] protected float damageCap;
+        [SerializeField] protected UnityEvent OnFinished;
+        
 
-        [Space] [SerializeField] private bool testEffect;
-
-        [SerializeField] private UnityEvent OnFinished;
-
-        public void SpawnEffect()
+        public virtual void SpawnEffect()
         {
             if (stickToParent)
             {
@@ -24,57 +26,50 @@ namespace Nutmeg.Runtime.Utility.Effects
                 go.transform.position = effectPosition.position;
                 go.transform.rotation = effectPosition.rotation;
                 go.transform.SetParent(effectParent);
-                go.GetComponent<ParticleEffect>().Initialize(Finished);
+                go.GetComponent<Effect>().Initialize(Finished);
             }
             else
             {
                 GameObject go = GoPoolingManager.Main.Get(effectPrefab);
                 go.transform.position = effectPosition.position;
                 go.transform.rotation = effectPosition.rotation;
-                go.GetComponent<ParticleEffect>().Initialize(Finished);
+                go.GetComponent<Effect>().Initialize(Finished);
             }
         }
 
-        public void SpawnEffect(Vector3 pos)
+        public virtual void SpawnEffect(DamageInfo info)
         {
             GameObject go = GoPoolingManager.Main.Get(effectPrefab);
-            go.transform.position = pos;
-            go.transform.rotation = effectPosition.rotation;
-            go.GetComponent<ParticleEffect>().Initialize(Finished);
+            go.transform.position = info.HitPosSpecified ? info.HitPos : transform.position;
+            go.transform.rotation = effectPosition ? effectPosition.rotation : transform.rotation;
+            go.GetComponent<Effect>().Initialize(info, Finished);
         }
 
-        public void SpawnEffect(Transform parent)
+        public virtual void TrySpawnEffect(DamageInfo info)
         {
-            GameObject go = GoPoolingManager.Main.Get(effectPrefab);
-            go.transform.position = parent.position;
-            go.transform.rotation = effectPosition.rotation;
-            go.transform.SetParent(parent);
-            go.GetComponent<ParticleEffect>().Initialize(Finished);
+            if (damageCap > info.Value)
+                return;
+
+            if (!validTypes.Contains(info.Type))
+                return;
+
+            SpawnEffect(info);
         }
 
-        public void SpawnEffect(Vector3 pos, Transform parent)
-        {
-            GameObject go = GoPoolingManager.Main.Get(effectPrefab);
-            go.transform.position = pos;
-            go.transform.rotation = effectPosition.rotation;
-            go.transform.SetParent(parent);
-            go.GetComponent<ParticleEffect>().Initialize(Finished);
-        }
-
-        private void Finished(GameObject go)
+        protected virtual void Finished(GameObject go)
         {
             GoPoolingManager.Main.Return(go, effectPrefab);
             OnFinished.Invoke();
         }
 
-        
-        private void OnValidate()
-        {
-            if (testEffect)
-            {
-                testEffect = false;
-                SpawnEffect();
-            }
-        }
+
+        // private void OnValidate()
+        // {
+        //     if (testEffect)
+        //     {
+        //         testEffect = false;
+        //         SpawnEffect();
+        //     }
+        // }
     }
 }

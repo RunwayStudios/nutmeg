@@ -31,8 +31,8 @@ namespace Nutmeg.Runtime.Utility.Animations
                 return;
             
             GameObject go = GoPoolingManager.Main.Get(prefab);
-            AttackEffect attackEffect = go.GetComponent<AttackEffect>();
-            attackEffect.Initialize(origin.position, targetEntity.transform.position, Finished);
+            Effect attackEffect = go.GetComponent<Effect>();
+            attackEffect.Initialize(new DamageInfo(origin.position, targetEntity.transform.position), Finished);
         }
     }
 }

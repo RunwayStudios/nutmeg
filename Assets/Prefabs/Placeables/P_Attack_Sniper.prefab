@@ -191,6 +191,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detector: {fileID: 6311361668244213556}
   attackDamage: 150
+  attackDamageType: 0
+  attackSource: {fileID: 0}
+  autoAttack: 1
   attackInterval: 3
   OnStartAttacking:
     m_PersistentCalls:
@@ -387,7 +390,7 @@ PrefabInstance:
     - target: {fileID: 8485913592809868127, guid: 02868c076760aa24f80534127a06dc1e, type: 3}
       propertyPath: placeable
       value: 
-      objectReference: {fileID: 1170082105736364}
+      objectReference: {fileID: 8525461802404038503}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02868c076760aa24f80534127a06dc1e, type: 3}
 --- !u!114 &2237858275271802607 stripped

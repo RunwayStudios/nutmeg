@@ -7,23 +7,15 @@ namespace Nutmeg.Runtime.Gameplay.Base.NPCBehaviours
 {
     public class NpcSniperBehaviour : MonoBehaviour
     {
-        [SerializeField] private GameObject placeable;
+        [SerializeField] private CombatEntity placeable;
         [SerializeField] private Transform weapon;
         [SerializeField] private Transform attackEffectOrigin;
+        [SerializeField] private EffectSpawner effectSpawner;
         
-        // Start is called before the first frame update
-        void Start()
-        {
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        }
 
         public void RotateToLastTarget()
         {
-            if (!placeable.GetComponent<CombatEntity>().TryGetModule(typeof(RadiusDetectorModule), out CombatModule module))
+            if (!placeable.TryGetModule(typeof(RadiusDetectorModule), out CombatModule module))
                 return;
 
             CombatEntity target = ((DetectorModule)module).MostRecentTarget;
@@ -37,14 +29,14 @@ namespace Nutmeg.Runtime.Gameplay.Base.NPCBehaviours
 
         public void SpawnAttackEffect()
         {
-            if (!placeable.GetComponent<CombatEntity>().TryGetModule(typeof(RadiusDetectorModule), out CombatModule module))
+            if (!placeable.TryGetModule(typeof(RadiusDetectorModule), out CombatModule module))
                 return;
 
             CombatEntity target = ((DetectorModule)module).MostRecentTarget;
             if (!target)
                 return;
 
-            GetComponent<AttackEffectSpawner>().Spawn(attackEffectOrigin.position, target.transform.position);
+            effectSpawner.SpawnEffect(new DamageInfo(attackEffectOrigin.position, target.transform.position));
         }
     }
 }

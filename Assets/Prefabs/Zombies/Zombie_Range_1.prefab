@@ -794,7 +794,6 @@ GameObject:
   - component: {fileID: -1906954859103034792}
   - component: {fileID: 1173289345764857417}
   - component: {fileID: -7523771953284000605}
-  - component: {fileID: 6198889913382425259}
   - component: {fileID: 4742128199620809915}
   - component: {fileID: -1108691985824748297}
   - component: {fileID: -4797206737992591843}
@@ -874,6 +873,10 @@ MonoBehaviour:
   decayDuration: 10
   decayDisplacement: -1
   bulletSource: {fileID: 6746694494634293368}
+  damageEffects:
+  - {fileID: 4742128199620809915}
+  deathEffects:
+  - {fileID: 4742128199620809915}
   skins:
   - {fileID: 1913734829866394}
   - {fileID: 1213179522021810}
@@ -932,7 +935,7 @@ MonoBehaviour:
   OnReceiveDamage:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6198889913382425259}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Nutmeg.Runtime.Utility.Effects.DamageTypeEffectSelector,
           Nutmeg.Runtime.Utility.Effects
         m_MethodName: OnDamage
@@ -991,6 +994,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detector: {fileID: 1173289345764857417}
   attackDamage: 5
+  attackDamageType: 0
+  attackSource: {fileID: 0}
+  autoAttack: 1
   attackInterval: 5
   OnStartAttacking:
     m_PersistentCalls:
@@ -1054,19 +1060,6 @@ MonoBehaviour:
         m_CallState: 2
   attackDistance: 10
   agent: {fileID: -7093906615665926990}
---- !u!114 &6198889913382425259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1418193975600942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2c282efa9f6ea04da4f40e5ef835aa7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultEffectSpawner: {fileID: 4742128199620809915}
 --- !u!114 &4742128199620809915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1083,6 +1076,11 @@ MonoBehaviour:
   effectPosition: {fileID: 4688374947186396}
   effectParent: {fileID: 0}
   stickToParent: 0
+  validTypes: 
+  damageCap: 0
+  OnFinished:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &-1108691985824748297
 MonoBehaviour:
   m_ObjectHideFlags: 0

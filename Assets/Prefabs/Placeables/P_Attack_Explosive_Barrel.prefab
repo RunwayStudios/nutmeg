@@ -211,6 +211,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detector: {fileID: 5209376145183861999}
   attackDamage: 110
+  attackDamageType: 2
+  attackSource: {fileID: 0}
   autoAttack: 0
   attackInterval: 5
   OnStartAttacking:
@@ -225,7 +227,7 @@ MonoBehaviour:
   OnStoppedAttacking:
     m_PersistentCalls:
       m_Calls: []
-  targetsBufferSize: 20
+  targetsBufferSize: 50
 --- !u!114 &5209376145183861999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,7 +277,23 @@ MonoBehaviour:
   effectPosition: {fileID: 1592732725527944586}
   effectParent: {fileID: 0}
   stickToParent: 0
-  testEffect: 0
+  validTypes: 
+  damageCap: 0
+  OnFinished:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5183320507588447962}
+        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Base.Placeable, Nutmeg.Runtime.Gameplay.Base
+        m_MethodName: OnDeath
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2873912803465017080
 GameObject:
   m_ObjectHideFlags: 0

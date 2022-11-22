@@ -1,7 +1,8 @@
 using System;
+using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using UnityEngine;
 
-namespace Nutmeg.Runtime.Utility.Effects.AttackEffects
+namespace Nutmeg.Runtime.Utility.Effects.EffectTypes
 {
     public class MoveLinearAttackEffect : AttackEffect
     {
@@ -22,11 +23,11 @@ namespace Nutmeg.Runtime.Utility.Effects.AttackEffects
         }
         
 
-        public override void Initialize(Vector3 origin, Vector3 target, Action<GameObject> FinishedAction)
+        public override void Initialize(DamageInfo info, Action<GameObject> FinishedAction)
         {
             transform.position = origin;
             
-            base.Initialize(origin, target, FinishedAction);
+            base.Initialize(info, FinishedAction);
             
             expectedLifeTime = Vector3.Distance(origin, target) / speed;
             startTime = Time.time;

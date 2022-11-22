@@ -4598,7 +4598,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: d167ef288d96bb84ca9743bf908f53cf, type: 2}
-  - {fileID: 2100000, guid: d167ef288d96bb84ca9743bf908f53cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4662,7 +4661,7 @@ GameObject:
   - component: {fileID: 199960877399999766}
   - component: {fileID: 1741538026756830629}
   m_Layer: 0
-  m_Name: Explosion_Small_FX
+  m_Name: Explosion_Medium_FX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4677,7 +4676,7 @@ Transform:
   m_GameObject: {fileID: 1804206099813350}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 8, y: 8, z: 8}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4818406259925334}
@@ -9249,7 +9248,6 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ae3fa6191020bd246ab9645e0c167855, type: 2}
   - {fileID: 2100000, guid: ae3fa6191020bd246ab9645e0c167855, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -13983,7 +13981,6 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fa9e67520e3a0c04996a1f31dd165bb9, type: 2}
   - {fileID: 2100000, guid: fa9e67520e3a0c04996a1f31dd165bb9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0

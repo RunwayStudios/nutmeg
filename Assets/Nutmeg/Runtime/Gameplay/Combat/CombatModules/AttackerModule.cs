@@ -8,6 +8,9 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         [SerializeField] protected DetectorModule detector;
 
         [Space] [SerializeField] protected float attackDamage = 5f;
+        [SerializeField] protected DamageType attackDamageType;
+        [SerializeField] protected Transform attackSource;
+        [Space]
         [SerializeField] protected bool autoAttack = true;
         [SerializeField] private float attackInterval = 5f;
         private float lastAttackTry;
@@ -21,6 +24,14 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         [SerializeField] protected UnityEvent OnStoppedAttacking;
 
 
+        public override void InitializeModule(CombatEntity entity)
+        {
+            base.InitializeModule(entity);
+
+            if (!attackSource)
+                attackSource = transform;
+        }
+
         public override void UpdateModule()
         {
             if (ShouldTryAttack()) 
@@ -32,7 +43,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         {
             if (target.TryGetModule(typeof(DamageableModule), out CombatModule module))
             {
-                ((DamageableModule)module).Damage(attackDamage);
+                ((DamageableModule)module).Damage(attackDamage, attackDamageType, attackSource.position, target.transform.position);
             }
         }
         
