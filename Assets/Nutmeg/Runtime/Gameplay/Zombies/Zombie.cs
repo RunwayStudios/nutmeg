@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Nutmeg.Runtime.Gameplay.Combat;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
@@ -7,6 +8,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 namespace Nutmeg.Runtime.Gameplay.Zombies
 {
@@ -24,10 +26,20 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         [SerializeField] private EffectSpawner[] deathEffects;
         [SerializeField] private List<GameObject> skins = new List<GameObject>();
 
-        [SerializeField] private NetworkTransform networkTransform;
+        [Space] [Header("Position Syncing")] [SerializeField]
+        private NetworkTransform networkTransform;
+
+        [SerializeField] private float posThreshold = 1f;
+        [SerializeField] private float timeThreshold = 3f;
+        [SerializeField] private float timedPositionThreshold = 0.1f;
+        private float lastNetPosUpdateTime;
+        private Vector3 lastNetPosUpdatePos;
+        private bool updateNetworkPos = true;
 
         private NavMeshAgent navMeshAgent;
         private Animator animator;
+
+        public bool testNetworkTransform;
 
         // Start is called before the first frame update
         void Start()
@@ -49,6 +61,10 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
                 navMeshAgent = GetComponent<NavMeshAgent>();
                 // todo set base center/hut? also in PathfindFirstAttackerModule
                 navMeshAgent.SetDestination(Vector3.zero);
+
+                GetComponent<NetworkTransform>().enabled = false;
+                
+                UpdateNetworkPosition();
             }
 
             SetAnimationState("walk");
@@ -58,6 +74,13 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         void Update()
         {
             UpdateDecay();
+            CheckForNetworkPositionUpdate();
+
+            if (testNetworkTransform)
+            {
+                testNetworkTransform = false;
+                networkTransform.SetState(transform.position, transform.rotation);
+            }
         }
 
 
@@ -78,6 +101,32 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
                 transform.position = new Vector3(transform.position.x, transform.position.y + decayDisplacement * (Time.deltaTime / decayDuration),
                     transform.position.z);
             }
+        }
+
+        private void CheckForNetworkPositionUpdate()
+        {
+            if (!updateNetworkPos || !NetworkManager.Singleton.IsServer)
+                return;
+
+            Vector3 curPos = transform.position;
+
+            if (Mathf.Abs(curPos.x - lastNetPosUpdatePos.x) > posThreshold ||
+                Mathf.Abs(curPos.y - lastNetPosUpdatePos.y) > posThreshold ||
+                Mathf.Abs(curPos.z - lastNetPosUpdatePos.z) > posThreshold ||
+                timeThreshold < Time.time - lastNetPosUpdateTime &&
+                (Mathf.Abs(curPos.x - lastNetPosUpdatePos.x) > timedPositionThreshold ||
+                 Mathf.Abs(curPos.y - lastNetPosUpdatePos.y) > timedPositionThreshold ||
+                 Mathf.Abs(curPos.z - lastNetPosUpdatePos.z) > timedPositionThreshold))
+            {
+                UpdateNetworkPosition();
+            }
+        }
+
+        private void UpdateNetworkPosition()
+        {
+            lastNetPosUpdatePos = transform.position;
+            lastNetPosUpdateTime = Time.time;
+            networkTransform.SetState(lastNetPosUpdatePos, transform.rotation);
         }
 
         private void Decay()
@@ -144,6 +193,8 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
         public void OnDeath()
         {
+            updateNetworkPos = false;
+
             SetAnimationState("die");
             SetAnimationState("attack", false);
             SetAnimationState("walk", false);
@@ -158,8 +209,6 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
             if (NetworkManager.Singleton.IsServer)
             {
-                networkTransform.SetState(transform.position, transform.rotation);
-                
                 MoneyManager.Main.AddBalance(killReward);
                 Decay();
             }

@@ -1556,6 +1556,11 @@ MonoBehaviour:
   - {fileID: 1144284481727758232}
   - {fileID: 1144351501613103966}
   - {fileID: 1143968507234138292}
+  networkTransform: {fileID: 2222171531711261991}
+  posThreshold: 0.5
+  timeThreshold: 1
+  timedPositionThreshold: 0.01
+  testNetworkTransform: 0
 --- !u!195 &-6260215301360327920
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1738,6 +1743,9 @@ MonoBehaviour:
   stickToParent: 0
   validTypes: 00000000
   damageCap: 0
+  OnFinished:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1917256347667031979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1755,7 +1763,10 @@ MonoBehaviour:
   effectParent: {fileID: 0}
   stickToParent: 0
   validTypes: 0000000002000000
-  damageCap: 100
+  damageCap: 1000
+  OnFinished:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &-7333130699766255940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1793,9 +1804,9 @@ MonoBehaviour:
   SyncScaleX: 0
   SyncScaleY: 0
   SyncScaleZ: 0
-  PositionThreshold: 0.2
-  RotAngleThreshold: 5
-  ScaleThreshold: 0.01
+  PositionThreshold: 0
+  RotAngleThreshold: 0.001
+  ScaleThreshold: 0
   InLocalSpace: 0
   Interpolate: 1
 --- !u!1 &1144534140835846824
