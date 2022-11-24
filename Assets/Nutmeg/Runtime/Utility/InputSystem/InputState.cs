@@ -73,12 +73,10 @@ namespace Nutmeg.Runtime.Utility.InputSystem
             }
             
             iterator.Dispose();
-            
-            EditorUtility.SetDirty(this);
-        }
 
-        private void OnDestroy()
-        {
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(this);
+#endif
         }
     }
 }

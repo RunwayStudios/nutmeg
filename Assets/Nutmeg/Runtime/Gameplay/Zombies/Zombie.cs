@@ -4,6 +4,7 @@ using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Gameplay.Money;
 using Nutmeg.Runtime.Utility.Effects;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -22,6 +23,8 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         [SerializeField] private EffectSpawner[] damageEffects;
         [SerializeField] private EffectSpawner[] deathEffects;
         [SerializeField] private List<GameObject> skins = new List<GameObject>();
+
+        [SerializeField] private NetworkTransform networkTransform;
 
         private NavMeshAgent navMeshAgent;
         private Animator animator;
@@ -72,7 +75,8 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
             if (Time.time > decayStart + decayDelay)
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y + decayDisplacement * (Time.deltaTime / decayDuration), transform.position.z);
+                transform.position = new Vector3(transform.position.x, transform.position.y + decayDisplacement * (Time.deltaTime / decayDuration),
+                    transform.position.z);
             }
         }
 
@@ -127,7 +131,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
                 damageEffects[i].TrySpawnEffect(info);
             }
         }
-        
+
         public void OnDeath(DamageInfo info)
         {
             OnDeath();
@@ -137,7 +141,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
                 deathEffects[i].TrySpawnEffect(info);
             }
         }
-        
+
         public void OnDeath()
         {
             SetAnimationState("die");
@@ -154,6 +158,8 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
             if (NetworkManager.Singleton.IsServer)
             {
+                networkTransform.SetState(transform.position, transform.rotation);
+                
                 MoneyManager.Main.AddBalance(killReward);
                 Decay();
             }
