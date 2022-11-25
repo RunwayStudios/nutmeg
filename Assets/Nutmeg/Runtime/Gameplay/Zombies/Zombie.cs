@@ -31,7 +31,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
         [SerializeField] private float posThreshold = 1f;
         [SerializeField] private float timeThreshold = 3f;
-        [SerializeField] private float timedPositionThreshold = 0.1f;
+        [SerializeField] private float timedPositionThreshold = 0f;
         private float lastNetPosUpdateTime;
         private Vector3 lastNetPosUpdatePos;
         private bool updateNetworkPos = true;
@@ -105,9 +105,9 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
                 Mathf.Abs(curPos.y - lastNetPosUpdatePos.y) > posThreshold ||
                 Mathf.Abs(curPos.z - lastNetPosUpdatePos.z) > posThreshold ||
                 timeThreshold < Time.time - lastNetPosUpdateTime &&
-                (Mathf.Abs(curPos.x - lastNetPosUpdatePos.x) > timedPositionThreshold ||
-                 Mathf.Abs(curPos.y - lastNetPosUpdatePos.y) > timedPositionThreshold ||
-                 Mathf.Abs(curPos.z - lastNetPosUpdatePos.z) > timedPositionThreshold))
+                (Mathf.Abs(curPos.x - lastNetPosUpdatePos.x) >= timedPositionThreshold ||
+                 Mathf.Abs(curPos.y - lastNetPosUpdatePos.y) >= timedPositionThreshold ||
+                 Mathf.Abs(curPos.z - lastNetPosUpdatePos.z) >= timedPositionThreshold))
             {
                 UpdateNetworkPosition();
             }
@@ -115,6 +115,8 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
         private void UpdateNetworkPosition(bool stopped = false)
         {
+            Debug.Log("update: " + stopped);
+            updateNetworkPos = !stopped;
             lastNetPosUpdatePos = transform.position;
             lastNetPosUpdateTime = Time.time;
             networkTransform.UpdateServerState(stopped);
@@ -190,7 +192,6 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
         public void OnDeath()
         {
-            updateNetworkPos = false;
             UpdateNetworkPosition(true);
 
             SetAnimationState("die");

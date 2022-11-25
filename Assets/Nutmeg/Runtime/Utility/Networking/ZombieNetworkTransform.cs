@@ -41,15 +41,22 @@ namespace Nutmeg.Runtime.Utility.Networking
 
             prevServerState = curServerState;
             curServerState = newServerState;
+
+            bool oldStopped = stopped;
             stopped = hasStopped;
 
             interpolationDistance = Vector3.Distance(transform.position, curServerState.pos);
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, curServerState.rotY, transform.rotation.eulerAngles.z);
-            if (interpolationDistance < 0.05f)
+            
+            if (oldStopped && !stopped)
             {
                 interpolating = false;
                 StartPredicting(true);
-                Debug.Log("predictingSkip");
+            }
+            else if (interpolationDistance < 0.01f)
+            {
+                interpolating = false;
+                StartPredicting();
             }
             else
             {

@@ -1557,9 +1557,9 @@ MonoBehaviour:
   - {fileID: 1144351501613103966}
   - {fileID: 1143968507234138292}
   networkTransform: {fileID: 4539193657094037214}
-  posThreshold: 3
+  posThreshold: 5
   timeThreshold: 10
-  timedPositionThreshold: 0.01
+  timedPositionThreshold: 0
 --- !u!195 &-6260215301360327920
 NavMeshAgent:
   m_ObjectHideFlags: 0
