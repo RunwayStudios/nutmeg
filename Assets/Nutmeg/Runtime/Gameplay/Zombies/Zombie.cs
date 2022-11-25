@@ -1,9 +1,9 @@
-using System;
 using System.Collections.Generic;
 using Nutmeg.Runtime.Gameplay.Combat;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Gameplay.Money;
 using Nutmeg.Runtime.Utility.Effects;
+using Nutmeg.Runtime.Utility.Networking;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -27,7 +27,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         [SerializeField] private List<GameObject> skins = new List<GameObject>();
 
         [Space] [Header("Position Syncing")] [SerializeField]
-        private NetworkTransform networkTransform;
+        private ZombieNetworkTransform networkTransform;
 
         [SerializeField] private float posThreshold = 1f;
         [SerializeField] private float timeThreshold = 3f;
@@ -39,7 +39,6 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         private NavMeshAgent navMeshAgent;
         private Animator animator;
 
-        public bool testNetworkTransform;
 
         // Start is called before the first frame update
         void Start()
@@ -62,8 +61,6 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
                 // todo set base center/hut? also in PathfindFirstAttackerModule
                 navMeshAgent.SetDestination(Vector3.zero);
 
-                GetComponent<NetworkTransform>().enabled = false;
-                
                 UpdateNetworkPosition();
             }
 
@@ -75,12 +72,6 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         {
             UpdateDecay();
             CheckForNetworkPositionUpdate();
-
-            if (testNetworkTransform)
-            {
-                testNetworkTransform = false;
-                networkTransform.SetState(transform.position, transform.rotation);
-            }
         }
 
 
@@ -122,11 +113,11 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             }
         }
 
-        private void UpdateNetworkPosition()
+        private void UpdateNetworkPosition(bool stopped = false)
         {
             lastNetPosUpdatePos = transform.position;
             lastNetPosUpdateTime = Time.time;
-            networkTransform.SetState(lastNetPosUpdatePos, transform.rotation);
+            networkTransform.UpdateServerState(stopped);
         }
 
         private void Decay()
@@ -145,7 +136,10 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             SetAnimationState("walk", false);
 
             if (NetworkManager.Singleton.IsServer)
+            {
                 navMeshAgent.isStopped = true;
+                UpdateNetworkPosition(true);
+            }
         }
 
         public void OnAttack()
@@ -170,7 +164,10 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             SetAnimationState("walk");
 
             if (NetworkManager.Singleton.IsServer)
+            {
                 navMeshAgent.isStopped = false;
+                UpdateNetworkPosition();
+            }
         }
 
         public void OnDamage(DamageInfo info)
@@ -194,6 +191,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         public void OnDeath()
         {
             updateNetworkPos = false;
+            UpdateNetworkPosition(true);
 
             SetAnimationState("die");
             SetAnimationState("attack", false);
@@ -205,10 +203,11 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
                 c.enabled = false;
             }
 
-            GetComponent<NavMeshAgent>().enabled = false;
-
             if (NetworkManager.Singleton.IsServer)
             {
+                navMeshAgent.enabled = false;
+                UpdateNetworkPosition();
+
                 MoneyManager.Main.AddBalance(killReward);
                 Decay();
             }

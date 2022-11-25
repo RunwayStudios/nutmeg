@@ -1458,7 +1458,7 @@ GameObject:
   - component: {fileID: -3086467689708996136}
   - component: {fileID: 1917256347667031979}
   - component: {fileID: -7333130699766255940}
-  - component: {fileID: 2222171531711261991}
+  - component: {fileID: 4539193657094037214}
   m_Layer: 0
   m_Name: Zombie_Default
   m_TagString: Untagged
@@ -1556,11 +1556,10 @@ MonoBehaviour:
   - {fileID: 1144284481727758232}
   - {fileID: 1144351501613103966}
   - {fileID: 1143968507234138292}
-  networkTransform: {fileID: 2222171531711261991}
-  posThreshold: 0.5
-  timeThreshold: 1
+  networkTransform: {fileID: 4539193657094037214}
+  posThreshold: 3
+  timeThreshold: 10
   timedPositionThreshold: 0.01
-  testNetworkTransform: 0
 --- !u!195 &-6260215301360327920
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1783,7 +1782,7 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &2222171531711261991
+--- !u!114 &4539193657094037214
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1792,23 +1791,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1144529266033343354}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: b4f784c1dccfc8d4699f5f654b628a97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
-  SyncRotAngleX: 0
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 0
-  SyncScaleX: 0
-  SyncScaleY: 0
-  SyncScaleZ: 0
-  PositionThreshold: 0
-  RotAngleThreshold: 0.001
-  ScaleThreshold: 0
-  InLocalSpace: 0
-  Interpolate: 1
+  interpolationSpeed: 10
+  teleportationThreshold: 1
 --- !u!1 &1144534140835846824
 GameObject:
   m_ObjectHideFlags: 0

@@ -41,6 +41,8 @@ namespace Nutmeg.Runtime.Gameplay.Weapons
 
         public override void Use()
         {
+            return;
+            
             if (fireRateCooldown > 0f || ammunitionComponent != null && !ammunitionComponent.Get(out object _))
                 return;
 
