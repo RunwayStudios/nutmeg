@@ -1560,6 +1560,7 @@ MonoBehaviour:
   posThreshold: 5
   timeThreshold: 10
   timedPositionThreshold: 0
+  firstPosUpdateDelay: 0.75
 --- !u!195 &-6260215301360327920
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1762,7 +1763,7 @@ MonoBehaviour:
   effectParent: {fileID: 0}
   stickToParent: 0
   validTypes: 0000000002000000
-  damageCap: 1000
+  damageCap: 100
   OnFinished:
     m_PersistentCalls:
       m_Calls: []
@@ -1794,8 +1795,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4f784c1dccfc8d4699f5f654b628a97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interpolationSpeed: 10
-  teleportationThreshold: 1
+  interpolationSpeed: 3
+  teleportationThreshold: 2
 --- !u!1 &1144534140835846824
 GameObject:
   m_ObjectHideFlags: 0

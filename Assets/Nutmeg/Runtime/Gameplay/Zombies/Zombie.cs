@@ -32,9 +32,13 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         [SerializeField] private float posThreshold = 1f;
         [SerializeField] private float timeThreshold = 3f;
         [SerializeField] private float timedPositionThreshold = 0f;
+        [SerializeField] private float firstPosUpdateDelay = .5f;
+        private bool sentFirstPosUpdate;
         private float lastNetPosUpdateTime;
         private Vector3 lastNetPosUpdatePos;
         private bool updateNetworkPos = true;
+
+        private float startTimestamp;
 
         private NavMeshAgent navMeshAgent;
         private Animator animator;
@@ -43,6 +47,8 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         // Start is called before the first frame update
         void Start()
         {
+            startTimestamp = Time.time;
+            
             if (skins.Count < 1)
             {
                 Debug.LogError("Skins haven't been set up for " + gameObject.name);
@@ -70,10 +76,20 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         // Update is called once per frame
         void Update()
         {
+            CheckFirstPosUpdate();
             UpdateDecay();
             CheckForNetworkPositionUpdate();
         }
 
+
+        private void CheckFirstPosUpdate()
+        {
+            if (!sentFirstPosUpdate && Time.time > startTimestamp + firstPosUpdateDelay)
+            {
+                sentFirstPosUpdate = true;
+                UpdateNetworkPosition();
+            }
+        }
 
         private void UpdateDecay()
         {
@@ -115,7 +131,6 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
         private void UpdateNetworkPosition(bool stopped = false)
         {
-            Debug.Log("update: " + stopped);
             updateNetworkPos = !stopped;
             lastNetPosUpdatePos = transform.position;
             lastNetPosUpdateTime = Time.time;

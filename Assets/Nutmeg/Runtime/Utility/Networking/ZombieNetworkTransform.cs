@@ -75,7 +75,7 @@ namespace Nutmeg.Runtime.Utility.Networking
         private void StartPredicting(bool skipVelocityCalculation = false)
         {
             predicting = true;
-            if (!skipVelocityCalculation)
+            if (!skipVelocityCalculation && curServerState.serverTime - prevServerState.serverTime > 0)
                 prevVelocity = (curServerState.pos - prevServerState.pos) / (curServerState.serverTime - prevServerState.serverTime);
         }
 
@@ -102,8 +102,7 @@ namespace Nutmeg.Runtime.Utility.Networking
                 else
                 {
                     float timePassed = Time.time - interpolationStartTime;
-                    transform.position = Vector3.Lerp(interpolationStartPos, serverPos,
-                        timePassed / (interpolationDistance / interpolationSpeed));
+                    transform.position = Vector3.Lerp(interpolationStartPos, serverPos, timePassed / (interpolationDistance / interpolationSpeed));
 
                     if (transform.position == serverPos)
                     {
