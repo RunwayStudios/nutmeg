@@ -262,6 +262,8 @@ GameObject:
   - component: {fileID: 23305499423621534}
   - component: {fileID: 64870654230503430}
   - component: {fileID: -2374084627976257803}
+  - component: {fileID: 466675130510157375}
+  - component: {fileID: 3285606676874347861}
   m_Layer: 0
   m_Name: PlayerWep_Rifle03
   m_TagString: Untagged
@@ -285,6 +287,7 @@ Transform:
   - {fileID: 4374609443849516}
   - {fileID: 4741506853990710}
   - {fileID: 4486838150829382}
+  - {fileID: 8370373825689587302}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -364,7 +367,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62e4c2d89c782924190fb03797ce30a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modules: []
+  modules:
+  - {fileID: 466675130510157375}
+--- !u!114 &466675130510157375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1523676449047648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be06044648ec7414583971affc16f954, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shotCount: 1
+  randomizeShotCount: 0
+  varianceShotCount: 0
+  maxFireRate: 2
+  continuous: 1
+  inaccuracy: 0
+  shotSource: {fileID: 8370373825689587302}
+  shotEffect: {fileID: 0}
+  muzzleFlashEffect: {fileID: 0}
+--- !u!114 &3285606676874347861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1523676449047648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e2cc25b8641dc449917da22a81d9c0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 0}
+  effectPosition: {fileID: 0}
+  effectParent: {fileID: 0}
+  stickToParent: 0
+  validTypes: 
+  damageCap: 0
+  OnFinished:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1933858031515588
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,3 +494,34 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8804666217221194305
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8370373825689587302}
+  m_Layer: 0
+  m_Name: ShotSource
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8370373825689587302
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8804666217221194305}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.0722, z: 0.74}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4941223918874586}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

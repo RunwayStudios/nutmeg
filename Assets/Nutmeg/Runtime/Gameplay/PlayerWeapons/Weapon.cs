@@ -27,7 +27,10 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons
 
         private void OnDestroy()
         {
-            
+            for (int i = 0; i < modules.Length; i++)
+            {
+                modules[i].DestroyModule();
+            }
         }
 
 #if UNITY_EDITOR

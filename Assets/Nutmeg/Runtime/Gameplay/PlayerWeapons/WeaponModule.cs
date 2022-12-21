@@ -15,11 +15,14 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons
 
         public virtual void UpdateModule()
         {
-            
+        }
+
+        public virtual void DestroyModule()
+        {
         }
 
         protected Weapon Weapon => weapon;
 
-        public WeaponParent WeaponParent => weaponParent;
+        protected WeaponParent WeaponParent => weaponParent;
     }
 }
