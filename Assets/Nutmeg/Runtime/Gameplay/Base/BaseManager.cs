@@ -118,7 +118,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
                 Placeable placeable = placeables[i].GetComponent<Placeable>();
                 UIList.AddElement().GetComponent<PlaceablesShopListItem>().Initialize(i, placeable.Price, placeable.DisplayName);
             }
-            
+
             inBuildingMode = true;
         }
 
@@ -127,11 +127,10 @@ namespace Nutmeg.Runtime.Gameplay.Base
             if (placingObject)
                 return;
 
-            if (!TryGetNewPlacementPosition(out Vector3 placeablePos))
-                return;
-
             if (!inBuildingMode)
                 EnterBuildingMode();
+
+            Vector3 placeablePos = GetNewPlacementPosition();
 
             curPlacingIndex = index;
             curPlacingOriginalGo = placeables[index];
@@ -155,7 +154,7 @@ namespace Nutmeg.Runtime.Gameplay.Base
 
             OnExitBuildingMode.Invoke();
             InputManager.Main.RemoveLayer(baseBuildingInput);
-            
+
             UIList.ClearList();
 
             inBuildingMode = false;
@@ -225,33 +224,23 @@ namespace Nutmeg.Runtime.Gameplay.Base
 
         private void UpdatePositionOfObjectBeingPlaced(bool forceUpdate = false)
         {
-            if (TryGetNewPlacementPosition(out var newPos))
-            {
-                if (previousPosition == newPos && !forceUpdate)
-                    return;
+            Vector3 newPos = GetNewPlacementPosition();
+            if (previousPosition == newPos && !forceUpdate)
+                return;
 
-                previousPosition = newPos;
+            previousPosition = newPos;
 
-                curPlacingGo.transform.position = newPos;
+            curPlacingGo.transform.position = newPos;
 
-                curPlacingPlaceable.CheckBaseBounds(baseFlatteningMap);
-                curPlacingPlaceable.CheckIntersecting();
-            }
+            curPlacingPlaceable.CheckBaseBounds(baseFlatteningMap);
+            curPlacingPlaceable.CheckIntersecting();
         }
 
-        private bool TryGetNewPlacementPosition(out Vector3 pos)
+        private Vector3 GetNewPlacementPosition()
         {
-            RaycastHit? hit = MouseController.ShootRayFromCameraToMouse((1 << 11));
-            if (hit.HasValue)
-            {
-                Vector3 posOut = hit.Value.point;
-                posOut.y = baseY;
-                pos = posOut;
-                return true;
-            }
-
-            pos = Vector3.zero;
-            return false;
+            Vector3 hit = MouseController.GetLastMouseLookTargetPoint();
+            hit.y = baseY;
+            return hit;
         }
 
         private void StartRotatingPlaceableClockwise(InputAction.CallbackContext context)
