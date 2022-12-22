@@ -25,9 +25,9 @@ namespace Nutmeg.Runtime.Utility.Effects.EffectTypes
 
         public override void Initialize(DamageInfo info, Action<GameObject> FinishedAction)
         {
-            transform.position = origin;
-            
             base.Initialize(info, FinishedAction);
+            
+            transform.position = origin;
             
             expectedLifeTime = Vector3.Distance(origin, target) / speed;
             startTime = Time.time;

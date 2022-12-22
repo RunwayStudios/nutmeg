@@ -1,8 +1,9 @@
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.PlayerWeapons
 {
-    public abstract class WeaponModule : MonoBehaviour
+    public abstract class WeaponModule : NetworkBehaviour
     {
         private Weapon weapon;
         private WeaponParent weaponParent;

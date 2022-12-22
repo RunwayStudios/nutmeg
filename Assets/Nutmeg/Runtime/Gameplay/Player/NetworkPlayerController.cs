@@ -103,8 +103,8 @@ namespace Nutmeg.Runtime.Gameplay.Player
         private void PrimaryAction()
         {
             //Use Item
-            weapon.playerNetworkObject = GetComponent<NetworkObject>();
-            weapon.Use();
+            // weapon.playerNetworkObject = GetComponent<NetworkObject>();
+            // weapon.Use();
 
             if (IsLocalPlayer)
             {

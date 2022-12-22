@@ -35,20 +35,32 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
         protected virtual void FireShot()
         {
             nextShotTime = Time.time + shotInterval;
+            Vector3 ogDirection = transform.forward;
 
             if (!muzzleFlashEffectNull)
                 muzzleFlashEffect.SpawnEffect();
 
             int fixedShotCount = randomizeShotCount ? shotCount + Random.Range(-varianceShotCount, varianceShotCount + 1) : shotCount;
+
             for (int i = 0; i < fixedShotCount; i++)
             {
-                if (!Physics.Raycast(shotSourcePos.position, transform.forward, out RaycastHit hit, 100f))
-                    continue;
-                
-                
-                
-                if (!shotEffectNull)
-                    shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hit.point));
+                Vector3 direction = (inaccuracy > 0)
+                    ? Quaternion.Euler(0f, Random.Range(-inaccuracy / 2f, inaccuracy / 2f + 1f), 0f) * ogDirection
+                    : ogDirection;
+
+                if (Physics.Raycast(shotSourcePos.position, direction, out RaycastHit hit, 100f))
+                {
+                    if (!shotEffectNull)
+                        shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hit.point));
+
+                    DamageableModule entity = hit.transform.GetComponent<DamageableModule>();
+                    if (!entity)
+                        continue;
+
+                    entity.Damage(damagePerShot, damageType, shotSourcePos.position, hit.point);
+                }
+                else if (!shotEffectNull)
+                    shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, direction * 50));
             }
         }
 
@@ -62,7 +74,8 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
         {
             shooting = continuous;
 
-            FireShot();
+            if (shooting && nextShotTime < Time.time)
+                FireShot();
         }
 
         protected override void AttackCancelled(InputAction.CallbackContext context)

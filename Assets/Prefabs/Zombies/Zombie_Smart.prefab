@@ -931,6 +931,7 @@ GameObject:
   - component: {fileID: 2349471182265988013}
   - component: {fileID: 5296444166371575410}
   - component: {fileID: 4727008092449864835}
+  - component: {fileID: -320163151911122536}
   m_Layer: 0
   m_Name: Zombie_Smart
   m_TagString: Untagged
@@ -1010,11 +1011,18 @@ MonoBehaviour:
   decayDuration: 10
   decayDisplacement: -1
   bulletSource: {fileID: 0}
+  damageEffects: []
+  deathEffects: []
   skins:
   - {fileID: 1177339439069308}
   - {fileID: 1748665293149880}
   - {fileID: 1092556488114106}
   - {fileID: 1483869819391620}
+  networkTransform: {fileID: 0}
+  posThreshold: 5
+  timeThreshold: 10
+  timedPositionThreshold: 0
+  firstPosUpdateDelay: 0.75
 --- !u!195 &-7093906615665926990
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1116,6 +1124,7 @@ MonoBehaviour:
   detector: {fileID: 6909698799584520908}
   attackDamage: 5
   attackDamageType: 0
+  attackSource: {fileID: 0}
   autoAttack: 1
   attackInterval: 1
   OnStartAttacking:
@@ -1178,10 +1187,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c282efa9f6ea04da4f40e5ef835aa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultEffectSpawner: {fileID: 5296444166371575410}
-  fireEffectSpawner: {fileID: 0}
-  explosionEffectSpawner: {fileID: 0}
-  waterEffectSpawner: {fileID: 0}
+  defaultEffectSpawner:
+  - {fileID: 0}
+  fireEffectSpawner:
+  - {fileID: 0}
+  explosionEffectSpawner:
+  - {fileID: 0}
+  waterEffectSpawner:
+  - {fileID: 0}
+  defaultDeathEffectSpawner: []
+  fireDeathEffectSpawner: []
+  explosionDeathEffectSpawner: []
+  waterDeathEffectSpawner: []
 --- !u!114 &5296444166371575410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1198,7 +1215,8 @@ MonoBehaviour:
   effectPosition: {fileID: 4688374947186396, guid: 9bb81d7d461ad9242877886abaee53bb, type: 3}
   effectParent: {fileID: 0}
   stickToParent: 0
-  testEffect: 0
+  validTypes: 
+  damageCap: 0
   OnFinished:
     m_PersistentCalls:
       m_Calls: []
@@ -1218,6 +1236,20 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &-320163151911122536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4f784c1dccfc8d4699f5f654b628a97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interpolationSpeed: 3
+  teleportationThreshold: 2
 --- !u!1 &1423411692011380
 GameObject:
   m_ObjectHideFlags: 0
