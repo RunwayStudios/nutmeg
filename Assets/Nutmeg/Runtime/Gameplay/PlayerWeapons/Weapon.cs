@@ -1,9 +1,10 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Nutmeg.Runtime.Gameplay.PlayerWeapons
 {
-    public class Weapon : MonoBehaviour
+    public class Weapon : NetworkBehaviour
     {
         [SerializeField] private WeaponModule[] modules;
 

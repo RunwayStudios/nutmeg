@@ -1,5 +1,6 @@
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Utility.Effects;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,12 +32,14 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
         protected float shotInterval;
         protected float nextShotTime;
 
+        private bool shotted;
+
 
         protected virtual void FireShot()
         {
             nextShotTime = Time.time + shotInterval;
             Vector3 ogDirection = transform.forward;
-
+            
             if (!muzzleFlashEffectNull)
                 muzzleFlashEffect.SpawnEffect();
 
@@ -48,10 +51,11 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
                     ? Quaternion.Euler(0f, Random.Range(-inaccuracy / 2f, inaccuracy / 2f + 1f), 0f) * ogDirection
                     : ogDirection;
 
+                Vector3 hitPos;
+
                 if (Physics.Raycast(shotSourcePos.position, direction, out RaycastHit hit, 100f))
                 {
-                    if (!shotEffectNull)
-                        shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hit.point));
+                    hitPos = hit.point;
 
                     DamageableModule entity = hit.transform.GetComponent<DamageableModule>();
                     if (!entity)
@@ -59,10 +63,34 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
 
                     entity.Damage(damagePerShot, damageType, shotSourcePos.position, hit.point);
                 }
-                else if (!shotEffectNull)
-                    shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, direction * 50));
+                else
+                    hitPos = shotSourcePos.position + direction * 50;
+                
+                if (!shotEffectNull)
+                    shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hitPos));
+                
+                
+                shotted = true;
+                FireShotClientRpc(hitPos);
             }
         }
+
+        [ClientRpc]
+        private void FireShotClientRpc(Vector3 hitPos)
+        {
+            if (shotted)
+            {
+                shotted = false;
+                return;
+            }
+            
+            if (!muzzleFlashEffectNull)
+                muzzleFlashEffect.SpawnEffect();
+            
+            if (!shotEffectNull)
+                shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hitPos));
+        }
+
 
         public override void UpdateModule()
         {

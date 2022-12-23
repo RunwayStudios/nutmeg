@@ -1,5 +1,3 @@
-using System;
-using System.Transactions;
 using JetBrains.Annotations;
 using Unity.Netcode;
 using UnityEngine;
@@ -30,13 +28,20 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons
 
         public void SetWeapon([CanBeNull] Weapon newWeapon)
         {
-            if (!newWeapon)
+            SetWeaponClientRpc(newWeapon ? new NetworkBehaviourReference(newWeapon) : new NetworkBehaviourReference());
+        }
+
+        [ClientRpc]
+        private void SetWeaponClientRpc(NetworkBehaviourReference newWeaponReference)
+        {   
+            if (!newWeaponReference.TryGet(out Weapon newWeapon))
             {
                 weapon = null;
+                weaponTransform = null;
                 weaponSelected = false;
                 return;
             }
-
+            
             weapon = newWeapon;
             weaponTransform = weapon.transform;
             weaponSelected = true;
