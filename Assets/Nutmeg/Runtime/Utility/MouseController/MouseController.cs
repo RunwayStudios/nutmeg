@@ -10,11 +10,13 @@ namespace Nutmeg.Runtime.Utility.MouseController
     {
         public static Camera camera;
         public static LayerMask defaultLayerMask;
-        private static RaycastHit lastLookTarget;
+        private static RaycastHit lastHit;
 
-        private Transform camTransform;
-        private Vector3 prevCamPos = Vector3.zero;
-        private Vector2 prevCursorPos = Vector2.zero;
+        private static Transform camTransform;
+        private static Vector3 prevCamPos = Vector3.zero;
+        private static Vector2 prevCursorPos = Vector2.zero;
+
+        private static bool updatedThisFrame;
 
         private void Start()
         {
@@ -25,19 +27,32 @@ namespace Nutmeg.Runtime.Utility.MouseController
 
         private void Update()
         {
-            if (prevCamPos != camTransform.position || prevCursorPos != Mouse.current.position.ReadValue())
-                UpdateMouseLookTarget();
+            updatedThisFrame = false;
         }
 
-        public static GameObject GetLastMouseLookTargetGameObject() => lastLookTarget.transform.gameObject;
-
-        public static Vector3 GetLastMouseLookTargetPoint() => lastLookTarget.point;
-
-        private void UpdateMouseLookTarget()
+        public static GameObject GetLastMouseLookTargetGameObject()
         {
+            UpdateMouseLookTarget();
+            return lastHit.transform.gameObject;
+        }
+
+        public static Vector3 GetLastMouseLookTargetPoint()
+        {
+            UpdateMouseLookTarget();
+            return lastHit.point;
+        }
+
+        private static void UpdateMouseLookTarget()
+        {
+            Vector2 mousePos = Mouse.current.position.ReadValue();
+            if (updatedThisFrame || (prevCamPos == camTransform.position && prevCursorPos == mousePos))
+                return;
+
+            updatedThisFrame = true;
+
             prevCamPos = camera.transform.position;
-            prevCursorPos = Mouse.current.position.ReadValue();
-            lastLookTarget = ShootRayFromCameraToMouse_Internal(defaultLayerMask) ?? lastLookTarget;
+            prevCursorPos = mousePos;
+            lastHit = ShootRayFromCameraToMouse_Internal(defaultLayerMask) ?? lastHit;
         }
 
         private static RaycastHit? ShootRayFromCameraToMouse_Internal(LayerMask mask)
@@ -60,7 +75,7 @@ namespace Nutmeg.Runtime.Utility.MouseController
             if (mask == defaultLayerMask)
                 throw new ArgumentException("use GetLastMouseLookTarget() when using default layer mask");
 #endif
-            
+
             return ShootRayFromCameraToMouse_Internal(mask);
         }
     }

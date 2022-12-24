@@ -39,11 +39,12 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
         {
             nextShotTime = Time.time + shotInterval;
             Vector3 ogDirection = transform.forward;
-            
+
             if (!muzzleFlashEffectNull)
                 muzzleFlashEffect.SpawnEffect();
 
             int fixedShotCount = randomizeShotCount ? shotCount + Random.Range(-varianceShotCount, varianceShotCount + 1) : shotCount;
+            Vector3[] hitPositions = new Vector3[fixedShotCount];
 
             for (int i = 0; i < fixedShotCount; i++)
             {
@@ -58,37 +59,40 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
                     hitPos = hit.point;
 
                     DamageableModule entity = hit.transform.GetComponent<DamageableModule>();
-                    if (!entity)
-                        continue;
-
-                    entity.Damage(damagePerShot, damageType, shotSourcePos.position, hit.point);
+                    if (entity)
+                        entity.Damage(damagePerShot, damageType, shotSourcePos.position, hit.point);
                 }
                 else
                     hitPos = shotSourcePos.position + direction * 50;
-                
+
+                hitPositions[i] = hitPos;
                 if (!shotEffectNull)
                     shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hitPos));
-                
-                
-                shotted = true;
-                FireShotClientRpc(hitPos);
             }
+
+            shotted = true;
+            FireShotsClientRpc(hitPositions);
         }
 
         [ClientRpc]
-        private void FireShotClientRpc(Vector3 hitPos)
+        private void FireShotsClientRpc(Vector3[] hitPositions)
         {
             if (shotted)
             {
                 shotted = false;
                 return;
             }
-            
+
             if (!muzzleFlashEffectNull)
                 muzzleFlashEffect.SpawnEffect();
-            
+
             if (!shotEffectNull)
-                shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hitPos));
+            {
+                for (int i = 0; i < hitPositions.Length; i++)
+                {
+                    shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hitPositions[i]));
+                }
+            }
         }
 
 

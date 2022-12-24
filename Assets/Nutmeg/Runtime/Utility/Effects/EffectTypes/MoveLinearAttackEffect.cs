@@ -8,6 +8,7 @@ namespace Nutmeg.Runtime.Utility.Effects.EffectTypes
     {
         [Tooltip("Speed in m/s")]
         [SerializeField] private float speed = 100;
+        [SerializeField] private TrailRenderer trailRenderer;
         
         private float startTime;
         private float expectedLifeTime;
@@ -28,6 +29,8 @@ namespace Nutmeg.Runtime.Utility.Effects.EffectTypes
             base.Initialize(info, FinishedAction);
             
             transform.position = origin;
+            if (trailRenderer)
+                trailRenderer.Clear();
             
             expectedLifeTime = Vector3.Distance(origin, target) / speed;
             startTime = Time.time;
