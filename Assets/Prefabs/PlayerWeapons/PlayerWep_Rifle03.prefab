@@ -380,8 +380,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 542d61140eb74bf89f2c7d064976009a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  magazineSize: 24
-  reserveAmmunition: 50
+  magazineSize: 25
+  reserveAmmunition: 75
   reloadTime: 3
   curMagazineAmmunition: 0
 --- !u!114 &759437227447347738
