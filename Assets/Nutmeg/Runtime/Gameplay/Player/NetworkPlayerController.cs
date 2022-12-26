@@ -15,11 +15,11 @@ namespace Nutmeg.Runtime.Gameplay.Player
     {
         [SerializeField] private float moveSpeed;
         [SerializeField] private Transform playerBody;
+        
         [SerializeField] private WeaponParent weaponParent;
         [SerializeField] private Weapon weapon;
-
         [SerializeField] private GameObject[] weapons;
-
+        
         public static NetworkPlayerController Main { get; private set; }
 
         private InputActions input;

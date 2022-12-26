@@ -6,9 +6,11 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
 {
     public class AmmunitionWepModule : WeaponModule
     {
-        [SerializeField] private int magazineSize = 12;
-        [SerializeField] private int reserveAmmunition = 100;
-        [SerializeField] private float reloadTime = 3f;
+        [SerializeField, Min(0)] private int magazineSize = 12;
+        [SerializeField] private bool infiniteMagazine;
+        [SerializeField, Min(0)] private int reserveAmmunition = 100;
+        [SerializeField] private bool infiniteAmmo;
+        [SerializeField, Min(0)] private float reloadTime = 3f;
 
         [Space] [SerializeField] private int curMagazineAmmunition;
         private bool reloading;
@@ -20,7 +22,9 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
             base.InitializeModule(weapon, weaponParent);
 
             curMagazineAmmunition = magazineSize;
-            
+            // if infinite magazine also infinite ammo
+            infiniteAmmo = infiniteMagazine || infiniteAmmo;
+
             InputManager.Input.Player.Reload.performed += ReloadCallbackContext;
         }
 
@@ -38,7 +42,8 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
 
             if (curMagazineAmmunition > 0)
             {
-                curMagazineAmmunition--;
+                if (!infiniteMagazine)
+                    curMagazineAmmunition--;
                 return true;
             }
 
@@ -47,10 +52,10 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
         }
 
         private void ReloadCallbackContext(InputAction.CallbackContext cc) => Reload();
-        
+
         private void Reload()
         {
-            if (reloading || curMagazineAmmunition == magazineSize || reserveAmmunition < 1)
+            if (reloading || curMagazineAmmunition >= magazineSize || reserveAmmunition == 0)
                 return;
 
             reloading = true;
@@ -67,7 +72,11 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
 
         private void FinishReloading()
         {
-            if (reserveAmmunition < magazineSize - curMagazineAmmunition)
+            if (infiniteAmmo)
+            {
+                curMagazineAmmunition = magazineSize;
+            }
+            else if (reserveAmmunition < magazineSize - curMagazineAmmunition)
             {
                 curMagazineAmmunition += reserveAmmunition;
                 reserveAmmunition = 0;
