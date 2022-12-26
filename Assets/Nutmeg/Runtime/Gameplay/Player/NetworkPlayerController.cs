@@ -3,7 +3,8 @@ using UnityEngine.InputSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Nutmeg.Runtime.Gameplay.Items;
+using IngameDebugConsole;
+using Nutmeg.Runtime.Gameplay.PlayerWeapons;
 using Nutmeg.Runtime.Utility.InputSystem;
 using Nutmeg.Runtime.Utility.MouseController;
 using UnityEngine;
@@ -14,7 +15,10 @@ namespace Nutmeg.Runtime.Gameplay.Player
     {
         [SerializeField] private float moveSpeed;
         [SerializeField] private Transform playerBody;
-        [SerializeField] private Item weapon;
+        [SerializeField] private WeaponParent weaponParent;
+        [SerializeField] private Weapon weapon;
+
+        [SerializeField] private GameObject[] weapons;
 
         public static NetworkPlayerController Main { get; private set; }
 
@@ -49,6 +53,43 @@ namespace Nutmeg.Runtime.Gameplay.Player
 
             input.Player.Primary.performed += OnPrimaryActionPerformed;
             input.Player.Primary.canceled += OnPrimaryActionCanceled;
+
+
+            DebugLogConsole.AddCommand("Player.SelectWeapon.none", "Select Weapon", DeselectWeapon);
+            foreach (GameObject weapon1 in weapons)
+            {
+                DebugLogConsole.AddCommand("Player.SelectWeapon." + weapon1.name, "Select Weapon", () => CommandSelectWeapon(weapon1.name));
+            }
+        }
+
+        private void CommandSelectWeapon(string newWeapon)
+        {
+            foreach (GameObject weapon1 in weapons)
+            {
+                if (weapon1.name != newWeapon)
+                    continue;
+
+                SelectWeapon(weapon1);
+                return;
+            }
+        }
+
+        private void SelectWeapon(GameObject newWeapon)
+        {
+            // TODO pooling
+            if (weapon)
+                Destroy(weapon.gameObject);
+            weapon = Instantiate(newWeapon.gameObject).GetComponent<Weapon>();
+            weapon.GetComponent<NetworkObject>().Spawn();
+            weaponParent.SetWeapon(weapon);
+        }
+
+        private void DeselectWeapon()
+        {
+            // TODO pooling
+            Destroy(weapon.gameObject);
+            weapon = null;
+            weaponParent.SetWeapon(null);
         }
 
         private void OnPrimaryActionPerformed(InputAction.CallbackContext context)
@@ -118,7 +159,7 @@ namespace Nutmeg.Runtime.Gameplay.Player
             List<ulong> ids = NetworkManager.Singleton.ConnectedClientsIds.ToList();
             ids.Remove(id);
 
-            PrimaryActionClientRpc(new ClientRpcParams {Send = new ClientRpcSendParams {TargetClientIds = ids}});
+            PrimaryActionClientRpc(new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = ids } });
         }
 
         [ClientRpc]

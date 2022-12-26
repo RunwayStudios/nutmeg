@@ -262,6 +262,7 @@ GameObject:
   - component: {fileID: 466675130510157375}
   - component: {fileID: 3285606676874347861}
   - component: {fileID: 8771028259486964402}
+  - component: {fileID: 5591271693597504250}
   - component: {fileID: 759437227447347738}
   m_Layer: 0
   m_Name: PlayerWep_Rifle03
@@ -300,6 +301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modules:
   - {fileID: 466675130510157375}
+  - {fileID: 5591271693597504250}
 --- !u!114 &466675130510157375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,6 +325,7 @@ MonoBehaviour:
   shotSourcePos: {fileID: 8370373825689587302}
   shotEffect: {fileID: 3285606676874347861}
   muzzleFlashEffect: {fileID: 8771028259486964402}
+  ammunitionModule: {fileID: 5591271693597504250}
 --- !u!114 &3285606676874347861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,6 +368,22 @@ MonoBehaviour:
   OnFinished:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5591271693597504250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1523676449047648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 542d61140eb74bf89f2c7d064976009a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  magazineSize: 24
+  reserveAmmunition: 50
+  reloadTime: 3
+  curMagazineAmmunition: 0
 --- !u!114 &759437227447347738
 MonoBehaviour:
   m_ObjectHideFlags: 0

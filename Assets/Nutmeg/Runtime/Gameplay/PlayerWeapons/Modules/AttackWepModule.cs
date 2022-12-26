@@ -1,4 +1,3 @@
-using System;
 using Nutmeg.Runtime.Utility.InputSystem;
 using UnityEngine.InputSystem;
 

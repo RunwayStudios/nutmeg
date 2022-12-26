@@ -27,6 +27,8 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
         [SerializeField] protected EffectSpawner muzzleFlashEffect;
         protected bool muzzleFlashEffectNull;
 
+        [Space] [SerializeField] private AmmunitionWepModule ammunitionModule;
+
 
         protected bool shooting;
         protected float shotInterval;
@@ -37,6 +39,9 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
 
         protected virtual void FireShot()
         {
+            if (!ammunitionModule.TryUseAmmo())
+                return;
+            
             nextShotTime = Time.time + shotInterval;
             Vector3 ogDirection = transform.forward;
 
@@ -106,7 +111,7 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
         {
             shooting = continuous;
 
-            if (shooting && nextShotTime < Time.time)
+            if (nextShotTime < Time.time)
                 FireShot();
         }
 

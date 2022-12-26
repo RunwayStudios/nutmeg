@@ -66,8 +66,8 @@ MonoBehaviour:
   shotCount: 5
   randomizeShotCount: 0
   varianceShotCount: 0
-  maxFireRate: 0.2
-  continuous: 1
+  maxFireRate: 5
+  continuous: 0
   inaccuracy: 4
   damagePerShot: 5
   damageType: 0
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effectPrefab: {fileID: 157586, guid: 852c75a5527a77349ae7c771baf83b02, type: 3}
-  effectPosition: {fileID: 0}
+  effectPosition: {fileID: 6843916995873097688}
   effectParent: {fileID: 0}
   stickToParent: 0
   validTypes: 
