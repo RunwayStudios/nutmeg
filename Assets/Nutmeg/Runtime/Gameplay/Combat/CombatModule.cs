@@ -17,6 +17,6 @@ namespace Nutmeg.Runtime.Gameplay.Combat
             
         }
 
-        protected CombatEntity Entity => entity;
+        public CombatEntity Entity => entity;
     }
 }

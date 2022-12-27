@@ -197,20 +197,6 @@ namespace Nutmeg.Runtime.Gameplay.Base
             no.Spawn();
             placed.Add(placeable);
             LevelGenerator.Main.UpdateNavMesh();
-
-            // PlacedPlaceableClientRpc(no.NetworkObjectId);
-        }
-
-        [ClientRpc]
-        private void PlacedPlaceableClientRpc(ulong id)
-        {
-            if (IsHost)
-                return;
-
-            // placed.Add(placeable);
-
-            // todo only do if client side pathfinding
-            // LevelGenerator.Main.UpdateNavMesh();
         }
 
         private void CancelPlacingPlaceable()

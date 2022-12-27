@@ -23,7 +23,7 @@ namespace Nutmeg.Runtime.Utility.Effects.EffectTypes
 
         public override void Initialize(Action<GameObject> finishedAction)
         {
-            throw new NotImplementedException();
+            throw new MethodAccessException("AttackEffects don't support initialization without DamageInfo");
         }
     }
 }

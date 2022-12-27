@@ -322,6 +322,7 @@ MonoBehaviour:
   inaccuracy: 1
   damagePerShot: 5
   damageType: 0
+  damageable: 00000000
   shotSourcePos: {fileID: 8370373825689587302}
   shotEffect: {fileID: 3285606676874347861}
   muzzleFlashEffect: {fileID: 8771028259486964402}
@@ -381,7 +382,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   magazineSize: 25
+  infiniteMagazine: 0
   reserveAmmunition: 75
+  infiniteAmmo: 0
   reloadTime: 3
   curMagazineAmmunition: 0
 --- !u!114 &759437227447347738

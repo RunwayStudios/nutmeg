@@ -29,7 +29,7 @@ namespace Nutmeg.Runtime.Utility.Effects.EffectTypes
 
         public override void Initialize(Action<GameObject> finishedAction)
         {
-            throw new NotImplementedException();
+            throw new MethodAccessException("BodySplatterEffects don't support initialization without DamageInfo");
         }
 
         public override void Initialize(DamageInfo info, Action<GameObject> finishedAction)

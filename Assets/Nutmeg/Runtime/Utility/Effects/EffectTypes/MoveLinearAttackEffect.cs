@@ -8,19 +8,28 @@ namespace Nutmeg.Runtime.Utility.Effects.EffectTypes
     {
         [Tooltip("Speed in m/s")]
         [SerializeField] private float speed = 100;
+        [SerializeField] private float stayAtTargetForSeconds = 0.3f;
         [SerializeField] private TrailRenderer trailRenderer;
         
         private float startTime;
         private float expectedLifeTime;
+        private float timeFinished;
 
 
         private void Update()
         {
+            if (timeFinished != default)
+            {
+                if (timeFinished + stayAtTargetForSeconds < Time.time)
+                    Finished();
+                return;
+            }
+            
             float progress = (Time.time - startTime) / expectedLifeTime;
             transform.position = Vector3.Lerp(origin, target, progress);
 
             if (progress >= 1)
-                Finished();
+                timeFinished = Time.time;
         }
         
 
@@ -31,7 +40,8 @@ namespace Nutmeg.Runtime.Utility.Effects.EffectTypes
             transform.position = origin;
             if (trailRenderer)
                 trailRenderer.Clear();
-            
+
+            timeFinished = default;
             expectedLifeTime = Vector3.Distance(origin, target) / speed;
             startTime = Time.time;
         }

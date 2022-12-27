@@ -26,7 +26,7 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons
             }
         }
 
-        private void OnDestroy()
+        public override void OnDestroy()
         {
             for (int i = 0; i < modules.Length; i++)
             {

@@ -8,10 +8,10 @@ namespace Nutmeg.Runtime.Utility.GameObjectPooling
     {
         public static GoPoolingManager Main;
 
-        [SerializeField] private float gameObjectCooldown = 0.1f;
+        // [SerializeField] private float gameObjectCooldown = 0.1f;
 
         private Dictionary<GameObject, List<GameObject>> pools = new();
-        private List<GameObjectToReturn> gameObjectsToReturn = new();
+        // private List<GameObjectToReturn> gameObjectsToReturn = new();
 
 
         private void Awake()
@@ -19,22 +19,22 @@ namespace Nutmeg.Runtime.Utility.GameObjectPooling
             Main = this;
         }
 
-        private void Update()
-        {
-            for (int i = gameObjectsToReturn.Count - 1; i >= 0; i--)
-            {
-                if (gameObjectsToReturn[i].t <= 0f)
-                {
-                    ReturnInternal(gameObjectsToReturn[i].go, gameObjectsToReturn[i].prefab);
-                    gameObjectsToReturn.RemoveAt(i);
-                    continue;
-                }
-
-                GameObjectToReturn gotr = gameObjectsToReturn[i];
-                gotr.t -= Time.deltaTime;
-                gameObjectsToReturn[i] = gotr;
-            }
-        }
+        // private void Update()
+        // {
+        //     for (int i = gameObjectsToReturn.Count - 1; i >= 0; i--)
+        //     {
+        //         if (gameObjectsToReturn[i].t <= 0f)
+        //         {
+        //             ReturnInternal(gameObjectsToReturn[i].go, gameObjectsToReturn[i].prefab);
+        //             gameObjectsToReturn.RemoveAt(i);
+        //             continue;
+        //         }
+        //
+        //         GameObjectToReturn gotr = gameObjectsToReturn[i];
+        //         gotr.t -= Time.deltaTime;
+        //         gameObjectsToReturn[i] = gotr;
+        //     }
+        // }
 
 
         private void CreatePool(GameObject prefab)
@@ -67,7 +67,8 @@ namespace Nutmeg.Runtime.Utility.GameObjectPooling
         public void Return(GameObject go, GameObject prefab)
         {
             go.SetActive(false);
-            gameObjectsToReturn.Add(new GameObjectToReturn(go, prefab, gameObjectCooldown));
+            ReturnInternal(go, prefab);
+            // gameObjectsToReturn.Add(new GameObjectToReturn(go, prefab, gameObjectCooldown));
         }
 
         private void ReturnInternal(GameObject go, GameObject prefab)

@@ -1,3 +1,5 @@
+using System.Linq;
+using Nutmeg.Runtime.Gameplay.Combat;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Utility.Effects;
 using Unity.Netcode;
@@ -20,6 +22,7 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
 
         [Space] [SerializeField] protected float damagePerShot;
         [SerializeField] protected DamageType damageType;
+        [SerializeField] protected CombatGroup[] damageable;
 
         [Space] [SerializeField] protected Transform shotSourcePos;
         [SerializeField] protected EffectSpawner shotEffect;
@@ -59,16 +62,16 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
 
                 Vector3 hitPos;
 
-                if (Physics.Raycast(shotSourcePos.position, direction, out RaycastHit hit, 100f))
+                if (Physics.Raycast(shotSourcePos.position, direction, out RaycastHit hit, 50f))
                 {
                     hitPos = hit.point;
 
                     DamageableModule entity = hit.transform.GetComponent<DamageableModule>();
-                    if (entity)
+                    if (entity && damageable.Contains(entity.Entity.Group))
                         entity.Damage(damagePerShot, damageType, shotSourcePos.position, hit.point);
                 }
                 else
-                    hitPos = shotSourcePos.position + direction * 50;
+                    hitPos = shotSourcePos.position + direction * 50f;
 
                 hitPositions[i] = hitPos;
                 if (!shotEffectNull)
