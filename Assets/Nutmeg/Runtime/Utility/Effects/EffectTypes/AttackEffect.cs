@@ -15,8 +15,13 @@ namespace Nutmeg.Runtime.Utility.Effects.EffectTypes
             if (!info.SourcePosSpecified || !info.HitPosSpecified)
                 throw new ArgumentException();
             
-            origin = info.SourcePos;
-            target = info.HitPos;
+            Initialize(info.SourcePos, info.HitPos, finishedAction);
+        }
+
+        public virtual void Initialize(Vector3 sourcePos, Vector3 targetPos, Action<GameObject> finishedAction)
+        {
+            origin = sourcePos;
+            target = targetPos;
             
             base.Initialize(finishedAction);
         }

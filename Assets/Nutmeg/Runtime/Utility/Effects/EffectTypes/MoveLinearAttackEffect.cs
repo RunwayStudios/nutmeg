@@ -35,8 +35,16 @@ namespace Nutmeg.Runtime.Utility.Effects.EffectTypes
 
         public override void Initialize(DamageInfo info, Action<GameObject> FinishedAction)
         {
-            base.Initialize(info, FinishedAction);
+            if (!info.SourcePosSpecified || !info.HitPosSpecified)
+                throw new ArgumentException();
             
+            Initialize(info.SourcePos, info.HitPos, finishedAction);
+        }
+
+        public override void Initialize(Vector3 sourcePos, Vector3 targetPos, Action<GameObject> finishedAction)
+        {
+            base.Initialize(sourcePos, targetPos, finishedAction);
+
             transform.position = origin;
             if (trailRenderer)
                 trailRenderer.Clear();
