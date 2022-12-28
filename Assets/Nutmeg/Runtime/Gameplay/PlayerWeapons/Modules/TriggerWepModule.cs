@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Nutmeg.Runtime.Utility.GameObjectPooling;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
@@ -9,14 +10,12 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
     {
         [SerializeField] private GameObject triggerPrefab;
         [SerializeField] private Transform spawnPos;
-        [SerializeField] private float lifetime;
-        [SerializeField] private Vector3 velocity;
-        [SerializeField] private bool moveInLocalSpace;
 
         [Space] [SerializeField] private bool continuous;
         [SerializeField] private float spawningInterval;
-        
 
+        [Space] [SerializeField] private UnityEvent onAttack;
+        [SerializeField] private UnityEvent onAttackCancelled;
 
         private List<TriggerHitDetector> activeTriggers = new List<TriggerHitDetector>();
 
@@ -30,12 +29,16 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
         
         protected override void Attack(InputAction.CallbackContext context)
         {
+            onAttack.Invoke();
+            
             base.Attack(context);
         }
 
         protected override void AttackCancelled(InputAction.CallbackContext context)
         {
             base.AttackCancelled(context);
+            
+            onAttackCancelled.Invoke();
         }
 
         public override void DestroyModule()
