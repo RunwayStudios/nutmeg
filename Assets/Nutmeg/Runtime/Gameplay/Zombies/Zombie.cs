@@ -134,7 +134,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             updateNetworkPos = !stopped;
             lastNetPosUpdatePos = transform.position;
             lastNetPosUpdateTime = Time.time;
-            networkTransform.UpdateServerState(stopped);
+            // networkTransform.UpdateServerState(stopped);
         }
 
         private void Decay()

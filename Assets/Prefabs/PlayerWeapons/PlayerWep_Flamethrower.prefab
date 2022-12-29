@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4941223918874586}
   - component: {fileID: -2374084627976257803}
   - component: {fileID: 2642837550920901704}
-  - component: {fileID: 8771028259486964402}
   - component: {fileID: 5591271693597504250}
   - component: {fileID: 759437227447347738}
   m_Layer: 0
@@ -64,10 +63,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596f9dee9e06d1844a7a8b378e7cb816, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerPrefab: {fileID: 0}
-  spawnPos: {fileID: 0}
-  continuous: 0
-  spawningInterval: 0
+  damage: 3
+  damageInterval: 0.2
+  type: 1
+  damageable: 00000000
+  triggerPrefab: {fileID: 4538273164992658143, guid: 0c1d8e58ca46c86439a9e4c1cb5df81a, type: 3}
+  spawnPos: {fileID: 438027460131469787}
+  continuous: 1
+  spawningInterval: 0.3
   onAttack:
     m_PersistentCalls:
       m_Calls:
@@ -98,27 +101,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8771028259486964402
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1523676449047648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e2cc25b8641dc449917da22a81d9c0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  effectPrefab: {fileID: 157586, guid: 852c75a5527a77349ae7c771baf83b02, type: 3}
-  effectPosition: {fileID: 438027460131469787}
-  effectParent: {fileID: 438027460131469787}
-  stickToParent: 1
-  validTypes: 
-  damageCap: 0
-  OnFinished:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &5591271693597504250
 MonoBehaviour:
   m_ObjectHideFlags: 0
