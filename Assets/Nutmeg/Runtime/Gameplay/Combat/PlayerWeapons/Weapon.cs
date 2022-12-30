@@ -2,10 +2,11 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Nutmeg.Runtime.Gameplay.PlayerWeapons
+namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons
 {
     public class Weapon : NetworkBehaviour
     {
+        [SerializeField] private bool localPlayerWeapon;
         [SerializeField] private WeaponModule[] modules;
 
 
@@ -57,5 +58,9 @@ namespace Nutmeg.Runtime.Gameplay.PlayerWeapons
             module = null;
             return false;
         }
+        
+        
+        
+        public bool LocalPlayerWeapon => localPlayerWeapon;
     }
 }

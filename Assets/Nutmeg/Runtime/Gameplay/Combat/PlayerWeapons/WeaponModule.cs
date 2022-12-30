@@ -1,7 +1,8 @@
+using Nutmeg.Runtime.Gameplay.PlayerWeapons;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Nutmeg.Runtime.Gameplay.PlayerWeapons
+namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons
 {
     public abstract class WeaponModule : NetworkBehaviour
     {

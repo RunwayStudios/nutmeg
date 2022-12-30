@@ -33,11 +33,11 @@ namespace Nutmeg.Runtime.Utility.Effects.EffectTypes
         }
         
 
-        public override void Initialize(DamageInfo info, Action<GameObject> FinishedAction)
+        public override void Initialize(DamageInfo info, Action<GameObject> finishedAction)
         {
             if (!info.SourcePosSpecified || !info.HitPosSpecified)
                 throw new ArgumentException();
-            
+
             Initialize(info.SourcePos, info.HitPos, finishedAction);
         }
 

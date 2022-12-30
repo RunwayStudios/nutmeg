@@ -10,21 +10,27 @@ namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
         {
             base.InitializeModule(weapon, weaponParent);
 
-            InputManager.Input.Player.Primary.started += Attack;
-            InputManager.Input.Player.Primary.canceled += AttackCancelled;
+            if (Weapon.LocalPlayerWeapon)
+            {
+                InputManager.Input.Player.Primary.started += Attack;
+                InputManager.Input.Player.Primary.canceled += AttackCancelled;
+            }
         }
 
         public override void DestroyModule()
         {
-            InputManager.Input.Player.Primary.started -= Attack;
-            InputManager.Input.Player.Primary.canceled -= AttackCancelled;
+            if (Weapon.LocalPlayerWeapon)
+            {
+                InputManager.Input.Player.Primary.started -= Attack;
+                InputManager.Input.Player.Primary.canceled -= AttackCancelled;
+            }
         }
 
-        protected virtual void Attack(InputAction.CallbackContext context)
+        public virtual void Attack(InputAction.CallbackContext context)
         {
         }
 
-        protected virtual void AttackCancelled(InputAction.CallbackContext context)
+        public virtual void AttackCancelled(InputAction.CallbackContext context)
         {
         }
     }

@@ -12649,6 +12649,7 @@ MonoBehaviour:
   - {fileID: 888044353502096120, guid: 67b0a4dcb88939740b684397b7d18c9f, type: 3}
   - {fileID: 1590421105922564580, guid: 87f01b5d1f6cfde42910bd64a89d945a, type: 3}
   - {fileID: 1590421105922564580, guid: 93de7ccfd6b04d74eb426dc0af97c4b9, type: 3}
+  - {fileID: 1170082105736364, guid: fade7d7be298e134cac82917534de781, type: 3}
   OnEnterBuildingMode:
     m_PersistentCalls:
       m_Calls:

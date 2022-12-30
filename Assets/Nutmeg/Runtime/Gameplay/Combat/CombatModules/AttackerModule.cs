@@ -14,7 +14,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         [SerializeField] protected bool autoAttack = true;
         [SerializeField] private float attackInterval = 5f;
         private float lastAttackTry;
-        protected bool attacking = false;
+        protected bool attacking;
 
         [Space] [Header("Events")] [SerializeField]
         protected UnityEvent OnStartAttacking;

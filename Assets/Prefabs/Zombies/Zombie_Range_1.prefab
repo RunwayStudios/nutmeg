@@ -792,13 +792,12 @@ GameObject:
   - component: {fileID: -7093906615665926990}
   - component: {fileID: 8915665403689979125}
   - component: {fileID: -1906954859103034792}
-  - component: {fileID: 1173289345764857417}
   - component: {fileID: -7523771953284000605}
+  - component: {fileID: 1173289345764857417}
   - component: {fileID: 4742128199620809915}
   - component: {fileID: -5613187113759643014}
-  - component: {fileID: -1108691985824748297}
-  - component: {fileID: -4797206737992591843}
   - component: {fileID: 2644987042870360144}
+  - component: {fileID: -1108691985824748297}
   m_Layer: 0
   m_Name: Zombie_Range_1
   m_TagString: Untagged
@@ -925,8 +924,8 @@ MonoBehaviour:
   group: 0
   modules:
   - {fileID: -1906954859103034792}
-  - {fileID: 1173289345764857417}
   - {fileID: -7523771953284000605}
+  - {fileID: 1173289345764857417}
 --- !u!114 &-1906954859103034792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -970,23 +969,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1173289345764857417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1418193975600942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6752db7822782a242aa5472d5163203b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetGroups: 0200000001000000
-  setPriority: 1
-  priorityTarget: 2
-  fromRadius: 0.5
-  toRadius: 20
 --- !u!114 &-7523771953284000605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1002,7 +984,7 @@ MonoBehaviour:
   detector: {fileID: 1173289345764857417}
   attackDamage: 5
   attackDamageType: 0
-  attackSource: {fileID: 0}
+  attackSource: {fileID: 6746694494634293368}
   autoAttack: 1
   attackInterval: 5
   OnStartAttacking:
@@ -1067,6 +1049,23 @@ MonoBehaviour:
         m_CallState: 2
   attackDistance: 10
   agent: {fileID: -7093906615665926990}
+--- !u!114 &1173289345764857417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6752db7822782a242aa5472d5163203b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetGroups: 0200000001000000
+  setPriority: 1
+  priorityTarget: 2
+  fromRadius: 0.5
+  toRadius: 20
 --- !u!114 &4742128199620809915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1109,6 +1108,20 @@ MonoBehaviour:
   OnFinished:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2644987042870360144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418193975600942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4f784c1dccfc8d4699f5f654b628a97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interpolationSpeed: 3
+  teleportationThreshold: 2
 --- !u!114 &-1108691985824748297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1125,46 +1138,6 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &-4797206737992591843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1418193975600942}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
-  SyncRotAngleX: 0
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 0
-  SyncScaleX: 0
-  SyncScaleY: 0
-  SyncScaleZ: 0
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  InLocalSpace: 0
-  Interpolate: 1
---- !u!114 &2644987042870360144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1418193975600942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4f784c1dccfc8d4699f5f654b628a97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interpolationSpeed: 3
-  teleportationThreshold: 2
 --- !u!1 &1423411692011380
 GameObject:
   m_ObjectHideFlags: 0
@@ -2312,6 +2285,10 @@ PrefabInstance:
     - target: {fileID: 4119278303340458, guid: 751d82661102a704aa862beb4c753bfc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -69.571
+      objectReference: {fileID: 0}
+    - target: {fileID: 64964383048758924, guid: 751d82661102a704aa862beb4c753bfc, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 751d82661102a704aa862beb4c753bfc, type: 3}

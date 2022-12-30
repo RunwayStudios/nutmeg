@@ -1,9 +1,9 @@
 using System.Linq;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Gameplay.PlayerWeapons;
-using Nutmeg.Runtime.Utility.Effects;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
@@ -13,6 +13,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
         [SerializeField] protected int shotCount = 1;
         [SerializeField] protected bool randomizeShotCount;
         [SerializeField] protected int varianceShotCount;
+        [SerializeField] private AmmunitionWepModule ammunitionModule;
 
         [Space] [SerializeField] [Min(0.001f)] protected float maxFireRate = 2f;
         [SerializeField] protected bool continuous = true;
@@ -25,12 +26,15 @@ namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
         [SerializeField] protected CombatGroup[] damageable;
 
         [Space] [SerializeField] protected Transform shotSourcePos;
-        [SerializeField] protected EffectSpawner shotEffect;
-        protected bool shotEffectNull;
-        [SerializeField] protected EffectSpawner muzzleFlashEffect;
-        protected bool muzzleFlashEffectNull;
 
-        [Space] [SerializeField] private AmmunitionWepModule ammunitionModule;
+        [SerializeField] protected UnityEvent<DamageInfo> onShotEffect;
+
+        // [SerializeField] protected EffectSpawner shotEffect;
+        // protected bool shotEffectNull;
+        [SerializeField] protected UnityEvent onMuzzleFlashEffect;
+        // [SerializeField] protected EffectSpawner muzzleFlashEffect;
+        // protected bool muzzleFlashEffectNull;
+
 
 
         protected bool shooting;
@@ -44,12 +48,13 @@ namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
         {
             if (!ammunitionModule.TryUseAmmo())
                 return;
-            
+
             nextShotTime = Time.time + shotInterval;
             Vector3 ogDirection = transform.forward;
 
-            if (!muzzleFlashEffectNull)
-                muzzleFlashEffect.SpawnEffect();
+            onMuzzleFlashEffect.Invoke();
+            // if (!muzzleFlashEffectNull)
+            //     muzzleFlashEffect.SpawnEffect();
 
             int fixedShotCount = randomizeShotCount ? shotCount + Random.Range(-varianceShotCount, varianceShotCount + 1) : shotCount;
             Vector3[] hitPositions = new Vector3[fixedShotCount];
@@ -74,8 +79,9 @@ namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
                     hitPos = shotSourcePos.position + direction * 50f;
 
                 hitPositions[i] = hitPos;
-                if (!shotEffectNull)
-                    shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hitPos));
+                onShotEffect.Invoke(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hitPos));
+                // if (!shotEffectNull)
+                //     shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hitPos));
             }
 
             shotted = true;
@@ -91,16 +97,19 @@ namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
                 return;
             }
 
-            if (!muzzleFlashEffectNull)
-                muzzleFlashEffect.SpawnEffect();
+            onMuzzleFlashEffect.Invoke();
+            // if (!muzzleFlashEffectNull)
+            //     muzzleFlashEffect.SpawnEffect();
 
-            if (!shotEffectNull)
-            {
-                for (int i = 0; i < hitPositions.Length; i++)
-                {
-                    shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hitPositions[i]));
-                }
-            }
+            for (int i = 0; i < hitPositions.Length; i++)
+                onShotEffect.Invoke(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hitPositions[i]));
+            // if (!shotEffectNull)
+            // {
+            //     for (int i = 0; i < hitPositions.Length; i++)
+            //     {
+            //         shotEffect.SpawnEffect(new DamageInfo(damagePerShot, damageType, shotSourcePos.position, hitPositions[i]));
+            //     }
+            // }
         }
 
 
@@ -110,7 +119,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
                 FireShot();
         }
 
-        protected override void Attack(InputAction.CallbackContext context)
+        public override void Attack(InputAction.CallbackContext context)
         {
             shooting = continuous;
 
@@ -118,7 +127,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
                 FireShot();
         }
 
-        protected override void AttackCancelled(InputAction.CallbackContext context)
+        public override void AttackCancelled(InputAction.CallbackContext context)
         {
             shooting = false;
         }
@@ -129,8 +138,8 @@ namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
 
             shotInterval = 1f / maxFireRate;
 
-            shotEffectNull = shotEffect == null;
-            muzzleFlashEffectNull = muzzleFlashEffect == null;
+            // shotEffectNull = shotEffect == null;
+            // muzzleFlashEffectNull = muzzleFlashEffect == null;
         }
     }
 }

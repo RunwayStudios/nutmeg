@@ -3,9 +3,7 @@ using Nutmeg.Runtime.Gameplay.Combat;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Gameplay.Money;
 using Nutmeg.Runtime.Utility.Effects;
-using Nutmeg.Runtime.Utility.Networking;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -25,9 +23,6 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         [SerializeField] private EffectSpawner[] damageEffects;
         [SerializeField] private EffectSpawner[] deathEffects;
         [SerializeField] private List<GameObject> skins = new List<GameObject>();
-
-        [Space] [Header("Position Syncing")] [SerializeField]
-        private ZombieNetworkTransform networkTransform;
 
         [SerializeField] private float posThreshold = 1f;
         [SerializeField] private float timeThreshold = 3f;

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using IngameDebugConsole;
+using Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons;
 using Nutmeg.Runtime.Gameplay.PlayerWeapons;
 using Nutmeg.Runtime.Utility.InputSystem;
 using Nutmeg.Runtime.Utility.MouseController;

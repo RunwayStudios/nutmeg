@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 2091201601401581819}
   - component: {fileID: 8525461802404038503}
   - component: {fileID: 6780269372015060223}
+  - component: {fileID: 282440159715300756}
   - component: {fileID: 6311361668244213556}
-  - component: {fileID: 894671858835887931}
   - component: {fileID: 4618249291070859870}
   m_Layer: 0
   m_Name: P_Attack_Flamethrower_Turret
@@ -131,8 +131,8 @@ MonoBehaviour:
   group: 1
   modules:
   - {fileID: 6780269372015060223}
+  - {fileID: 282440159715300756}
   - {fileID: 6311361668244213556}
-  - {fileID: 894671858835887931}
 --- !u!114 &6780269372015060223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,6 +164,39 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &282440159715300756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170082105736364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a28613610a8d6c240a49b1f685f9b2dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detector: {fileID: 6311361668244213556}
+  attackDamage: 20
+  attackDamageType: 1
+  attackSource: {fileID: 4472779831955753586}
+  autoAttack: 1
+  attackInterval: 0.2
+  OnStartAttacking:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStartedAttacking:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStoppedAttacking:
+    m_PersistentCalls:
+      m_Calls: []
+  shootContinuous: 1
+  rotatingTransform: {fileID: 4041734564227390579}
+  attackModule: {fileID: 2065904181343262689}
 --- !u!114 &6311361668244213556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,63 +213,7 @@ MonoBehaviour:
   setPriority: 0
   priorityTarget: 0
   fromRadius: 1
-  toRadius: 5.61
---- !u!114 &894671858835887931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1170082105736364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25adc742abc296f4f92281fb4d20fff9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detector: {fileID: 6311361668244213556}
-  attackDamage: 150
-  attackDamageType: 0
-  attackSource: {fileID: 4472779831955753586}
-  autoAttack: 1
-  attackInterval: 3
-  OnStartAttacking:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStartedAttacking:
-    m_PersistentCalls:
-      m_Calls: []
-  OnAttack:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Base.NPCBehaviours.NpcSniperBehaviour,
-          Nutmeg.Runtime.Gameplay.Base
-        m_MethodName: RotateToLastTarget
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Nutmeg.Runtime.Gameplay.Base.NPCBehaviours.NpcSniperBehaviour,
-          Nutmeg.Runtime.Gameplay.Base
-        m_MethodName: SpawnAttackEffect
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnStoppedAttacking:
-    m_PersistentCalls:
-      m_Calls: []
+  toRadius: 7.5
 --- !u!114 &4618249291070859870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -516,12 +493,36 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 951099334
       objectReference: {fileID: 0}
+    - target: {fileID: 2642837550920901704, guid: c0e064f742611a344895e6188012d810, type: 3}
+      propertyPath: damage
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5591271693597504250, guid: c0e064f742611a344895e6188012d810, type: 3}
+      propertyPath: infiniteAmmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5591271693597504250, guid: c0e064f742611a344895e6188012d810, type: 3}
+      propertyPath: infiniteMagazine
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8578459801020379511, guid: c0e064f742611a344895e6188012d810, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 759437227447347738, guid: c0e064f742611a344895e6188012d810, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c0e064f742611a344895e6188012d810, type: 3}
+--- !u!114 &2065904181343262689 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2642837550920901704, guid: c0e064f742611a344895e6188012d810, type: 3}
+  m_PrefabInstance: {fileID: 4037105604035195817}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 596f9dee9e06d1844a7a8b378e7cb816, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4041734564227390579 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4941223918874586, guid: c0e064f742611a344895e6188012d810, type: 3}

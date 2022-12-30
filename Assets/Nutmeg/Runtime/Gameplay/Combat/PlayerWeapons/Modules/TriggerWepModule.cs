@@ -60,7 +60,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
             collisions.Clear();
         }
 
-        protected override void Attack(InputAction.CallbackContext context)
+        public override void Attack(InputAction.CallbackContext context)
         {
             onAttack.Invoke();
             attacking = true;
@@ -70,7 +70,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
             base.Attack(context);
         }
 
-        protected override void AttackCancelled(InputAction.CallbackContext context)
+        public override void AttackCancelled(InputAction.CallbackContext context)
         {
             base.AttackCancelled(context);
 
