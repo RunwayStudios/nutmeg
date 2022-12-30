@@ -1,12 +1,12 @@
 using System.Linq;
-using Nutmeg.Runtime.Gameplay.Combat;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
+using Nutmeg.Runtime.Gameplay.PlayerWeapons;
 using Nutmeg.Runtime.Utility.Effects;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
+namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
 {
     public class HitscanWepModule : AttackWepModule
     {

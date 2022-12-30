@@ -1,8 +1,9 @@
+using Nutmeg.Runtime.Gameplay.PlayerWeapons;
 using Nutmeg.Runtime.Utility.InputSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Nutmeg.Runtime.Gameplay.PlayerWeapons.Modules
+namespace Nutmeg.Runtime.Gameplay.Combat.PlayerWeapons.Modules
 {
     public class AmmunitionWepModule : WeaponModule
     {
