@@ -938,18 +938,18 @@ GameObject:
   - component: {fileID: 1146225356081259194}
   - component: {fileID: 1059452761220779612}
   - component: {fileID: 3186858835567826602}
-  - component: {fileID: 884813880285531491}
   - component: {fileID: -6260215301360327920}
+  - component: {fileID: 884813880285531491}
   - component: {fileID: 8753250620566009835}
   - component: {fileID: 6066062097090351641}
   - component: {fileID: 4853782146285696133}
   - component: {fileID: 2559359259358476368}
   - component: {fileID: -3086467689708996136}
   - component: {fileID: 1917256347667031979}
-  - component: {fileID: -7333130699766255940}
   - component: {fileID: 4539193657094037214}
+  - component: {fileID: -7333130699766255940}
   m_Layer: 0
-  m_Name: Zombie_Stupid_Default
+  m_Name: Z_Direct_Melee_Template
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -988,115 +988,7 @@ Animator:
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: '
-
-    Transform ''Finger_03'' has been deleted
-
-    Transform
-    ''Finger_02'' has been deleted
-
-    Transform ''Finger_01'' has been deleted
-
-    Transform
-    ''IndexFinger_03'' has been deleted
-
-    Transform ''IndexFinger_02'' has been
-    deleted
-
-    Transform ''IndexFinger_01'' has been deleted
-
-    Transform ''Thumb_03''
-    has been deleted
-
-    Transform ''Thumb_02'' has been deleted
-
-    Transform
-    ''Thumb_01'' has been deleted
-
-    Transform ''Hand_L'' has been deleted
-
-    Transform
-    ''Elbow_L'' has been deleted
-
-    Transform ''Shoulder_L'' has been deleted
-
-    Transform
-    ''Clavicle_L'' has been deleted
-
-    Transform ''Finger_03 1'' has been deleted
-
-    Transform
-    ''Finger_02 1'' has been deleted
-
-    Transform ''Finger_01 1'' has been deleted
-
-    Transform
-    ''IndexFinger_03 1'' has been deleted
-
-    Transform ''IndexFinger_02 1'' has
-    been deleted
-
-    Transform ''IndexFinger_01 1'' has been deleted
-
-    Transform
-    ''Thumb_03 1'' has been deleted
-
-    Transform ''Thumb_02 1'' has been deleted
-
-    Transform
-    ''Thumb_01 1'' has been deleted
-
-    Transform ''Hand_R'' has been deleted
-
-    Transform
-    ''Elbow_R'' has been deleted
-
-    Transform ''Shoulder_R'' has been deleted
-
-    Transform
-    ''Clavicle_R'' has been deleted
-
-    Transform ''Eyebrows'' has been deleted
-
-    Transform
-    ''Jaw'' has been deleted
-
-    Transform ''Head'' has been deleted
-
-    Transform
-    ''Neck'' has been deleted
-
-    Transform ''Spine_03'' has been deleted
-
-    Transform
-    ''Spine_02'' has been deleted
-
-    Transform ''Spine_01'' has been deleted
-
-    Transform
-    ''Ball_L'' has been deleted
-
-    Transform ''Ankle_L'' has been deleted
-
-    Transform
-    ''LowerLeg_L'' has been deleted
-
-    Transform ''UpperLeg_L'' has been deleted
-
-    Transform
-    ''Ball_R'' has been deleted
-
-    Transform ''Ankle_R'' has been deleted
-
-    Transform
-    ''LowerLeg_R'' has been deleted
-
-    Transform ''UpperLeg_R'' has been deleted
-
-    Transform
-    ''Hips'' has been deleted
-
-    Transform ''Root'' has been deleted'
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -1114,41 +1006,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &884813880285531491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1144529266033343354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9cb4816a7f9f4546856236cca6ca36a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  killReward: 1
-  decayDelay: 5
-  decayDuration: 10
-  decayDisplacement: -1
-  bulletSource: {fileID: 0}
-  damageEffects:
-  - {fileID: -3086467689708996136}
-  deathEffects:
-  - {fileID: 1917256347667031979}
-  - {fileID: -3086467689708996136}
-  skins:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  posThreshold: 5
-  timeThreshold: 10
-  timedPositionThreshold: 0
-  firstPosUpdateDelay: 0.75
 --- !u!195 &-6260215301360327920
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1171,6 +1028,33 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 9
   m_ObstacleAvoidanceType: 1
+--- !u!114 &884813880285531491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144529266033343354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9cb4816a7f9f4546856236cca6ca36a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killReward: 1
+  decayDelay: 5
+  decayDuration: 10
+  decayDisplacement: -1
+  bulletSource: {fileID: 0}
+  damageEffects:
+  - {fileID: -3086467689708996136}
+  deathEffects:
+  - {fileID: -3086467689708996136}
+  - {fileID: 1917256347667031979}
+  skins: []
+  posThreshold: 5
+  timeThreshold: 10
+  timedPositionThreshold: 0
+  firstPosUpdateDelay: 0.75
 --- !u!114 &8753250620566009835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1250,7 +1134,7 @@ MonoBehaviour:
   detector: {fileID: 2559359259358476368}
   attackDamage: 5
   attackDamageType: 0
-  attackSource: {fileID: 0}
+  attackSource: {fileID: 2717501034244476489}
   autoAttack: 1
   attackInterval: 1
   OnStartAttacking:
@@ -1359,6 +1243,20 @@ MonoBehaviour:
   OnFinished:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4539193657094037214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144529266033343354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4f784c1dccfc8d4699f5f654b628a97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interpolationSpeed: 3
+  teleportationThreshold: 2
 --- !u!114 &-7333130699766255940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1375,20 +1273,6 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &4539193657094037214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1144529266033343354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4f784c1dccfc8d4699f5f654b628a97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interpolationSpeed: 3
-  teleportationThreshold: 2
 --- !u!1 &1233738323401061475
 GameObject:
   m_ObjectHideFlags: 0
