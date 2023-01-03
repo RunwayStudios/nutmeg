@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,24 +9,24 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
     public class DamageableModule : CombatModule
     {
         [SerializeField] private float health = 100f;
+        [SerializeField] private DamageType[] immunities;
         [SerializeField] private UnityEvent<DamageInfo> OnReceiveDamage;
+        [SerializeField] private UnityEvent<DamageInfo> OnImmune;
         [SerializeField] private UnityEvent<DamageInfo> OnDeath;
-        private bool dead = false;
+        private bool dead;
         
         
-        
-
-        public virtual void Damage(float value, DamageType type, Vector3 sourcePos, Vector3 hitPos)
+        public void Damage(float value, DamageType type, Vector3 sourcePos, Vector3 hitPos)
         {
             DamageServerRpc(new DamageInfo(value, type, sourcePos, hitPos));
         }
         
-        public virtual void Damage(float value, DamageType type, Vector3 sourcePos)
+        public void Damage(float value, DamageType type, Vector3 sourcePos)
         {
             DamageServerRpc(new DamageInfo(value, type, sourcePos));
         }
         
-        public virtual void Damage(float value, DamageType type)
+        public void Damage(float value, DamageType type)
         {
             DamageServerRpc(new DamageInfo(value, type));
         }
@@ -37,11 +38,17 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         
 
         [ServerRpc(RequireOwnership = false)]
-        private void DamageServerRpc(DamageInfo info)
+        protected virtual void DamageServerRpc(DamageInfo info)
         {
             if (dead)
                 return;
 
+            if (immunities.Contains(info.Type))
+            {
+                OnImmune.Invoke(info);
+                return;
+            }
+            
             health -= info.Value;
 
             dead = health <= 0f;
@@ -49,7 +56,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
         }
 
         [ClientRpc]
-        private void DamageClientRpc(bool death, DamageInfo info)
+        protected virtual void DamageClientRpc(bool death, DamageInfo info)
         {
             OnReceiveDamage.Invoke(info);
 
