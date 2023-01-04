@@ -1040,11 +1040,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9cb4816a7f9f4546856236cca6ca36a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rootTransform: {fileID: 1146225356081259194}
   killReward: 1
   decayDelay: 5
   decayDuration: 10
   decayDisplacement: -1
-  bulletSource: {fileID: 0}
+  bulletSource: {fileID: 2717501034244476489}
   damageEffects:
   - {fileID: -3086467689708996136}
   deathEffects:
@@ -1055,6 +1056,7 @@ MonoBehaviour:
   timeThreshold: 10
   timedPositionThreshold: 0
   firstPosUpdateDelay: 0.75
+  networkTransform: {fileID: 4539193657094037214}
 --- !u!114 &8753250620566009835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1218,7 +1220,7 @@ MonoBehaviour:
   effectParent: {fileID: 0}
   stickToParent: 0
   validTypes: 00000000
-  damageCap: 0
+  damageCap: 1
   OnFinished:
     m_PersistentCalls:
       m_Calls: []

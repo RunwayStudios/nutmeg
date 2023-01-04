@@ -16,7 +16,7 @@ public class SpawnSingleWavePart : ZombieWavePart
         List<Transform> spawningLocations = ZombieSpawner.Main.SpawningLocations;
         Vector3 position = spawningLocations[Random.Range(0, spawningLocations.Count)].position;
         GameObject go = Object.Instantiate(zombiePrefab, position, new Quaternion());
-        go.GetComponent<NetworkObject>().Spawn(true);
+        go.GetComponentInChildren<NetworkObject>().Spawn(true);
         
         return true;
     }

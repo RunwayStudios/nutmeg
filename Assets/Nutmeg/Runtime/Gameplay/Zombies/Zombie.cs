@@ -3,6 +3,7 @@ using Nutmeg.Runtime.Gameplay.Combat;
 using Nutmeg.Runtime.Gameplay.Combat.CombatModules;
 using Nutmeg.Runtime.Gameplay.Money;
 using Nutmeg.Runtime.Utility.Effects;
+using Nutmeg.Runtime.Utility.Networking;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -12,6 +13,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 {
     public class Zombie : MonoBehaviour
     {
+        [SerializeField] private Transform rootTransform;
         [SerializeField] private int killReward = 0;
         [Space] [SerializeField] private float decayDelay = 5f;
         [SerializeField] private float decayDuration = 10f;
@@ -28,6 +30,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
         [SerializeField] private float timeThreshold = 3f;
         [SerializeField] private float timedPositionThreshold = 0f;
         [SerializeField] private float firstPosUpdateDelay = .5f;
+        [SerializeField] private ZombieNetworkTransform networkTransform;
         private bool sentFirstPosUpdate;
         private float lastNetPosUpdateTime;
         private Vector3 lastNetPosUpdatePos;
@@ -46,7 +49,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             
             if (skins.Count < 1)
             {
-                Debug.LogError("Skins haven't been set up for " + gameObject.name);
+                Debug.LogError("Skins haven't been set up for " + rootTransform.name);
                 return;
             }
 
@@ -56,11 +59,13 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 
             animator = GetComponent<Animator>();
 
-            if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
+            if (NetworkManager.Singleton.IsServer)
             {
                 navMeshAgent = GetComponent<NavMeshAgent>();
                 // todo set base center/hut? also in PathfindFirstAttackerModule
-                navMeshAgent.SetDestination(Vector3.zero);
+                Vector3 pathfindTarget = Vector3.zero;
+                navMeshAgent.SetDestination(pathfindTarget);
+                transform.LookAt(new Vector3(pathfindTarget.x, transform.position.y, pathfindTarget.z));
 
                 UpdateNetworkPosition();
             }
@@ -94,7 +99,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             if (Time.time > decayStart + decayDelay + decayDuration)
             {
                 decaying = false;
-                Destroy(gameObject);
+                Destroy(rootTransform);
                 return;
             }
 
@@ -129,7 +134,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             updateNetworkPos = !stopped;
             lastNetPosUpdatePos = transform.position;
             lastNetPosUpdateTime = Time.time;
-            // networkTransform.UpdateServerState(stopped);
+            networkTransform.UpdateServerState(stopped);
         }
 
         private void Decay()

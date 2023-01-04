@@ -19,7 +19,7 @@ public class SpawnGroupWavePart : ZombieWavePart
         for (int i = 0; i < groupSize; i++)
         {
             GameObject go = Object.Instantiate(zombiePrefab, position, new Quaternion());
-            go.GetComponent<NetworkObject>().Spawn(true);
+            go.GetComponentInChildren<NetworkObject>().Spawn(true);
         }
 
         return true;
