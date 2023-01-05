@@ -55,6 +55,10 @@ PrefabInstance:
       propertyPath: rootTransform
       value: 
       objectReference: {fileID: 3521657826233075220}
+    - target: {fileID: 1059452761220779612, guid: 738a4b9aa289c7747a3aa350e741baa1, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 1e794b55a86efd548aa0b7640a34f22b, type: 2}
     - target: {fileID: 1144529266033343354, guid: 738a4b9aa289c7747a3aa350e741baa1, type: 3}
       propertyPath: m_Name
       value: Z_Direct_Melee_Template

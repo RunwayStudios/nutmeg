@@ -13,7 +13,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
 {
     public class Zombie : MonoBehaviour
     {
-        [SerializeField] private Transform rootTransform;
+        [SerializeField] private GameObject rootGameObject;
         [SerializeField] private int killReward = 0;
         [Space] [SerializeField] private float decayDelay = 5f;
         [SerializeField] private float decayDuration = 10f;
@@ -49,7 +49,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             
             if (skins.Count < 1)
             {
-                Debug.LogError("Skins haven't been set up for " + rootTransform.name);
+                Debug.LogError("Skins haven't been set up for " + rootGameObject.name);
                 return;
             }
 
@@ -99,7 +99,7 @@ namespace Nutmeg.Runtime.Gameplay.Zombies
             if (Time.time > decayStart + decayDelay + decayDuration)
             {
                 decaying = false;
-                Destroy(rootTransform);
+                Destroy(rootGameObject);
                 return;
             }
 
