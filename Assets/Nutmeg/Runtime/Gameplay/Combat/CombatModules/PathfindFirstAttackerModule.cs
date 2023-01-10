@@ -6,6 +6,7 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
 {
     public class PathfindFirstAttackerModule : AttackerModule
     {
+        [SerializeField] private DetectorModule attackDetector;
         [SerializeField] private float attackDistance = 1f;
         [SerializeField] private NavMeshAgent agent;
 
@@ -17,7 +18,8 @@ namespace Nutmeg.Runtime.Gameplay.Combat.CombatModules
             if (detector.TryGetTarget(out CombatEntity target))
             {
                 // attacking
-                if (((RadiusDetectorModule)detector).LastFoundDistance <= attackDistance)
+                if (attackDetector ? attackDetector.TryGetTarget(out target) : 
+                        ((RadiusDetectorModule)detector).LastFoundDistance <= attackDistance)
                 {
                     if (!attacking)
                     {
